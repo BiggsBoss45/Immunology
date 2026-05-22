@@ -196,3 +196,115 @@ input{
         opacity:0.3;
     }
 }
+
+/* 3 PANEL MENU */
+
+.menuGrid{
+
+    display:flex;
+
+    width:100vw;
+    height:100vh;
+}
+
+.menuPanel{
+
+    position:relative;
+
+    flex:1;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    border-right:1px solid white;
+
+    transition:0.3s;
+}
+
+.menuPanel:hover{
+
+    flex:1.2;
+}
+
+/* PANEL IMAGES */
+
+.panelImage{
+
+    position:absolute;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    opacity:0;
+
+    transition:0.4s;
+
+    filter:brightness(0.45)
+    grayscale(40%);
+}
+
+.menuPanel:hover .panelImage{
+
+    opacity:1;
+}
+
+/* OVERLAY */
+
+.panelOverlay{
+
+    position:absolute;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    backdrop-filter:blur(2px);
+
+    transition:0.3s;
+}
+
+.panelOverlay h1{
+
+    font-size:42px;
+
+    letter-spacing:4px;
+
+    text-align:center;
+
+    transition:0.3s;
+}
+
+.menuPanel:hover .panelOverlay h1{
+
+    transform:scale(1.08);
+
+    text-shadow:0 0 20px white;
+}
+
+/* HIDE MENU WHEN TAB OPEN */
+
+.tabContent{
+
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%, -50%);
+
+    background:black;
+
+    width:90%;
+    height:85%;
+
+    z-index:100;
+
+    overflow:auto;
+}
