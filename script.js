@@ -1,12 +1,21 @@
 let stage = 0;
 
+const clickSound = new Audio("click.mp3");
+
 document.addEventListener("keydown", handleStart);
 document.addEventListener("click", handleStart);
+
+function playClick(){
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
 
 function handleStart(){
 
     // START SCREEN
     if(stage === 0){
+
+        playClick();
 
         document.getElementById("startScreen")
         .classList.remove("active");
@@ -32,6 +41,8 @@ function handleStart(){
     // CONTINUE SCREEN
     else if(stage === 1){
 
+        playClick();
+
         document.getElementById("continueScreen")
         .classList.remove("active");
 
@@ -44,6 +55,8 @@ function handleStart(){
 
 function openTab(tabId){
 
+    playClick();
+
     document.querySelectorAll(".tabContent")
     .forEach(tab => {
         tab.classList.remove("activeTab");
@@ -53,19 +66,33 @@ function openTab(tabId){
     .classList.add("activeTab");
 }
 
+function revealVideo(){
+
+    playClick();
+
+    document.getElementById("videoContainer")
+    .style.display = "block";
+
+    document.getElementById("revealButton")
+    .style.display = "none";
+}
+
 function checkPassword(){
 
-    const b1 = document.getElementById("box1").value.trim();
-    const b2 = document.getElementById("box2").value.trim();
-    const b3 = document.getElementById("box3").value.trim();
-    const b4 = document.getElementById("box4").value.trim();
+    playClick();
 
-    if(
-        b1 === "V-03" &&
-        b2 === "E-13" &&
-        b3 === "H-07" &&
-        b4 === "P-09"
-    ){
+    const values = [
+        document.getElementById("box1").value.trim().toUpperCase(),
+        document.getElementById("box2").value.trim().toUpperCase(),
+        document.getElementById("box3").value.trim().toUpperCase(),
+        document.getElementById("box4").value.trim().toUpperCase()
+    ];
+
+    const correct = ["V-03","E-13","H-07","P-09"];
+
+    const success = correct.every(code => values.includes(code));
+
+    if(success){
 
         document.getElementById("passwordResult")
         .innerHTML = "ACCESS GRANTED";
