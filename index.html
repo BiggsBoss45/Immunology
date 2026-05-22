@@ -29,11 +29,60 @@
     <!-- MAIN MENU -->
     <div id="menuScreen" class="screen">
 
-        <div class="tabs">
-            <button onclick="openTab('audioTab')">Audio Log</button>
-            <button onclick="openTab('docTab')">Amino Acid Sequence</button>
-            <button onclick="openTab('phase2Tab')">Phase 2</button>
+    <div class="tabs">
+        <button onclick="openTab('audioTab')">Audio Log</button>
+        <button onclick="openTab('docTab')">Amino Acid Sequence</button>
+        <button onclick="openTab('phase2Tab')">Phase 2</button>
+    </div>
+
+    <!-- AUDIO LOG -->
+    <div id="audioTab" class="tabContent">
+
+        <button id="revealButton" onclick="revealVideo()">
+            OPEN AUDIO LOG
+        </button>
+
+        <div id="videoContainer" style="display:none; margin-top:20px;">
+
+            <video controls width="700">
+                <source src="video1.mp4" type="video/mp4">
+            </video>
+
         </div>
+
+    </div>
+
+    <!-- DOCUMENT -->
+    <div id="docTab" class="tabContent">
+
+        <iframe src="Doc1.html"></iframe>
+
+    </div>
+
+    <!-- PHASE 2 -->
+    <div id="phase2Tab" class="tabContent">
+
+        <h2>Please Enter All Possible Vectors</h2>
+
+        <div class="passwordBoxes">
+
+            <input type="text" id="box1">
+
+            <input type="text" id="box2">
+
+            <input type="text" id="box3">
+
+            <input type="text" id="box4">
+
+        </div>
+
+        <button onclick="checkPassword()">ENTER</button>
+
+        <p id="passwordResult"></p>
+
+    </div>
+
+</div>
 
         <!-- AUDIO LOG -->
         <div id="audioTab" class="tabContent activeTab">
