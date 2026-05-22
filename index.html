@@ -43,13 +43,140 @@
 </div>
 
     <!-- MAIN MENU -->
-    <div id="menuScreen" class="screen">
+   <div id="menuScreen" class="screen">
 
-    <div class="tabs">
-        <button onclick="openTab('audioTab')">Audio Log</button>
-        <button onclick="openTab('docTab')">Amino Acid Sequence</button>
-        <button onclick="openTab('phase2Tab')">Phase 2</button>
+    <div class="menuGrid">
+
+        <!-- VIDEO LOGS -->
+
+        <div class="menuPanel"
+        onclick="openTab('audioTab')">
+
+            <img src="preview1.png"
+            class="panelImage">
+
+            <div class="panelOverlay">
+
+                <h1>VIDEO LOGS</h1>
+
+            </div>
+
+        </div>
+
+        <!-- AMINO ACID -->
+
+        <div class="menuPanel"
+        onclick="openTab('docTab')">
+
+            <img src="preview2.png"
+            class="panelImage">
+
+            <div class="panelOverlay">
+
+                <h1>AMINO ACID SEQUENCE</h1>
+
+            </div>
+
+        </div>
+
+        <!-- PHASE 2 -->
+
+        <div class="menuPanel"
+        onclick="openTab('phase2Tab')">
+
+            <img src="preview3.png"
+            class="panelImage">
+
+            <div class="panelOverlay">
+
+                <h1>PHASE 2</h1>
+
+            </div>
+
+        </div>
+
     </div>
+
+    <!-- AUDIO TAB -->
+
+    <div id="audioTab" class="tabContent">
+
+        <button id="revealButton"
+        onclick="revealVideo()">
+
+            OPEN AUDIO LOG
+
+        </button>
+
+        <div id="videoContainer"
+        style="display:none; margin-top:30px;">
+
+            <video controls width="900">
+
+                <source src="video1.mp4"
+                type="video/mp4">
+
+            </video>
+
+        </div>
+
+        <button class="backButton"
+        onclick="closeTabs()">
+
+            BACK
+
+        </button>
+
+    </div>
+
+    <!-- DOC TAB -->
+
+    <div id="docTab" class="tabContent">
+
+        <iframe src="Doc1.html"></iframe>
+
+        <button class="backButton"
+        onclick="closeTabs()">
+
+            BACK
+
+        </button>
+
+    </div>
+
+    <!-- PHASE 2 TAB -->
+
+    <div id="phase2Tab" class="tabContent">
+
+        <h2>
+            Please Enter All Possible Vectors
+        </h2>
+
+        <div class="passwordBoxes">
+
+            <input type="text" id="box1">
+            <input type="text" id="box2">
+            <input type="text" id="box3">
+            <input type="text" id="box4">
+
+        </div>
+
+        <button onclick="checkPassword()">
+            ENTER
+        </button>
+
+        <p id="passwordResult"></p>
+
+        <button class="backButton"
+        onclick="closeTabs()">
+
+            BACK
+
+        </button>
+
+    </div>
+
+</div>
 
     <!-- AUDIO LOG -->
     <div id="audioTab" class="tabContent">
