@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immunology System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- AUDIO -->
+    <audio id="bootAudio" src="BootupIm.mp3"></audio>
+
+    <!-- SCREEN 1 -->
+    <div id="startScreen" class="screen active">
+        <h1>PRESS ENTER / TAP SCREEN</h1>
+    </div>
+
+    <!-- SCREEN 2 -->
+    <div id="bootScreen" class="screen">
+        <img src="Immune.png" id="immuneLogo">
+    </div>
+
+    <!-- SCREEN 3 -->
+    <div id="continueScreen" class="screen">
+        <h1>PRESS ENTER TO CONTINUE</h1>
+    </div>
+
+    <!-- MAIN MENU -->
+    <div id="menuScreen" class="screen">
+
+        <div class="tabs">
+            <button onclick="openTab('audioTab')">Audio Log</button>
+            <button onclick="openTab('docTab')">Amino Acid Sequence</button>
+            <button onclick="openTab('phase2Tab')">Phase 2</button>
+        </div>
+
+        <!-- AUDIO LOG -->
+        <div id="audioTab" class="tabContent activeTab">
+            <video controls width="700">
+                <source src="video1.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- DOCUMENT -->
+        <div id="docTab" class="tabContent">
+            <iframe src="Doc1.html"></iframe>
+        </div>
+
+        <!-- PHASE 2 -->
+        <div id="phase2Tab" class="tabContent">
+            <h2>Please Enter All Possible Vectors</h2>
+
+            <div class="passwordBoxes">
+                <input type="text" id="box1" placeholder="V-03">
+                <input type="text" id="box2" placeholder="E-13">
+                <input type="text" id="box3" placeholder="H-07">
+                <input type="text" id="box4" placeholder="P-09">
+            </div>
+
+            <button onclick="checkPassword()">ENTER</button>
+
+            <p id="passwordResult"></p>
+        </div>
+
+    </div>
+
+<script src="script.js"></script>
+</body>
+</html>
