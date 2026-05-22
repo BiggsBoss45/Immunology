@@ -160,3 +160,39 @@ button,
 input{
     box-shadow:0 0 10px rgba(255,255,255,0.2);
 }
+
+/* CONTINUE PROMPT */
+
+#continueScreen{
+
+    justify-content:flex-end;
+    align-items:center;
+
+    padding-bottom:60px;
+}
+
+#continuePrompt{
+
+    font-size:28px;
+
+    letter-spacing:3px;
+
+    animation:pulseText 1.5s infinite;
+
+    opacity:0.8;
+}
+
+@keyframes pulseText{
+
+    0%{
+        opacity:0.3;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0.3;
+    }
+}
