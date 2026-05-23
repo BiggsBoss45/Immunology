@@ -534,3 +534,26 @@ input{
     50%{opacity:1;}
     100%{opacity:0.2;}
 }
+
+.crtBoot {
+    animation: crtFlash 0.15s infinite;
+}
+
+@keyframes crtFlash {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.4) contrast(1.2); }
+    100% { filter: brightness(1); }
+}
+
+.glitch {
+    animation: glitchShake 0.6s;
+}
+
+@keyframes glitchShake {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    60% { transform: translate(-2px, -1px); }
+    80% { transform: translate(1px, 2px); }
+    100% { transform: translate(0); }
+}
