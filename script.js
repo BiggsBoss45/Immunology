@@ -1,6 +1,7 @@
 let stage = 0;
 let bootState = "idle";
 let started = false;
+let locked = false;
 
 const clickSound = new Audio("click.mp3");
 const rebootSound = new Audio("reboot.mp3");
@@ -13,6 +14,14 @@ const sequences = [
 let dnaLoaded = false;
 
 /* =========================
+   DEBUG SAFETY (IMPORTANT)
+========================= */
+
+window.addEventListener("error", (e) => {
+    console.log("JS ERROR:", e.message);
+});
+
+/* =========================
    INIT
 ========================= */
 
@@ -20,33 +29,50 @@ window.addEventListener("load", () => {
     stage = 0;
     bootState = "idle";
     started = false;
+    locked = false;
 
-    showScreen("startScreen");
+    if (typeof showScreen === "function") {
+        showScreen("startScreen");
+    } else {
+        console.warn("showScreen() missing");
+    }
 });
 
 /* =========================
-   INPUT (FIXED + SAFE)
+   INPUT (BULLETPROOF)
 ========================= */
 
 document.addEventListener("keydown", (e) => {
     if (e.key !== "Enter") return;
-
-    if (stage === 0) startSequence();
-    else if (stage === 2 && bootState === "continue") continueToMenu();
+    handleStart();
 });
 
 document.addEventListener("click", () => {
-    if (stage === 0) startSequence();
-    else if (stage === 2 && bootState === "continue") continueToMenu();
+    handleStart();
 });
 
+function handleStart() {
+
+    if (locked) return;
+
+    if (stage === 0) {
+        startSequence();
+    }
+    else if (stage === 2 && bootState === "continue") {
+        continueToMenu();
+    }
+}
+
 /* =========================
-   SCREEN SYSTEM
+   SCREEN SYSTEM SAFETY WRAPPER
 ========================= */
 
 function showScreen(id){
-    document.querySelectorAll(".screen")
-        .forEach(s => s.classList.remove("active"));
+
+    const screens = document.querySelectorAll(".screen");
+    if (!screens.length) return;
+
+    screens.forEach(s => s.classList.remove("active"));
 
     const el = document.getElementById(id);
     if (el) el.classList.add("active");
@@ -57,8 +83,10 @@ function showScreen(id){
 ========================= */
 
 function startSequence(){
+
     if (started) return;
     started = true;
+    locked = true;
 
     stage = 1;
     bootState = "booting";
@@ -66,9 +94,13 @@ function startSequence(){
     showScreen("bootScreen");
 
     setTimeout(() => {
+
         stage = 2;
         bootState = "continue";
+        locked = false;
+
         showScreen("continueScreen");
+
     }, 6000);
 }
 
@@ -77,16 +109,19 @@ function startSequence(){
 ========================= */
 
 function continueToMenu(){
+
     stage = 3;
     bootState = "menu";
+
     showScreen("menuScreen");
 }
 
 /* =========================
-   PHASE 3 ENTRY (SAFE)
+   PHASE 3 ENTRY
 ========================= */
 
 function enterPhase3(){
+
     stage = 4;
 
     showScreen("phase3Screen");
@@ -102,26 +137,28 @@ function enterPhase3(){
 }
 
 /* =========================
-   SIMULATION CORE (FIXED TIMING)
+   SIMULATION CORE (SAFE)
 ========================= */
 
 function runSimulation(){
+
+    const bacteria = document.getElementById("bacteriaCell");
+    const virus = document.getElementById("virusParticle");
+    const rna = document.getElementById("rnaStrand");
+    const result = document.getElementById("simulationResult");
+    const atpBar = document.getElementById("atpBarInner");
+    const atpValue = document.getElementById("atpValue");
+
+    if (!bacteria || !virus || !result || !atpBar || !atpValue) {
+        console.warn("Missing simulation elements");
+        return;
+    }
 
     const pathway = document.getElementById("pathwaySelect")?.value;
     const atp = document.getElementById("atpSelect")?.value;
     const mutation = document.getElementById("mutationSelect")?.value;
 
-    const bacteria = document.getElementById("bacteriaCell");
-    const virus = document.getElementById("virusParticle");
-    const rna = document.getElementById("rnaStrand");
-
-    const result = document.getElementById("simulationResult");
-    const atpBar = document.getElementById("atpBarInner");
-    const atpValue = document.getElementById("atpValue");
-
-    if (!bacteria || !virus || !result) return;
-
-    /* RESET STATES */
+    /* RESET */
     bacteria.className = "";
     virus.className = "";
     if (rna) rna.className = "";
@@ -131,18 +168,19 @@ function runSimulation(){
     atpValue.textContent = "0 ATP";
 
     /* =========================
-       STEP 1: RNA ENTRY
+       RNA PHASE
     ========================= */
 
     if (rna) rna.classList.add("rnaInject");
 
     setTimeout(() => {
 
-        /* STEP 2: VIRUS INJECTION */
+        if (!virus) return;
+
         virus.classList.add("injecting");
 
         /* =========================
-           FAIL: LYSIS SEQUENCE
+           LYSIS FAILURE
         ========================= */
 
         if (pathway === "electron" && atp === "extreme") {
@@ -151,23 +189,23 @@ function runSimulation(){
 
             setTimeout(() => {
                 bacteria.classList.add("lysing");
-            }, 600);
+            }, 500);
 
             atpBar.style.width = "100%";
             atpValue.textContent = "ATP OVERLOAD";
-            result.textContent = "Cell lysis detected. Membrane rupture confirmed.";
+            result.textContent = "Cell lysis detected.";
 
             return;
         }
 
-        /* FAIL MUTATION */
+        /* MUTATION FAILURE */
         if (mutation === "repair" && atp === "elevated") {
 
             bacteria.classList.add("failedMutation");
 
             atpBar.style.width = "45%";
             atpValue.textContent = "45 ATP";
-            result.textContent = "Unstable mutation. No sustained replication.";
+            result.textContent = "Unstable mutation.";
 
             return;
         }
@@ -179,7 +217,7 @@ function runSimulation(){
 
             atpBar.style.width = "78%";
             atpValue.textContent = "78 ATP";
-            result.textContent = "Stable integration achieved. Enhanced ATP production confirmed.";
+            result.textContent = "Stable integration confirmed.";
 
             return;
         }
