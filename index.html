@@ -13,6 +13,11 @@
 <!-- AUDIO -->
 <audio id="bootAudio" src="BootupIm.mp3"></audio>
 
+<!-- REBOOT SCREEN -->
+<div id="rebootScreen" class="screen">
+    <h1>REBOOTING SYSTEM...</h1>
+</div>
+
 <!-- START SCREEN -->
 <div id="startScreen" class="screen active">
     <h1>PRESS ENTER / TAP SCREEN</h1>
@@ -35,76 +40,11 @@
     </div>
 </div>
 
-<!-- MAIN MENU -->
-<div id="menuScreen" class="screen">
 <!-- =========================
-     PHASE 3 MENU
+     MAIN MENU (PHASE 1)
 ========================= -->
+<div id="menuScreen" class="screen active">
 
-<div id="phase3Screen" class="screen">
-
-    <div class="phase3Grid">
-
-        <div class="menuPanel" onclick="openPhase3Tab('p3VideoTab')">
-            <div class="panelOverlay">
-                <h1>VIDEO LOG</h1>
-            </div>
-        </div>
-
-        <div class="menuPanel" onclick="openPhase3Tab('p3MetaTab')">
-            <div class="panelOverlay">
-                <h1>METABOLIC PATHWAYS</h1>
-            </div>
-        </div>
-
-        <div class="menuPanel" onclick="openPhase3Tab('p3QuizTab')">
-            <div class="panelOverlay">
-                <h1>PHASE 3</h1>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- VIDEO TAB -->
-    <div id="p3VideoTab" class="tabContent">
-        <h2>VIDEO LOG</h2>
-
-        <video controls width="700">
-            <source src="video2.mp4" type="video/mp4">
-        </video>
-
-        <button onclick="closePhase3()">BACK</button>
-    </div>
-
-    <!-- METABOLIC TAB -->
-    <div id="p3MetaTab" class="tabContent">
-        <h2>METABOLIC PATHWAYS</h2>
-
-        <iframe src="doc2.txt"></iframe>
-        <iframe src="doc3.txt"></iframe>
-
-        <button onclick="closePhase3()">BACK</button>
-    </div>
-
-    <!-- QUIZ TAB -->
-    <div id="p3QuizTab" class="tabContent">
-
-        <h2>PHASE 3 QUESTION</h2>
-
-        <p>What is the total energy production?</p>
-
-        <input id="phase3Answer" type="text" />
-
-        <button onclick="checkPhase3()">SUBMIT</button>
-
-        <p id="phase3Result"></p>
-
-        <button onclick="closePhase3()">BACK</button>
-    </div>
-
-</div>
-    
-    <!-- MENU GRID -->
     <div class="menuGrid">
 
         <div class="menuPanel" onclick="openTab('audioTab')">
@@ -128,7 +68,6 @@
             </div>
         </div>
 
-        <!-- NEW DNA MENU -->
         <div class="menuPanel" onclick="openTab('dnaTab')">
             <img src="preview4.png" class="panelImage">
             <div class="panelOverlay">
@@ -138,26 +77,19 @@
 
     </div>
 
-    <!-- =========================
-         AUDIO TAB
-    ========================== -->
+    <!-- AUDIO TAB -->
     <div id="audioTab" class="tabContent">
 
-        <button id="revealButton" onclick="revealVideo()">
-            OPEN AUDIO LOG
-        </button>
+        <button id="revealButton" onclick="revealVideo()">OPEN VIDEO LOG</button>
 
         <div id="videoContainer" style="display:none; margin-top:20px;">
-           <video id="mainVideo" controls width="700"></video>
+            <video id="mainVideo" controls></video>
         </div>
 
         <button class="backButton" onclick="closeTabs()">BACK</button>
-
     </div>
 
-    <!-- =========================
-         DOCUMENT TAB
-    ========================== -->
+    <!-- DOC TAB -->
     <div id="docTab" class="tabContent">
 
         <h2>AMINO ACID SEQUENCE</h2>
@@ -165,12 +97,9 @@
         <iframe src="Doc1.html"></iframe>
 
         <button class="backButton" onclick="closeTabs()">BACK</button>
-
     </div>
 
-    <!-- =========================
-         PHASE 2 TAB
-    ========================== -->
+    <!-- PHASE 2 TAB -->
     <div id="phase2Tab" class="tabContent">
 
         <h2>PHASE 2 // VECTOR VALIDATION</h2>
@@ -201,12 +130,9 @@
         </div>
 
         <button class="backButton" onclick="closeTabs()">BACK</button>
-
     </div>
 
-    <!-- =========================
-         DNA TAB (FIXED)
-    ========================== -->
+    <!-- DNA TAB -->
     <div id="dnaTab" class="tabContent">
 
         <h2>Recovered DNA Sequences</h2>
@@ -214,7 +140,74 @@
         <div id="dnaList"></div>
 
         <button class="backButton" onclick="closeTabs()">BACK</button>
+    </div>
 
+</div>
+
+<!-- =========================
+     PHASE 3 SCREEN (NEW SYSTEM)
+========================= -->
+<div id="phase3Screen" class="screen">
+
+    <div class="menuGrid">
+
+        <div class="menuPanel" onclick="openPhase3Tab('p3VideoTab')">
+            <div class="panelOverlay">
+                <h1>VIDEO LOG</h1>
+            </div>
+        </div>
+
+        <div class="menuPanel" onclick="openPhase3Tab('p3MetaTab')">
+            <div class="panelOverlay">
+                <h1>METABOLIC PATHWAYS</h1>
+            </div>
+        </div>
+
+        <div class="menuPanel" onclick="openPhase3Tab('p3QuizTab')">
+            <div class="panelOverlay">
+                <h1>PHASE 3</h1>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- VIDEO TAB -->
+    <div id="p3VideoTab" class="tabContent">
+
+        <h2>VIDEO LOG</h2>
+
+        <video controls width="700">
+            <source src="video2.mp4" type="video/mp4">
+        </video>
+
+        <button onclick="closePhase3()">BACK</button>
+    </div>
+
+    <!-- METABOLIC TAB -->
+    <div id="p3MetaTab" class="tabContent">
+
+        <h2>METABOLIC PATHWAYS</h2>
+
+        <iframe src="doc2.txt"></iframe>
+        <iframe src="doc3.txt"></iframe>
+
+        <button onclick="closePhase3()">BACK</button>
+    </div>
+
+    <!-- QUIZ TAB -->
+    <div id="p3QuizTab" class="tabContent">
+
+        <h2>PHASE 3 QUESTION</h2>
+
+        <p>What is the total energy production?</p>
+
+        <input id="phase3Answer" type="text" />
+
+        <button onclick="checkPhase3()">SUBMIT</button>
+
+        <p id="phase3Result"></p>
+
+        <button onclick="closePhase3()">BACK</button>
     </div>
 
 </div>
