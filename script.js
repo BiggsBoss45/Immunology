@@ -9,6 +9,7 @@ let bootState = "idle";
 let started = false;
 
 const clickSound = new Audio("click.mp3");
+
 const rebootSound = new Audio("reboot.mp3");
 rebootSound.preload = "auto";
 
@@ -17,22 +18,15 @@ rebootSound.preload = "auto";
 ========================= */
 
 const sequences = [
-    "B-01.html",
-    "C-09.html",
-    "E-13.html",
-    "L-12.html",
-    "M-22.html",
-    "P-09.html",
-    "S-05.html",
-    "V-03.html",
-    "H-07.html"
+    "B-01.html","C-09.html","E-13.html","L-12.html",
+    "M-22.html","P-09.html","S-05.html","V-03.html","H-07.html"
 ];
 
 let sequencesLoaded = false;
 let dnaLoaded = false;
 
 /* =========================
-   INIT (FORCE CLEAN START)
+   INIT
 ========================= */
 
 window.addEventListener("load", () => {
@@ -42,13 +36,10 @@ window.addEventListener("load", () => {
     started = false;
 
     showScreen("startScreen");
-
-    document.querySelector(".menuGrid")?.style && 
-        (document.querySelector(".menuGrid").style.display = "flex");
 });
 
 /* =========================
-   INPUT (ONLY START FLOW)
+   INPUT
 ========================= */
 
 document.addEventListener("keydown", (e) => {
@@ -73,10 +64,7 @@ function playClick() {
 ========================= */
 
 function showScreen(id) {
-    document.querySelectorAll(".screen").forEach(s => {
-        s.classList.remove("active");
-    });
-
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     const el = document.getElementById(id);
     if (el) el.classList.add("active");
 }
@@ -179,8 +167,6 @@ function stopVideoLog() {
         video.pause();
         video.removeAttribute("src");
         video.load();
-        video.currentTime = 0;
-        video.muted = true;
     }
 
     if (container) container.style.display = "none";
@@ -205,58 +191,27 @@ function revealVideo() {
 }
 
 /* =========================
-   PHASE 2 → REBOOT → PHASE 3 (FIXED SYNC)
+   🔥 REBOOT SYSTEM (FIXED)
 ========================= */
 
-function checkPhase2() {
-
-    playClick();
-
-    const selected = Array.from(
-        document.querySelectorAll("#orgList input:checked")
-    ).map(el => el.value);
-
-    const correct = ["V-03", "E-13", "H-07", "P-09"];
-
-    const success =
-        selected.length === correct.length &&
-        correct.every(v => selected.includes(v));
-
-    const result = document.getElementById("phase2Result");
-
-    if (result) {
-        result.textContent = success
-            ? "SEQUENCE VALIDATED"
-            : "INVALID VECTOR COMBINATION";
-    }
-
-    if (!success) return;
-
-    document.getElementById("phase2Access").style.display = "block";
-
-    // =========================
-    // REBOOT SEQUENCE (SYNC FIX)
-    // =========================
+function triggerReboot() {
 
     stage = 4;
     bootState = "phase3";
+
+    document.querySelector(".menuGrid").style.display = "none";
 
     showScreen("bootScreen");
 
     document.body.classList.add("glitch");
 
-    // RESET AUDIO + PLAY FULL REBOOT SOUND
     rebootSound.pause();
     rebootSound.currentTime = 0;
+    rebootSound.load();
 
-    const playPromise = rebootSound.play();
-    if (playPromise) {
-        playPromise.catch(() => {});
-    }
-
-    // keep screen locked during reboot
-    const menuGrid = document.querySelector(".menuGrid");
-    if (menuGrid) menuGrid.style.display = "none";
+    rebootSound.play().catch(() => {
+        console.log("Reboot blocked");
+    });
 
     setTimeout(() => {
 
@@ -270,7 +225,38 @@ function checkPhase2() {
             p3Audio.play().catch(() => {});
         }
 
-    }, 7000); // 🔥 MATCHES reboot.mp3 LENGTH
+    }, 7000);
+}
+
+/* =========================
+   PHASE 2
+========================= */
+
+function checkPhase2() {
+
+    playClick();
+
+    const selected = Array.from(
+        document.querySelectorAll("#orgList input:checked")
+    ).map(el => el.value);
+
+    const correct = ["V-03","E-13","H-07","P-09"];
+
+    const success =
+        selected.length === correct.length &&
+        correct.every(v => selected.includes(v));
+
+    const result = document.getElementById("phase2Result");
+
+    result.textContent = success
+        ? "SEQUENCE VALIDATED"
+        : "INVALID VECTOR COMBINATION";
+
+    if (!success) return;
+
+    document.getElementById("phase2Access").style.display = "block";
+
+    triggerReboot();
 }
 
 /* =========================
