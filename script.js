@@ -45,19 +45,37 @@ function playClick() {
 ========================= */
 
 function stopVideoLog() {
+
     const video = document.getElementById("mainVideo");
+    const container = document.getElementById("videoContainer");
+    const button = document.getElementById("revealButton");
 
     if (video) {
+
+        // FULL STOP
         video.pause();
+
+        // remove current playback
+        video.removeAttribute("src");
+
+        // clears internal media state
+        video.load();
+
+        // reset settings
         video.currentTime = 0;
         video.muted = true;
+    }
 
-        // 🔥 HARD STOP AUTOPLAY RESUME BEHAVIOR
-        video.removeAttribute("autoplay");
-        video.load();
+    // hide video again
+    if (container) {
+        container.style.display = "none";
+    }
+
+    // show open button again
+    if (button) {
+        button.style.display = "inline-block";
     }
 }
-
 /* =========================
    VIDEO REVEAL (SAFE PLAY ONLY)
 ========================= */
@@ -70,21 +88,9 @@ function revealVideo() {
     const container = document.getElementById("videoContainer");
     const button = document.getElementById("revealButton");
 
-    if (video) {
-        video.muted = false;
+    if (!video) return;
 
-        // 🔥 ALWAYS RESET BEFORE PLAYING
-        video.pause();
-        video.currentTime = 0;
-
-        video.src = "video1.mp4";
-
-        video.load();
-
-        // user-initiated play only
-        video.play().catch(() => {});
-    }
-
+    // make visible FIRST
     if (container) {
         container.style.display = "block";
     }
@@ -92,6 +98,23 @@ function revealVideo() {
     if (button) {
         button.style.display = "none";
     }
+
+    // reset everything
+    video.pause();
+    video.currentTime = 0;
+
+    // explicitly assign source ONLY when opened
+    video.src = "video1.mp4";
+
+    // stop muted autoplay weirdness
+    video.muted = false;
+
+    video.load();
+
+    // manual play only
+    video.play().catch(err => {
+        console.log("Playback blocked:", err);
+    });
 }
 
 /* =========================
