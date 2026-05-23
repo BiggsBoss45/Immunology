@@ -2,7 +2,7 @@ let stage = 0;
 // 0 = start
 // 1 = booting
 // 2 = continue
-// 3 = main menu
+// 3 = menu
 // 4 = phase3
 
 let bootState = "idle";
@@ -36,6 +36,11 @@ let dnaLoaded = false;
 
 window.addEventListener("load", () => {
     showScreen("startScreen");
+
+    // make sure everything else is hidden
+    document.querySelectorAll(".screen").forEach(s => {
+        if (s.id !== "startScreen") s.classList.remove("active");
+    });
 });
 
 /* =========================
@@ -111,8 +116,6 @@ function handleStart() {
 
         stage = 3;
         bootState = "menu";
-
-        inputLocked = true;
     }
 }
 
@@ -176,7 +179,7 @@ function openTab(tabId) {
     if (target) target.classList.add("activeTab");
 
     if (tabId === "audioTab" && !sequencesLoaded) {
-        loadSequences();
+        loadSequences?.();
         sequencesLoaded = true;
     }
 
@@ -284,38 +287,35 @@ function checkPhase2() {
             : "INVALID VECTOR COMBINATION";
     }
 
-    if (success) {
+    if (!success) return;
 
-        document.getElementById("phase2Access").style.display = "block";
+    document.getElementById("phase2Access").style.display = "block";
 
-        playClick();
+    /* =========================
+       REBOOT SEQUENCE
+    ========================= */
 
-        /* =========================
-           REBOOT SEQUENCE
-        ========================= */
+    rebootSound.currentTime = 0;
+    rebootSound.play();
 
-        rebootSound.currentTime = 0;
-        rebootSound.play();
+    showScreen("bootScreen");
 
-        showScreen("rebootScreen");
+    document.body.classList.add("glitch");
 
-        document.body.classList.add("glitch");
+    setTimeout(() => {
+        document.body.classList.remove("glitch");
 
-        setTimeout(() => {
-            document.body.classList.remove("glitch");
+        showScreen("phase3Screen");
+        stage = 4;
+        bootState = "phase3";
 
-            showScreen("phase3Screen");
-            stage = 4;
-            bootState = "phase3";
+        const p3Audio = document.getElementById("phase3Audio");
+        if (p3Audio) {
+            p3Audio.currentTime = 0;
+            p3Audio.play();
+        }
 
-            const p3Audio = document.getElementById("phase3Audio");
-            if (p3Audio) {
-                p3Audio.currentTime = 0;
-                p3Audio.play();
-            }
-
-        }, 2200);
-    }
+    }, 2200);
 }
 
 /* =========================
@@ -348,9 +348,7 @@ function checkPhase3() {
     const input = document.getElementById("phase3Answer").value.trim();
     const result = document.getElementById("phase3Result");
 
-    if (input === "19") {
-        result.textContent = "SEQUENCE COMPLETE";
-    } else {
-        result.textContent = "INCORRECT";
-    }
+    result.textContent = (input === "19")
+        ? "SEQUENCE COMPLETE"
+        : "INCORRECT";
 }
