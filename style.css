@@ -57,9 +57,9 @@ body{
 ========================= */
 
 #continueScreen{
-    justify-content:flex-end;
+    justify-content:center;
     align-items:center;
-    padding-bottom:60px;
+    padding-bottom:0;
 }
 
 #continuePrompt{
@@ -291,6 +291,8 @@ input{
     stroke-dashoffset:1000;
 
     opacity:0;
+
+    transition:1.2s linear;
 
     filter: drop-shadow(0 0 6px white);
 }
