@@ -6,7 +6,6 @@ let stage = 0;
 // 4 = phase3
 
 let bootState = "idle";
-
 let started = false;
 
 const clickSound = new Audio("click.mp3");
@@ -32,90 +31,43 @@ let sequencesLoaded = false;
 let dnaLoaded = false;
 
 /* =========================
-   INIT (FORCE START SCREEN)
+   INIT
 ========================= */
 
 window.addEventListener("load", () => {
 
-    // HARD RESET STATE
     stage = 0;
     bootState = "idle";
     started = false;
 
     showScreen("startScreen");
 
-    // ensure everything else is hidden
-    document.querySelectorAll(".screen").forEach(s => {
-        if (s.id !== "startScreen") s.classList.remove("active");
-    });
-
-    document.querySelector(".menuGrid")?.style && (document.querySelector(".menuGrid").style.display = "flex");
+    document.querySelector(".menuGrid")?.style &&
+        (document.querySelector(".menuGrid").style.display = "flex");
 });
 
 /* =========================
-   INPUT (ONLY HERE)
+   INPUT SYSTEM (FIXED)
 ========================= */
 
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") startSequence();
+    if (e.key === "Enter") handleInput();
 });
 
-document.addEventListener("click", () => {
-    startSequence();
-});
+/* ONLY ONE INPUT CONTROLLER */
+function handleInput() {
 
-/* =========================
-   START FLOW (FIXED CORE)
-========================= */
-
-function startSequence() {
-
-    if (started) return; // 🔥 prevents UI breaking double trigger
-    started = true;
-
-    stage = 1;
-    bootState = "booting";
-
-    playClick();
-    showScreen("bootScreen");
-
-    const bootAudio = document.getElementById("bootAudio");
-    if (bootAudio) {
-        bootAudio.currentTime = 0;
-        bootAudio.play().catch(() => {});
+    // START
+    if (stage === 0 && !started) {
+        startSequence();
+        return;
     }
 
-    // safety: force menuGrid hidden during boot
-    const mg = document.querySelector(".menuGrid");
-    if (mg) mg.style.display = "none";
-
-    setTimeout(() => {
-        showScreen("continueScreen");
-        stage = 2;
-        bootState = "continue";
-    }, 8000);
-}
-
-/* =========================
-   CONTINUE FLOW (FIXED)
-========================= */
-
-document.addEventListener("click", continueSequence);
-
-function continueSequence() {
-
-    if (stage !== 2 || bootState !== "continue") return;
-
-    playClick();
-
-    stage = 3;
-    bootState = "menu";
-
-    showScreen("menuScreen");
-
-    // IMPORTANT FIX: restore menu visibility
-    const mg = document.querySelector(".menuGrid");
-    if (mg) mg.style.display = "flex";
+    // CONTINUE → MENU
+    if (stage === 2 && bootState === "continue") {
+        continueSequence();
+        return;
+    }
 }
 
 /* =========================
@@ -128,64 +80,69 @@ function playClick() {
 }
 
 /* =========================
-   SCREEN SYSTEM
+   SCREEN SYSTEM (FIXED RENDER BUG)
 ========================= */
 
 function showScreen(id) {
 
     document.querySelectorAll(".screen").forEach(s => {
+        s.style.display = "none";
         s.classList.remove("active");
     });
 
     const el = document.getElementById(id);
-    if (el) el.classList.add("active");
-}
-
-/* =========================
-   MENU SYSTEM (FIXED)
-========================= */
-
-function openTab(tabId) {
-
-    playClick();
-    stopVideoLog();
-
-    const menuGrid = document.querySelector(".menuGrid");
-    if (menuGrid) menuGrid.style.display = "none";
-
-    document.querySelectorAll(".tabContent").forEach(tab => {
-        tab.classList.remove("activeTab");
-    });
-
-    const target = document.getElementById(tabId);
-    if (target) target.classList.add("activeTab");
-
-    if (tabId === "audioTab" && !sequencesLoaded) {
-        loadSequences?.();
-        sequencesLoaded = true;
-    }
-
-    if (tabId === "dnaTab" && !dnaLoaded) {
-        loadDNASequences();
-        dnaLoaded = true;
+    if (el) {
+        el.style.display = "flex";
+        el.classList.add("active");
     }
 }
 
 /* =========================
-   CLOSE TABS (FIXED)
+   START SEQUENCE
 ========================= */
 
-function closeTabs() {
+function startSequence() {
+
+    started = true;
+    stage = 1;
+    bootState = "booting";
 
     playClick();
-    stopVideoLog();
+    showScreen("bootScreen");
 
-    document.querySelectorAll(".tabContent").forEach(tab => {
-        tab.classList.remove("activeTab");
-    });
+    const bootAudio = document.getElementById("bootAudio");
+    if (bootAudio) {
+        bootAudio.currentTime = 0;
+        bootAudio.play().catch(() => {});
+    }
 
-    const menuGrid = document.querySelector(".menuGrid");
-    if (menuGrid) menuGrid.style.display = "flex";
+    const mg = document.querySelector(".menuGrid");
+    if (mg) mg.style.display = "none";
+
+    setTimeout(() => {
+        showScreen("continueScreen");
+        stage = 2;
+        bootState = "continue";
+    }, 8000);
+}
+
+/* =========================
+   CONTINUE SEQUENCE
+========================= */
+
+function continueSequence() {
+
+    if (stage !== 2 || bootState !== "continue") return;
+
+    playClick();
+
+    stage = 3;
+    bootState = "menu";
+
+    showScreen("menuScreen");
+
+    const mg = document.querySelector(".menuGrid");
+    if (mg) mg.style.display = "flex";
 }
 
 /* =========================
@@ -232,7 +189,50 @@ function revealVideo() {
 }
 
 /* =========================
-   DNA SYSTEM (UNCHANGED BUT SAFE)
+   MENU SYSTEM
+========================= */
+
+function openTab(tabId) {
+
+    playClick();
+    stopVideoLog();
+
+    const menuGrid = document.querySelector(".menuGrid");
+    if (menuGrid) menuGrid.style.display = "none";
+
+    document.querySelectorAll(".tabContent").forEach(tab => {
+        tab.classList.remove("activeTab");
+    });
+
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add("activeTab");
+
+    if (tabId === "audioTab" && !sequencesLoaded) {
+        loadSequences?.();
+        sequencesLoaded = true;
+    }
+
+    if (tabId === "dnaTab" && !dnaLoaded) {
+        loadDNASequences();
+        dnaLoaded = true;
+    }
+}
+
+function closeTabs() {
+
+    playClick();
+    stopVideoLog();
+
+    document.querySelectorAll(".tabContent").forEach(tab => {
+        tab.classList.remove("activeTab");
+    });
+
+    const menuGrid = document.querySelector(".menuGrid");
+    if (menuGrid) menuGrid.style.display = "flex";
+}
+
+/* =========================
+   DNA SYSTEM
 ========================= */
 
 function loadDNASequences() {
@@ -312,16 +312,14 @@ function checkPhase2() {
     const result = document.getElementById("phase2Result");
 
     if (result) {
-        result.textContent = success
-            ? "SEQUENCE VALIDATED"
-            : "INVALID VECTOR COMBINATION";
+        result.textContent =
+            success ? "SEQUENCE VALIDATED" : "INVALID VECTOR COMBINATION";
     }
 
     if (!success) return;
 
     document.getElementById("phase2Access").style.display = "block";
 
-    // reboot transition
     rebootSound.currentTime = 0;
     rebootSound.play().catch(() => {});
 
