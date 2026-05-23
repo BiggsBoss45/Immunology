@@ -7,6 +7,8 @@ let stage = 0;
 
 let bootState = "idle";
 
+let started = false;
+
 const clickSound = new Audio("click.mp3");
 const rebootSound = new Audio("reboot.mp3");
 
@@ -34,54 +36,42 @@ let dnaLoaded = false;
 ========================= */
 
 window.addEventListener("load", () => {
-    showScreen("startScreen");
+
+    // HARD RESET STATE
     stage = 0;
     bootState = "idle";
+    started = false;
+
+    showScreen("startScreen");
+
+    // ensure everything else is hidden
+    document.querySelectorAll(".screen").forEach(s => {
+        if (s.id !== "startScreen") s.classList.remove("active");
+    });
+
+    document.querySelector(".menuGrid")?.style && (document.querySelector(".menuGrid").style.display = "flex");
 });
 
 /* =========================
-   INPUT (FIXED — NO AUTO BREAKING UI)
+   INPUT (ONLY HERE)
 ========================= */
 
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") handleStart();
+    if (e.key === "Enter") startSequence();
 });
 
-/* IMPORTANT:
-   DO NOT auto-trigger on every click globally
-   This was breaking your UI.
-   Only start button should call handleStart()
-*/
+document.addEventListener("click", () => {
+    startSequence();
+});
 
 /* =========================
-   SOUND
+   START FLOW (FIXED CORE)
 ========================= */
 
-function playClick() {
-    clickSound.currentTime = 0;
-    clickSound.play();
-}
+function startSequence() {
 
-/* =========================
-   SCREEN SYSTEM
-========================= */
-
-function showScreen(id) {
-    document.querySelectorAll(".screen").forEach(s => {
-        s.classList.remove("active");
-    });
-
-    const el = document.getElementById(id);
-    if (el) el.classList.add("active");
-}
-
-/* =========================
-   START FLOW (CLEAN)
-========================= */
-
-function handleStart() {
-
-    if (stage !== 0) return; // 🔥 prevents accidental retrigger
+    if (started) return; // 🔥 prevents UI breaking double trigger
+    started = true;
 
     stage = 1;
     bootState = "booting";
@@ -95,28 +85,107 @@ function handleStart() {
         bootAudio.play().catch(() => {});
     }
 
+    // safety: force menuGrid hidden during boot
+    const mg = document.querySelector(".menuGrid");
+    if (mg) mg.style.display = "none";
+
     setTimeout(() => {
         showScreen("continueScreen");
-        bootState = "continue";
         stage = 2;
+        bootState = "continue";
     }, 8000);
 }
 
 /* =========================
-   CONTINUE (SEPARATE FLOW)
+   CONTINUE FLOW (FIXED)
 ========================= */
 
-document.addEventListener("click", handleContinue);
+document.addEventListener("click", continueSequence);
 
-function handleContinue() {
+function continueSequence() {
 
     if (stage !== 2 || bootState !== "continue") return;
+
+    playClick();
 
     stage = 3;
     bootState = "menu";
 
-    playClick();
     showScreen("menuScreen");
+
+    // IMPORTANT FIX: restore menu visibility
+    const mg = document.querySelector(".menuGrid");
+    if (mg) mg.style.display = "flex";
+}
+
+/* =========================
+   SOUND
+========================= */
+
+function playClick() {
+    clickSound.currentTime = 0;
+    clickSound.play().catch(() => {});
+}
+
+/* =========================
+   SCREEN SYSTEM
+========================= */
+
+function showScreen(id) {
+
+    document.querySelectorAll(".screen").forEach(s => {
+        s.classList.remove("active");
+    });
+
+    const el = document.getElementById(id);
+    if (el) el.classList.add("active");
+}
+
+/* =========================
+   MENU SYSTEM (FIXED)
+========================= */
+
+function openTab(tabId) {
+
+    playClick();
+    stopVideoLog();
+
+    const menuGrid = document.querySelector(".menuGrid");
+    if (menuGrid) menuGrid.style.display = "none";
+
+    document.querySelectorAll(".tabContent").forEach(tab => {
+        tab.classList.remove("activeTab");
+    });
+
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add("activeTab");
+
+    if (tabId === "audioTab" && !sequencesLoaded) {
+        loadSequences?.();
+        sequencesLoaded = true;
+    }
+
+    if (tabId === "dnaTab" && !dnaLoaded) {
+        loadDNASequences();
+        dnaLoaded = true;
+    }
+}
+
+/* =========================
+   CLOSE TABS (FIXED)
+========================= */
+
+function closeTabs() {
+
+    playClick();
+    stopVideoLog();
+
+    document.querySelectorAll(".tabContent").forEach(tab => {
+        tab.classList.remove("activeTab");
+    });
+
+    const menuGrid = document.querySelector(".menuGrid");
+    if (menuGrid) menuGrid.style.display = "flex";
 }
 
 /* =========================
@@ -124,6 +193,7 @@ function handleContinue() {
 ========================= */
 
 function stopVideoLog() {
+
     const video = document.getElementById("mainVideo");
     const container = document.getElementById("videoContainer");
     const button = document.getElementById("revealButton");
@@ -141,6 +211,7 @@ function stopVideoLog() {
 }
 
 function revealVideo() {
+
     playClick();
 
     const video = document.getElementById("mainVideo");
@@ -161,48 +232,7 @@ function revealVideo() {
 }
 
 /* =========================
-   MENU SYSTEM
-========================= */
-
-function openTab(tabId) {
-
-    playClick();
-    stopVideoLog();
-
-    document.querySelector(".menuGrid").style.display = "none";
-
-    document.querySelectorAll(".tabContent").forEach(tab => {
-        tab.classList.remove("activeTab");
-    });
-
-    const target = document.getElementById(tabId);
-    if (target) target.classList.add("activeTab");
-
-    if (tabId === "audioTab" && !sequencesLoaded) {
-        loadSequences?.();
-        sequencesLoaded = true;
-    }
-
-    if (tabId === "dnaTab" && !dnaLoaded) {
-        loadDNASequences();
-        dnaLoaded = true;
-    }
-}
-
-function closeTabs() {
-
-    playClick();
-    stopVideoLog();
-
-    document.querySelectorAll(".tabContent").forEach(tab => {
-        tab.classList.remove("activeTab");
-    });
-
-    document.querySelector(".menuGrid").style.display = "flex";
-}
-
-/* =========================
-   DNA SYSTEM
+   DNA SYSTEM (UNCHANGED BUT SAFE)
 ========================= */
 
 function loadDNASequences() {
@@ -291,10 +321,7 @@ function checkPhase2() {
 
     document.getElementById("phase2Access").style.display = "block";
 
-    /* =========================
-       REBOOT SEQUENCE
-    ========================= */
-
+    // reboot transition
     rebootSound.currentTime = 0;
     rebootSound.play().catch(() => {});
 
