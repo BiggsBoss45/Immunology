@@ -3,20 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <title>L-12 (Viral Sequence)</title>
+
 <style>
-body{margin:0;background:black;color:white;font-family:Courier New;padding:40px;}
-h1{text-align:center;letter-spacing:4px;margin-bottom:30px;}
-.block{margin-bottom:40px;line-height:2.2;}
-.codon{display:inline-block;margin:4px;padding:2px 6px;border:1px solid rgba(255,255,255,0.2);}
-.vector{border-color:rgba(255,255,255,0.6);}
-.vector:hover{background:white;color:black;}
+body{
+    margin:0;
+    background:black;
+    color:white;
+    font-family:Courier New, monospace;
+    padding:40px;
+}
+
+/* HEADER */
+h1{
+    text-align:center;
+    letter-spacing:4px;
+    margin-bottom:30px;
+}
+
+/* CLICK HEADERS */
+.blockHeader{
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.3);
+    padding:10px;
+    margin-bottom:10px;
+    text-align:center;
+    transition:0.2s;
+}
+
+.blockHeader:hover{
+    background:white;
+    color:black;
+}
+
+/* COLLAPSIBLE CONTENT */
+.blockContent{
+    display:none;
+    margin-bottom:40px;
+    line-height:2.2;
+}
+
+.blockContent.active{
+    display:block;
+}
+
+/* CODONS */
+.codon{
+    display:inline-block;
+    margin:4px;
+    padding:2px 6px;
+    border:1px solid rgba(255,255,255,0.2);
+}
+
+/* VECTOR (TARGET) */
+.vector{
+    border-color:rgba(255,255,255,0.6);
+    transition:0.2s;
+}
+
+.vector:hover{
+    background:white;
+    color:black;
+}
 </style>
+
+<script>
+function toggleBlock(id){
+    document.getElementById(id).classList.toggle("active");
+}
+</script>
+
 </head>
+
 <body>
 
 <h1>L-12 (Viral Sequence)</h1>
 
-<div class="block">
+<!-- BLOCK 1 -->
+<div class="blockHeader" onclick="toggleBlock('l12b1')">
+    BLOCK 1 — TARGET SEQUENCE
+</div>
+
+<div class="blockContent" id="l12b1">
 
 <span class="codon vector">ATG</span>
 <span class="codon vector">GGT</span>
@@ -35,8 +102,12 @@ h1{text-align:center;letter-spacing:4px;margin-bottom:30px;}
 
 </div>
 
-<!-- DECOY 1 -->
-<div class="block">
+<!-- BLOCK 2 -->
+<div class="blockHeader" onclick="toggleBlock('l12b2')">
+    BLOCK 2 — DECOY
+</div>
+
+<div class="blockContent" id="l12b2">
 
 <span class="codon">ATG</span>
 <span class="codon">GTT</span>
@@ -55,8 +126,12 @@ h1{text-align:center;letter-spacing:4px;margin-bottom:30px;}
 
 </div>
 
-<!-- DECOY 2 -->
-<div class="block">
+<!-- BLOCK 3 -->
+<div class="blockHeader" onclick="toggleBlock('l12b3')">
+    BLOCK 3 — DECOY
+</div>
+
+<div class="blockContent" id="l12b3">
 
 <span class="codon">ATG</span>
 <span class="codon">GCT</span>
@@ -75,8 +150,12 @@ h1{text-align:center;letter-spacing:4px;margin-bottom:30px;}
 
 </div>
 
-<!-- DECOY 3 -->
-<div class="block">
+<!-- BLOCK 4 -->
+<div class="blockHeader" onclick="toggleBlock('l12b4')">
+    BLOCK 4 — DECOY
+</div>
+
+<div class="blockContent" id="l12b4">
 
 <span class="codon">ATG</span>
 <span class="codon">GGT</span>
