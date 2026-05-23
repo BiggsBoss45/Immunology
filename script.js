@@ -17,7 +17,7 @@ const sequences = [
 let dnaLoaded = false;
 
 /* =========================
-   DEBUG SAFETY (IMPORTANT)
+   ERROR DEBUG
 ========================= */
 
 window.addEventListener("error", (e) => {
@@ -34,15 +34,11 @@ window.addEventListener("load", () => {
     started = false;
     locked = false;
 
-    if (typeof showScreen === "function") {
-        showScreen("startScreen");
-    } else {
-        console.warn("showScreen() missing");
-    }
+    showScreen("startScreen");
 });
 
 /* =========================
-   INPUT (BULLETPROOF)
+   INPUT
 ========================= */
 
 document.addEventListener("keydown", (e) => {
@@ -67,15 +63,13 @@ function handleStart() {
 }
 
 /* =========================
-   SCREEN SYSTEM SAFETY WRAPPER
+   SCREEN SYSTEM
 ========================= */
 
 function showScreen(id){
 
-    const screens = document.querySelectorAll(".screen");
-    if (!screens.length) return;
-
-    screens.forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".screen")
+        .forEach(s => s.classList.remove("active"));
 
     const el = document.getElementById(id);
     if (el) el.classList.add("active");
@@ -112,11 +106,84 @@ function startSequence(){
 ========================= */
 
 function continueToMenu(){
-
     stage = 3;
     bootState = "menu";
-
     showScreen("menuScreen");
+}
+
+/* =========================
+   TAB SYSTEM (MISSING FIX)
+========================= */
+
+function openTab(tabId) {
+
+    const menuGrid = document.querySelector("#menuScreen .menuGrid");
+    if (menuGrid) menuGrid.style.display = "none";
+
+    document.querySelectorAll("#menuScreen .tabContent")
+        .forEach(tab => tab.classList.remove("activeTab"));
+
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add("activeTab");
+}
+
+function closeTabs() {
+
+    document.querySelectorAll("#menuScreen .tabContent")
+        .forEach(tab => tab.classList.remove("activeTab"));
+
+    const menuGrid = document.querySelector("#menuScreen .menuGrid");
+    if (menuGrid) menuGrid.style.display = "flex";
+}
+
+/* =========================
+   VIDEO
+========================= */
+
+function revealVideo() {
+
+    const video = document.getElementById("mainVideo");
+    const container = document.getElementById("videoContainer");
+    const button = document.getElementById("revealButton");
+
+    if (!video || !container || !button) return;
+
+    container.style.display = "block";
+    button.style.display = "none";
+
+    video.src = "video1.mp4";
+    video.load();
+}
+
+/* =========================
+   PHASE 2
+========================= */
+
+function checkPhase2() {
+
+    const selected = Array.from(
+        document.querySelectorAll("#orgList input:checked")
+    ).map(el => el.value);
+
+    const correct = ["V-03","E-13","H-07","P-09"];
+
+    const success =
+        selected.length === correct.length &&
+        correct.every(v => selected.includes(v));
+
+    const result = document.getElementById("phase2Result");
+
+    result.textContent = success
+        ? "SEQUENCE VALIDATED"
+        : "INVALID COMBINATION";
+
+    if (success) {
+        document.getElementById("phase2Access").style.display = "block";
+
+        setTimeout(() => {
+            enterPhase3();
+        }, 1000);
+    }
 }
 
 /* =========================
@@ -140,7 +207,32 @@ function enterPhase3(){
 }
 
 /* =========================
-   SIMULATION CORE (SAFE)
+   PHASE 3 MENU
+========================= */
+
+function openPhase3Tab(tabId){
+
+    const menuGrid = document.querySelector("#phase3Screen .menuGrid");
+    if (menuGrid) menuGrid.style.display = "none";
+
+    document.querySelectorAll("#phase3Screen .tabContent")
+        .forEach(t => t.classList.remove("activeTab"));
+
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add("activeTab");
+}
+
+function closePhase3(){
+
+    document.querySelectorAll("#phase3Screen .tabContent")
+        .forEach(t => t.classList.remove("activeTab"));
+
+    const menuGrid = document.querySelector("#phase3Screen .menuGrid");
+    if (menuGrid) menuGrid.style.display = "flex";
+}
+
+/* =========================
+   SIMULATION CORE
 ========================= */
 
 function runSimulation(){
@@ -152,16 +244,12 @@ function runSimulation(){
     const atpBar = document.getElementById("atpBarInner");
     const atpValue = document.getElementById("atpValue");
 
-    if (!bacteria || !virus || !result || !atpBar || !atpValue) {
-        console.warn("Missing simulation elements");
-        return;
-    }
+    if (!bacteria || !virus || !result || !atpBar || !atpValue) return;
 
     const pathway = document.getElementById("pathwaySelect")?.value;
     const atp = document.getElementById("atpSelect")?.value;
     const mutation = document.getElementById("mutationSelect")?.value;
 
-    /* RESET */
     bacteria.className = "";
     virus.className = "";
     if (rna) rna.className = "";
@@ -170,21 +258,11 @@ function runSimulation(){
     atpBar.style.width = "0%";
     atpValue.textContent = "0 ATP";
 
-    /* =========================
-       RNA PHASE
-    ========================= */
-
     if (rna) rna.classList.add("rnaInject");
 
     setTimeout(() => {
 
-        if (!virus) return;
-
         virus.classList.add("injecting");
-
-        /* =========================
-           LYSIS FAILURE
-        ========================= */
 
         if (pathway === "electron" && atp === "extreme") {
 
@@ -197,11 +275,9 @@ function runSimulation(){
             atpBar.style.width = "100%";
             atpValue.textContent = "ATP OVERLOAD";
             result.textContent = "Cell lysis detected.";
-
             return;
         }
 
-        /* MUTATION FAILURE */
         if (mutation === "repair" && atp === "elevated") {
 
             bacteria.classList.add("failedMutation");
@@ -209,11 +285,9 @@ function runSimulation(){
             atpBar.style.width = "45%";
             atpValue.textContent = "45 ATP";
             result.textContent = "Unstable mutation.";
-
             return;
         }
 
-        /* SUCCESS */
         if (pathway === "krebs" && atp === "elevated" && mutation === "enzyme") {
 
             bacteria.classList.add("mutatedCell");
@@ -221,11 +295,9 @@ function runSimulation(){
             atpBar.style.width = "78%";
             atpValue.textContent = "78 ATP";
             result.textContent = "Stable integration confirmed.";
-
             return;
         }
 
-        /* DEFAULT */
         bacteria.classList.add("stableCell");
 
         atpBar.style.width = "30%";
@@ -234,3 +306,16 @@ function runSimulation(){
 
     }, 1400);
 }
+
+/* =========================
+   GLOBAL EXPORT (CRITICAL)
+========================= */
+
+window.openTab = openTab;
+window.closeTabs = closeTabs;
+window.revealVideo = revealVideo;
+window.checkPhase2 = checkPhase2;
+window.runSimulation = runSimulation;
+window.openPhase3Tab = openPhase3Tab;
+window.closePhase3 = closePhase3;
+window.enterPhase3 = enterPhase3;
