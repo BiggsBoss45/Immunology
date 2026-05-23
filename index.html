@@ -1,262 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
     <title>Immunology System</title>
+
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
 
     <!-- AUDIO -->
-    <audio id="bootAudio" src="BootupIm.mp3"></audio>
 
-    <!-- SCREEN 1 -->
-    <div id="startScreen" class="screen active">
-        <h1>PRESS ENTER / TAP SCREEN</h1>
-    </div>
+    <audio id="bootAudio"
+    src="BootupIm.mp3"></audio>
 
-    <!-- SCREEN 2 -->
-    <div id="bootScreen" class="screen">
+    <!-- START SCREEN -->
 
-    <div id="vectorContainer">
+    <div id="startScreen"
+    class="screen active">
 
-        <div class="scanCircle"></div>
-        <div class="scanLine horizontal"></div>
-        <div class="scanLine vertical"></div>
-
-        <img src="Immune.png" id="immuneLogo">
+        <h1>
+            PRESS ENTER / TAP SCREEN
+        </h1>
 
     </div>
 
-</div>
+    <!-- BOOT SCREEN -->
 
-    <!-- SCREEN 3 -->
-    <div id="continueScreen" class="screen">
+    <div id="bootScreen"
+    class="screen">
 
-    <div id="continuePrompt">
+        <div id="vectorContainer">
 
-        PRESS ENTER / TAP TO CONTINUE
+            <div class="scanCircle"></div>
+
+            <div class="scanLine horizontal"></div>
+
+            <div class="scanLine vertical"></div>
+
+            <img src="Immune.png"
+            id="immuneLogo">
+
+        </div>
 
     </div>
 
-</div>
+    <!-- CONTINUE SCREEN -->
+
+    <div id="continueScreen"
+    class="screen">
+
+        <div id="continuePrompt">
+
+            PRESS ENTER / TAP TO CONTINUE
+
+        </div>
+
+    </div>
 
     <!-- MAIN MENU -->
-   <div id="menuScreen" class="screen">
 
-    <div class="menuGrid">
+    <div id="menuScreen"
+    class="screen">
 
-        <!-- VIDEO LOGS -->
+        <div class="menuGrid">
 
-        <div class="menuPanel"
-        onclick="openTab('audioTab')">
+            <!-- VIDEO LOGS -->
 
-            <img src="preview1.png"
-            class="panelImage">
+            <div class="menuPanel"
+            onclick="openTab('audioTab')">
 
-            <div class="panelOverlay">
+                <img src="preview1.png"
+                class="panelImage">
 
-                <h1>VIDEO LOGS</h1>
+                <div class="panelOverlay">
+
+                    <h1>VIDEO LOGS</h1>
+
+                </div>
+
+            </div>
+
+            <!-- AMINO ACID -->
+
+            <div class="menuPanel"
+            onclick="openTab('docTab')">
+
+                <img src="preview2.png"
+                class="panelImage">
+
+                <div class="panelOverlay">
+
+                    <h1>AMINO ACID SEQUENCE</h1>
+
+                </div>
+
+            </div>
+
+            <!-- PHASE 2 -->
+
+            <div class="menuPanel"
+            onclick="openTab('phase2Tab')">
+
+                <img src="preview3.png"
+                class="panelImage">
+
+                <div class="panelOverlay">
+
+                    <h1>PHASE 2</h1>
+
+                </div>
 
             </div>
 
         </div>
 
-        <!-- AMINO ACID -->
+        <!-- =========================
+             AUDIO LOG TAB
+        ========================== -->
 
-        <div class="menuPanel"
-        onclick="openTab('docTab')">
+        <div id="audioTab"
+        class="tabContent">
 
-            <img src="preview2.png"
-            class="panelImage">
+            <h2>VIDEO LOG ARCHIVE</h2>
 
-            <div class="panelOverlay">
+            <button id="revealButton"
+            onclick="revealVideo()">
 
-                <h1>AMINO ACID SEQUENCE</h1>
+                OPEN AUDIO LOG
+
+            </button>
+
+            <div id="videoContainer"
+            style="display:none; margin-top:30px;">
+
+                <video id="mainVideo"
+                controls
+                width="900">
+
+                    <source src="video1.mp4"
+                    type="video/mp4">
+
+                </video>
 
             </div>
 
-        </div>
+            <button class="backButton"
+            onclick="closeTabs()">
 
-        <!-- PHASE 2 -->
+                BACK
 
-        <div class="menuPanel"
-        onclick="openTab('phase2Tab')">
-
-            <img src="preview3.png"
-            class="panelImage">
-
-            <div class="panelOverlay">
-
-                <h1>PHASE 2</h1>
-
-            </div>
+            </button>
 
         </div>
 
-    </div>
+        <!-- =========================
+             DOCUMENT TAB
+        ========================== -->
 
-    <!-- AUDIO TAB -->
+        <div id="docTab"
+        class="tabContent">
 
-    <div id="audioTab" class="tabContent">
+            <h2>AMINO ACID SEQUENCE</h2>
 
-        <button id="revealButton"
-        onclick="revealVideo()">
-
-            OPEN AUDIO LOG
-
-        </button>
-
-        <div id="videoContainer"
-        style="display:none; margin-top:30px;">
-
-            <video controls width="900">
-
-                <source src="video1.mp4"
-                type="video/mp4">
-
-            </video>
-
-        </div>
-
-        <button class="backButton"
-        onclick="closeTabs()">
-
-            BACK
-
-        </button>
-
-    </div>
-
-    <!-- DOC TAB -->
-
-    <div id="docTab" class="tabContent">
-
-        <iframe src="Doc1.html"></iframe>
-
-        <button class="backButton"
-        onclick="closeTabs()">
-
-            BACK
-
-        </button>
-
-    </div>
-
-    <!-- PHASE 2 TAB -->
-
-    <div id="phase2Tab" class="tabContent">
-
-        <h2>
-            Please Enter All Possible Vectors
-        </h2>
-
-        <div class="passwordBoxes">
-
-            <input type="text" id="box1">
-            <input type="text" id="box2">
-            <input type="text" id="box3">
-            <input type="text" id="box4">
-
-        </div>
-
-        <button onclick="checkPassword()">
-            ENTER
-        </button>
-
-        <p id="passwordResult"></p>
-
-        <button class="backButton"
-        onclick="closeTabs()">
-
-            BACK
-
-        </button>
-
-    </div>
-
-</div>
-
-    <!-- AUDIO LOG -->
-    <div id="audioTab" class="tabContent">
-
-        <button id="revealButton" onclick="revealVideo()">
-            OPEN AUDIO LOG
-        </button>
-
-        <div id="videoContainer" style="display:none; margin-top:20px;">
-
-            <video controls width="700">
-                <source src="video1.mp4" type="video/mp4">
-            </video>
-
-        </div>
-
-    </div>
-
-    <!-- DOCUMENT -->
-    <div id="docTab" class="tabContent">
-
-        <iframe src="Doc1.html"></iframe>
-
-    </div>
-
-    <!-- PHASE 2 -->
-    <div id="phase2Tab" class="tabContent">
-
-        <h2>Please Enter All Possible Vectors</h2>
-
-        <div class="passwordBoxes">
-
-            <input type="text" id="box1">
-
-            <input type="text" id="box2">
-
-            <input type="text" id="box3">
-
-            <input type="text" id="box4">
-
-        </div>
-
-        <button onclick="checkPassword()">ENTER</button>
-
-        <p id="passwordResult"></p>
-
-    </div>
-
-</div>
-
-        <!-- AUDIO LOG -->
-        <div id="audioTab" class="tabContent activeTab">
-            <video controls width="700">
-                <source src="video1.mp4" type="video/mp4">
-            </video>
-        </div>
-
-        <!-- DOCUMENT -->
-        <div id="docTab" class="tabContent">
             <iframe src="Doc1.html"></iframe>
+
+            <button class="backButton"
+            onclick="closeTabs()">
+
+                BACK
+
+            </button>
+
         </div>
 
-        <!-- PHASE 2 -->
-        <div id="phase2Tab" class="tabContent">
-            <h2>Please Enter All Possible Vectors</h2>
+        <!-- =========================
+             PHASE 2 TAB
+        ========================== -->
 
-            <div class="passwordBoxes">
-                <input type="text" id="box1" placeholder="V-03">
-                <input type="text" id="box2" placeholder="E-13">
-                <input type="text" id="box3" placeholder="H-07">
-                <input type="text" id="box4" placeholder="P-09">
+        <div id="phase2Tab"
+        class="tabContent">
+
+            <h2>
+                PHASE 2 // VECTOR VALIDATION
+            </h2>
+
+            <p>
+                Select all valid organisms
+                capable of producing the
+                reconstructed protein.
+            </p>
+
+            <div id="orgList">
+
+                <label>
+                    <input type="checkbox"
+                    value="V-03">
+                    V-03
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                    value="E-13">
+                    E-13
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                    value="H-07">
+                    H-07
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                    value="P-09">
+                    P-09
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                    value="S-05">
+                    S-05
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                    value="M-22">
+                    M-22
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                    value="L-12">
+                    L-12
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                    value="B-01">
+                    B-01
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                    value="C-09">
+                    C-09
+                </label>
+
             </div>
 
-            <button onclick="checkPassword()">ENTER</button>
+            <button onclick="checkPhase2()">
 
-            <p id="passwordResult"></p>
+                VALIDATE SEQUENCE
+
+            </button>
+
+            <p id="phase2Result"></p>
+
+            <!-- SECRET UNLOCK -->
+
+            <div id="phase2Access"
+            style="display:none; margin-top:30px;">
+
+                <h2>
+                    PHASE 2 UNLOCKED
+                </h2>
+
+                <p>
+                    RECONSTRUCTED PROTEIN
+                    CONFIRMED
+                </p>
+
+            </div>
+
+            <button class="backButton"
+            onclick="closeTabs()">
+
+                BACK
+
+            </button>
+
         </div>
 
     </div>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
+
 </body>
+
 </html>
