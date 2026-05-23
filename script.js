@@ -6,7 +6,6 @@ let stage = 0;
 // 4 = phase3
 
 let bootState = "idle";
-let inputLocked = false;
 
 const clickSound = new Audio("click.mp3");
 const rebootSound = new Audio("reboot.mp3");
@@ -31,31 +30,28 @@ let sequencesLoaded = false;
 let dnaLoaded = false;
 
 /* =========================
-   INIT
+   INIT (FORCE START SCREEN)
 ========================= */
 
 window.addEventListener("load", () => {
     showScreen("startScreen");
-
-    // make sure everything else is hidden
-    document.querySelectorAll(".screen").forEach(s => {
-        if (s.id !== "startScreen") s.classList.remove("active");
-    });
+    stage = 0;
+    bootState = "idle";
 });
 
 /* =========================
-   INPUT
+   INPUT (FIXED — NO AUTO BREAKING UI)
 ========================= */
 
 document.addEventListener("keydown", (e) => {
-    if (inputLocked) return;
     if (e.key === "Enter") handleStart();
 });
 
-document.addEventListener("click", () => {
-    if (inputLocked) return;
-    handleStart();
-});
+/* IMPORTANT:
+   DO NOT auto-trigger on every click globally
+   This was breaking your UI.
+   Only start button should call handleStart()
+*/
 
 /* =========================
    SOUND
@@ -80,43 +76,47 @@ function showScreen(id) {
 }
 
 /* =========================
-   START FLOW
+   START FLOW (CLEAN)
 ========================= */
 
 function handleStart() {
 
-    if (bootState === "booting") return;
+    if (stage !== 0) return; // 🔥 prevents accidental retrigger
 
-    if (stage === 0) {
+    stage = 1;
+    bootState = "booting";
 
-        bootState = "booting";
-        playClick();
+    playClick();
+    showScreen("bootScreen");
 
-        showScreen("bootScreen");
-
-        const bootAudio = document.getElementById("bootAudio");
-        if (bootAudio) {
-            bootAudio.currentTime = 0;
-            bootAudio.play();
-        }
-
-        stage = 1;
-
-        setTimeout(() => {
-            showScreen("continueScreen");
-            bootState = "continue";
-        }, 8000);
+    const bootAudio = document.getElementById("bootAudio");
+    if (bootAudio) {
+        bootAudio.currentTime = 0;
+        bootAudio.play().catch(() => {});
     }
 
-    else if (stage === 1 && bootState === "continue") {
+    setTimeout(() => {
+        showScreen("continueScreen");
+        bootState = "continue";
+        stage = 2;
+    }, 8000);
+}
 
-        playClick();
+/* =========================
+   CONTINUE (SEPARATE FLOW)
+========================= */
 
-        showScreen("menuScreen");
+document.addEventListener("click", handleContinue);
 
-        stage = 3;
-        bootState = "menu";
-    }
+function handleContinue() {
+
+    if (stage !== 2 || bootState !== "continue") return;
+
+    stage = 3;
+    bootState = "menu";
+
+    playClick();
+    showScreen("menuScreen");
 }
 
 /* =========================
@@ -262,7 +262,7 @@ function loadDNASequences() {
 }
 
 /* =========================
-   PHASE 2
+   PHASE 2 → REBOOT → PHASE 3
 ========================= */
 
 function checkPhase2() {
@@ -296,13 +296,14 @@ function checkPhase2() {
     ========================= */
 
     rebootSound.currentTime = 0;
-    rebootSound.play();
+    rebootSound.play().catch(() => {});
 
     showScreen("bootScreen");
 
     document.body.classList.add("glitch");
 
     setTimeout(() => {
+
         document.body.classList.remove("glitch");
 
         showScreen("phase3Screen");
@@ -312,7 +313,7 @@ function checkPhase2() {
         const p3Audio = document.getElementById("phase3Audio");
         if (p3Audio) {
             p3Audio.currentTime = 0;
-            p3Audio.play();
+            p3Audio.play().catch(() => {});
         }
 
     }, 2200);
@@ -348,7 +349,6 @@ function checkPhase3() {
     const input = document.getElementById("phase3Answer").value.trim();
     const result = document.getElementById("phase3Result");
 
-    result.textContent = (input === "19")
-        ? "SEQUENCE COMPLETE"
-        : "INCORRECT";
+    result.textContent =
+        (input === "19") ? "SEQUENCE COMPLETE" : "INCORRECT";
 }
