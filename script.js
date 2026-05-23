@@ -41,7 +41,7 @@ function playClick() {
 }
 
 /* =========================
-   VIDEO CONTROL
+   VIDEO CONTROL (HARD RESET)
 ========================= */
 
 function stopVideoLog() {
@@ -51,11 +51,15 @@ function stopVideoLog() {
         video.pause();
         video.currentTime = 0;
         video.muted = true;
+
+        // 🔥 HARD STOP AUTOPLAY RESUME BEHAVIOR
+        video.removeAttribute("autoplay");
+        video.load();
     }
 }
 
 /* =========================
-   VIDEO REVEAL (FIXED)
+   VIDEO REVEAL (SAFE PLAY ONLY)
 ========================= */
 
 function revealVideo() {
@@ -68,8 +72,16 @@ function revealVideo() {
 
     if (video) {
         video.muted = false;
-        video.src = "video1.mp4";   // 🔥 FORCE CORRECT FILE
+
+        // 🔥 ALWAYS RESET BEFORE PLAYING
+        video.pause();
+        video.currentTime = 0;
+
+        video.src = "video1.mp4";
+
         video.load();
+
+        // user-initiated play only
         video.play().catch(() => {});
     }
 
@@ -132,6 +144,8 @@ function handleStart() {
 function openTab(tabId) {
 
     playClick();
+
+    // 🔥 IMPORTANT: always kill video state when switching tabs
     stopVideoLog();
 
     document.querySelector(".menuGrid").style.display = "none";
@@ -153,6 +167,10 @@ function openTab(tabId) {
         dnaLoaded = true;
     }
 }
+
+/* =========================
+   CLOSE TABS
+========================= */
 
 function closeTabs() {
 
