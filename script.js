@@ -13,6 +13,22 @@ function playClick(){
 }
 
 /* =========================
+   VIDEO SAFETY CONTROL
+========================= */
+
+function stopVideoLog(){
+
+    const video = document.querySelector("#videoContainer video");
+
+    if(video){
+
+        video.pause();
+        video.currentTime = 0;
+        video.muted = true;
+    }
+}
+
+/* =========================
    BOOT VECTOR SYSTEM
 ========================= */
 
@@ -64,7 +80,6 @@ function destroyVector(){
 
 function handleStart(){
 
-    // 🚨 HARD BLOCK ALL INPUT DURING BOOT
     if(bootState === "booting"){
         return;
     }
@@ -72,7 +87,7 @@ function handleStart(){
     // START SCREEN
     if(stage === 0){
 
-        bootState = "booting"; // LOCK INPUT IMMEDIATELY
+        bootState = "booting";
 
         playClick();
 
@@ -104,7 +119,7 @@ function handleStart(){
                 document.getElementById("continueScreen")
                 .classList.add("active");
 
-                bootState = "continue"; // UNLOCK HERE
+                bootState = "continue";
 
             }, 1200);
 
@@ -135,14 +150,15 @@ function openTab(tabId){
 
     playClick();
 
+    // STOP VIDEO WHEN SWITCHING TABS
+    stopVideoLog();
+
     document.querySelector(".menuGrid")
     .style.display = "none";
 
     document.querySelectorAll(".tabContent")
     .forEach(tab => {
-
         tab.classList.remove("activeTab");
-
     });
 
     document.getElementById(tabId)
@@ -153,11 +169,12 @@ function closeTabs(){
 
     playClick();
 
+    // STOP VIDEO WHEN EXITING TABS
+    stopVideoLog();
+
     document.querySelectorAll(".tabContent")
     .forEach(tab => {
-
         tab.classList.remove("activeTab");
-
     });
 
     document.querySelector(".menuGrid")
@@ -171,6 +188,12 @@ function closeTabs(){
 function revealVideo(){
 
     playClick();
+
+    const video = document.querySelector("#videoContainer video");
+
+    if(video){
+        video.muted = false;
+    }
 
     document.getElementById("videoContainer")
     .style.display = "block";
@@ -188,7 +211,6 @@ function checkPassword(){
     playClick();
 
     const values = [
-
         document.getElementById("box1").value.trim().toUpperCase(),
         document.getElementById("box2").value.trim().toUpperCase(),
         document.getElementById("box3").value.trim().toUpperCase(),
