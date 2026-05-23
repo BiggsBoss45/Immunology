@@ -3,43 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <title>C-09 (Viral Sequence)</title>
+
 <style>
-body{margin:0;background:black;color:white;font-family:Courier New;padding:40px;}
-h1{text-align:center;letter-spacing:4px;margin-bottom:30px;}
-.block{margin-bottom:40px;line-height:2.2;}
-.codon{display:inline-block;margin:4px;padding:2px 6px;border:1px solid rgba(255,255,255,0.2);}
-.vector{border-color:rgba(255,255,255,0.6);}
-.vector:hover{background:white;color:black;}
+body{
+    margin:0;
+    background:black;
+    color:white;
+    font-family:Courier New;
+    padding:40px;
+}
+
+h1{
+    text-align:center;
+    letter-spacing:4px;
+    margin-bottom:30px;
+}
+
+/* =========================
+   SEQUENCE UI SYSTEM
+========================= */
+
+.seqItem{
+    margin-bottom:20px;
+}
+
+.seqButton{
+    width:100%;
+    padding:12px;
+    background:black;
+    color:white;
+    border:1px solid white;
+    cursor:pointer;
+    font-family:inherit;
+    letter-spacing:2px;
+    transition:0.2s;
+}
+
+.seqButton:hover{
+    background:white;
+    color:black;
+}
+
+.seqContent{
+    display:none;
+    margin-top:15px;
+}
+
+/* =========================
+   CODON DISPLAY
+========================= */
+
+.block{
+    margin-bottom:20px;
+    line-height:2.2;
+}
+
+.codon{
+    display:inline-block;
+    margin:4px;
+    padding:2px 6px;
+    border:1px solid rgba(255,255,255,0.2);
+}
+
+.vector{
+    border-color:rgba(255,255,255,0.6);
+}
+
+.vector:hover{
+    background:white;
+    color:black;
+}
 </style>
+
 </head>
+
 <body>
 
 <h1>C-09 (Viral Sequence)</h1>
 
-<!-- BLOCK 1 (VECTOR / TARGET) -->
-<div class="block">
-<span class="codon vector">ATG</span><span class="codon vector">GCA</span><span class="codon vector">TGG</span><span class="codon vector">AAT</span>
-<span class="codon vector">CCG</span><span class="codon vector">GAA</span><span class="codon vector">TTT</span><span class="codon vector">CGT</span>
-<span class="codon vector">AAA</span><span class="codon vector">TGT</span><span class="codon vector">GGT</span><span class="codon vector">CCG</span>
-<span class="codon vector">TGG</span><span class="codon vector">TAA</span>
+<div id="sequenceContainer">
+
+    <!-- TARGET -->
+    <div class="seqItem">
+
+        <button class="seqButton" onclick="toggleSequence(this)">
+            Target Sequence (Encrypted Strand)
+        </button>
+
+        <div class="seqContent">
+
+            <div class="block">
+                <span class="codon vector">ATG</span><span class="codon vector">GCA</span><span class="codon vector">TGG</span><span class="codon vector">AAT</span>
+                <span class="codon vector">CCG</span><span class="codon vector">GAA</span><span class="codon vector">TTT</span><span class="codon vector">CGT</span>
+                <span class="codon vector">AAA</span><span class="codon vector">TGT</span><span class="codon vector">GGT</span><span class="codon vector">CCG</span>
+                <span class="codon vector">TGG</span><span class="codon vector">TAA</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DECOY 1 -->
+    <div class="seqItem">
+
+        <button class="seqButton" onclick="toggleSequence(this)">
+            Sequence A (Fragment)
+        </button>
+
+        <div class="seqContent">
+
+            <div class="block">
+                <span class="codon">ATG</span><span class="codon">GTT</span><span class="codon">GGT</span><span class="codon">GCT</span><span class="codon">TCT</span>
+                <span class="codon">ACT</span><span class="codon">CTG</span><span class="codon">CAT</span><span class="codon">GAA</span><span class="codon">CCG</span>
+                <span class="codon">GGT</span><span class="codon">AAA</span><span class="codon">TAC</span><span class="codon">TAA</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DECOY 2 -->
+    <div class="seqItem">
+
+        <button class="seqButton" onclick="toggleSequence(this)">
+            Sequence B (Fragment)
+        </button>
+
+        <div class="seqContent">
+
+            <div class="block">
+                <span class="codon">ATG</span><span class="codon">GCT</span><span class="codon">GAT</span><span class="codon">GGT</span><span class="codon">CTG</span>
+                <span class="codon">TCT</span><span class="codon">CGT</span><span class="codon">GTT</span><span class="codon">ACT</span><span class="codon">AAT</span>
+                <span class="codon">GAA</span><span class="codon">TTT</span><span class="codon">GGT</span><span class="codon">TGA</span>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
-<br><br>
+<script>
+function toggleSequence(button){
 
-<!-- BLOCK 2 (DECOY) -->
-<div class="block">
-<span class="codon">ATG</span><span class="codon">GTT</span><span class="codon">GGT</span><span class="codon">GCT</span><span class="codon">TCT</span>
-<span class="codon">ACT</span><span class="codon">CTG</span><span class="codon">CAT</span><span class="codon">GAA</span><span class="codon">CCG</span>
-<span class="codon">GGT</span><span class="codon">AAA</span><span class="codon">TAC</span><span class="codon">TAA</span>
-</div>
+    const content = button.nextElementSibling;
 
-<br><br>
+    const isOpen = content.style.display === "block";
 
-<!-- BLOCK 3 (DECOY) -->
-<div class="block">
-<span class="codon">ATG</span><span class="codon">GCT</span><span class="codon">GAT</span><span class="codon">GGT</span><span class="codon">CTG</span>
-<span class="codon">TCT</span><span class="codon">CGT</span><span class="codon">GTT</span><span class="codon">ACT</span><span class="codon">AAT</span>
-<span class="codon">GAA</span><span class="codon">TTT</span><span class="codon">GGT</span><span class="codon">TGA</span>
-</div>
+    document.querySelectorAll(".seqContent").forEach(el => {
+        el.style.display = "none";
+    });
+
+    content.style.display = isOpen ? "none" : "block";
+
+    if(typeof playClick === "function"){
+        playClick();
+    }
+}
+</script>
+
 </body>
 </html>
