@@ -1,3 +1,6 @@
+alert("SCRIPT IS RUNNING");
+console.log("SCRIPT LOADED");
+
 let stage = 0;
 let bootState = "idle";
 let started = false;
