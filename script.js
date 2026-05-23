@@ -317,3 +317,116 @@ function checkPhase3() {
     result.textContent =
         (input === "19") ? "SEQUENCE COMPLETE" : "INCORRECT";
 }
+
+/* =========================
+   PHASE 3 SIMULATION
+========================= */
+
+function runSimulation() {
+
+    playClick();
+
+    const pathway =
+        document.getElementById("pathwaySelect").value;
+
+    const atp =
+        document.getElementById("atpSelect").value;
+
+    const mutation =
+        document.getElementById("mutationSelect").value;
+
+    const bacteria =
+        document.getElementById("bacteriaCell");
+
+    const virus =
+        document.getElementById("virusParticle");
+
+    const result =
+        document.getElementById("simulationResult");
+
+    const atpBar =
+        document.getElementById("atpBarInner");
+
+    const atpValue =
+        document.getElementById("atpValue");
+
+    /* RESET */
+
+    bacteria.className = "";
+    virus.className = "";
+
+    result.textContent = "Injecting viral strain...";
+
+    atpBar.style.width = "0%";
+
+    /* VIRUS ANIMATION */
+
+    virus.classList.add("injecting");
+
+    setTimeout(() => {
+
+        /* FAILURE STATES */
+
+        if (
+            pathway === "electron" &&
+            atp === "extreme"
+        ) {
+
+            bacteria.classList.add("deadCell");
+
+            atpBar.style.width = "100%";
+            atpValue.textContent = "ATP OVERLOAD";
+
+            result.textContent =
+                "Sample destroyed. ATP levels exceeded viable range.";
+
+            return;
+        }
+
+        if (
+            mutation === "repair" &&
+            atp === "elevated"
+        ) {
+
+            bacteria.classList.add("failedMutation");
+
+            atpBar.style.width = "45%";
+            atpValue.textContent = "45 ATP";
+
+            result.textContent =
+                "Mutation unstable. No sustained adaptation detected.";
+
+            return;
+        }
+
+        /* SUCCESS CONDITION */
+
+        if (
+            pathway === "krebs" &&
+            atp === "elevated" &&
+            mutation === "enzyme"
+        ) {
+
+            bacteria.classList.add("mutatedCell");
+
+            atpBar.style.width = "78%";
+            atpValue.textContent = "78 ATP";
+
+            result.textContent =
+                "Stable mutation achieved. Sustained ATP amplification confirmed.";
+
+            return;
+        }
+
+        /* DEFAULT */
+
+        bacteria.classList.add("stableCell");
+
+        atpBar.style.width = "30%";
+        atpValue.textContent = "30 ATP";
+
+        result.textContent =
+            "No major mutation observed.";
+
+    }, 1800);
+}
