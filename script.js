@@ -6,7 +6,7 @@ let bootState = "idle";
 const clickSound = new Audio("click.mp3");
 
 /* =========================
-   SEQUENCE DATA (AUDIO TAB)
+   SEQUENCE DATA
 ========================= */
 
 const sequences = [
@@ -22,13 +22,6 @@ const sequences = [
 ];
 
 let sequencesLoaded = false;
-
-/* =========================
-   DNA DATA (NEW TAB)
-========================= */
-
-const dnaFiles = [...sequences];
-
 let dnaLoaded = false;
 
 /* =========================
@@ -48,7 +41,7 @@ function playClick() {
 }
 
 /* =========================
-   VIDEO SAFETY CONTROL
+   VIDEO CONTROL
 ========================= */
 
 function stopVideoLog() {
@@ -62,41 +55,7 @@ function stopVideoLog() {
 }
 
 /* =========================
-   VECTOR ANIMATION SYSTEM
-========================= */
-
-function initVectorLines() {
-    const elements = document.querySelectorAll(".vline");
-    const beatInterval = 700;
-
-    elements.forEach((el, i) => {
-        setTimeout(() => {
-            el.style.opacity = "1";
-            el.style.strokeDashoffset = "0";
-            el.style.transition = "1.2s linear";
-        }, i * beatInterval);
-    });
-}
-
-function destroyVector() {
-    const elements = document.querySelectorAll(".vline");
-    const beatInterval = 150;
-
-    elements.forEach((el, i) => {
-        setTimeout(() => {
-            el.style.transition = "none";
-            el.style.strokeDashoffset = "1000";
-            el.style.opacity = "0";
-
-            setTimeout(() => {
-                el.style.transition = "1.2s linear";
-            }, 50);
-        }, i * beatInterval);
-    });
-}
-
-/* =========================
-   START / BOOT FLOW
+   START FLOW
 ========================= */
 
 function handleStart() {
@@ -117,21 +76,13 @@ function handleStart() {
             bootAudio.play();
         }
 
-        setTimeout(initVectorLines, 300);
-
         stage = 1;
 
         setTimeout(() => {
-
-            destroyVector();
-
-            setTimeout(() => {
-                document.getElementById("bootScreen")?.classList.remove("active");
-                document.getElementById("continueScreen")?.classList.add("active");
-                bootState = "continue";
-            }, 1200);
-
-        }, 7000);
+            document.getElementById("bootScreen")?.classList.remove("active");
+            document.getElementById("continueScreen")?.classList.add("active");
+            bootState = "continue";
+        }, 8000);
     }
 
     else if (stage === 1 && bootState === "continue") {
@@ -164,13 +115,11 @@ function openTab(tabId) {
     const target = document.getElementById(tabId);
     if (target) target.classList.add("activeTab");
 
-    // AUDIO SEQUENCES
     if (tabId === "audioTab" && !sequencesLoaded) {
         loadSequences();
         sequencesLoaded = true;
     }
 
-    // DNA TAB
     if (tabId === "dnaTab" && !dnaLoaded) {
         loadDNASequences();
         dnaLoaded = true;
@@ -190,57 +139,7 @@ function closeTabs() {
 }
 
 /* =========================
-   VIDEO REVEAL
-========================= */
-
-function revealVideo() {
-
-    playClick();
-
-    const video = document.getElementById("mainVideo");
-    if (video) video.muted = false;
-
-    document.getElementById("videoContainer")?.style && (document.getElementById("videoContainer").style.display = "block");
-    document.getElementById("revealButton")?.style && (document.getElementById("revealButton").style.display = "none");
-}
-
-/* =========================
-   SHUFFLE
-========================= */
-
-function shuffleArray(arr) {
-    let a = [...arr];
-
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-
-    return a;
-}
-
-/* =========================
-   AUDIO SEQUENCES (IFRAMES)
-========================= */
-
-function loadSequences() {
-
-    const container = document.getElementById("sequenceContainer");
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    const shuffled = shuffleArray(sequences);
-
-    shuffled.forEach(file => {
-        const frame = document.createElement("iframe");
-        frame.src = file;
-        container.appendChild(frame);
-    });
-}
-
-/* =========================
-   DNA SEQUENCE SYSTEM (NEW TAB)
+   DNA SYSTEM (UPDATED WITH LABEL FIX)
 ========================= */
 
 function loadDNASequences() {
@@ -250,16 +149,21 @@ function loadDNASequences() {
 
     container.innerHTML = "";
 
-    dnaFiles.forEach(file => {
+    const labels = ["Sequence A", "Sequence B", "Sequence C", "Sequence D"];
 
-        const name = file.replace(".html", "");
+    dnaFiles.forEach((file, index) => {
 
         const block = document.createElement("div");
         block.className = "block collapsed";
 
         const button = document.createElement("button");
         button.className = "seqButton";
-        button.textContent = name;
+
+        // 🔥 FIX: rename ALL labels consistently
+        const baseName = file.replace(".html", "");
+        const label = labels[index % labels.length];
+
+        button.textContent = `${baseName} — ${label}`;
 
         const content = document.createElement("div");
         content.className = "seqContent";
@@ -270,13 +174,31 @@ function loadDNASequences() {
         iframe.style.height = "350px";
         iframe.style.border = "1px solid white";
 
+        // OPTIONAL: auto-rename inside iframe after load
+        iframe.onload = () => {
+            try {
+                const doc = iframe.contentDocument;
+
+                if (!doc) return;
+
+                doc.body.innerHTML = doc.body.innerHTML
+                    .replace(/Target Sequence/g, "Sequence A")
+                    .replace(/Sequence A/g, "Sequence A")
+                    .replace(/Sequence B/g, "Sequence B")
+                    .replace(/Sequence C/g, "Sequence C")
+                    .replace(/Fragment/g, "Sequence D");
+
+            } catch (e) {
+                // cross-origin safe fallback (ignored)
+            }
+        };
+
         content.appendChild(iframe);
 
         button.addEventListener("click", () => {
 
             const isOpen = content.classList.contains("active");
 
-            // close all
             document.querySelectorAll("#dnaList .seqContent")
                 .forEach(c => c.classList.remove("active"));
 
@@ -286,7 +208,6 @@ function loadDNASequences() {
                     b.classList.add("collapsed");
                 });
 
-            // toggle clicked
             if (!isOpen) {
                 content.classList.add("active");
                 block.classList.add("expanded");
@@ -301,7 +222,7 @@ function loadDNASequences() {
 }
 
 /* =========================
-   PHASE 2 VALIDATION
+   PHASE 2
 ========================= */
 
 function checkPhase2() {
@@ -326,20 +247,8 @@ function checkPhase2() {
             : "INVALID VECTOR COMBINATION";
     }
 
-    if (success) unlockPhase2();
-}
-
-/* =========================
-   PHASE 2 UNLOCK
-========================= */
-
-function unlockPhase2() {
-
-    const unlock = document.getElementById("phase2Access");
-
-    if (unlock) {
-        unlock.style.display = "block";
+    if (success) {
+        document.getElementById("phase2Access").style.display = "block";
+        document.body.style.filter = "contrast(1.1) brightness(1.05)";
     }
-
-    document.body.style.filter = "contrast(1.1) brightness(1.05)";
 }
