@@ -4,20 +4,42 @@ body{
     color:white;
     font-family:Courier New, monospace;
     overflow:hidden;
+    text-shadow:0 0 5px rgba(255,255,255,0.4);
 }
+
+/* =========================
+   SCREEN SYSTEM (FIXED)
+========================= */
 
 .screen{
     display:none;
+    position:fixed;
+    top:0;
+    left:0;
     width:100vw;
     height:100vh;
+
     justify-content:center;
     align-items:center;
     flex-direction:column;
+
+    background:black;
 }
 
 .active{
-    display:flex;
+    display:flex !important;
+    z-index:999;
 }
+
+/* Screen layering safety */
+#startScreen{ z-index:1000; }
+#bootScreen{ z-index:1000; }
+#continueScreen{ z-index:1000; }
+#menuScreen{ z-index:900; }
+
+/* =========================
+   BOOT LOGO (FALLBACK FADE)
+========================= */
 
 #immuneLogo{
     width:400px;
@@ -26,13 +48,126 @@ body{
 }
 
 @keyframes fadeIn{
-    from{
-        opacity:0;
-    }
-    to{
-        opacity:1;
-    }
+    from{ opacity:0; }
+    to{ opacity:1; }
 }
+
+/* =========================
+   CONTINUE SCREEN
+========================= */
+
+#continueScreen{
+    justify-content:flex-end;
+    align-items:center;
+    padding-bottom:60px;
+}
+
+#continuePrompt{
+    font-size:28px;
+    letter-spacing:3px;
+    animation:pulseText 1.5s infinite;
+    opacity:0.8;
+}
+
+@keyframes pulseText{
+    0%{ opacity:0.3; }
+    50%{ opacity:1; }
+    100%{ opacity:0.3; }
+}
+
+/* =========================
+   MENU GRID (3 PANEL UI)
+========================= */
+
+.menuGrid{
+    display:flex;
+    width:100vw;
+    height:100vh;
+}
+
+.menuPanel{
+    position:relative;
+    flex:1;
+    overflow:hidden;
+    cursor:pointer;
+    border-right:1px solid white;
+    transition:0.3s;
+}
+
+.menuPanel:hover{
+    flex:1.2;
+}
+
+/* PANEL IMAGE */
+.panelImage{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+
+    opacity:0;
+    transition:0.4s;
+
+    filter:brightness(0.45) grayscale(40%);
+}
+
+.menuPanel:hover .panelImage{
+    opacity:1;
+}
+
+/* PANEL OVERLAY */
+.panelOverlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    backdrop-filter:blur(2px);
+}
+
+.panelOverlay h1{
+    font-size:42px;
+    letter-spacing:4px;
+    text-align:center;
+    transition:0.3s;
+}
+
+.menuPanel:hover .panelOverlay h1{
+    transform:scale(1.08);
+    text-shadow:0 0 20px white;
+}
+
+/* =========================
+   TAB SYSTEM
+========================= */
+
+.tabContent{
+    display:none;
+    position:absolute;
+
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+
+    width:90%;
+    height:85%;
+
+    background:black;
+    z-index:200;
+
+    overflow:auto;
+}
+
+.activeTab{
+    display:block;
+}
+
+/* =========================
+   UI ELEMENTS
+========================= */
 
 .tabs{
     margin-top:20px;
@@ -42,8 +177,10 @@ body{
     background:black;
     color:white;
     border:1px solid white;
+
     padding:10px 20px;
     margin:5px;
+
     cursor:pointer;
     transition:0.2s;
 }
@@ -53,21 +190,15 @@ body{
     color:black;
 }
 
-.tabContent{
-    display:none;
-    margin-top:30px;
-    text-align:center;
-}
-
-.activeTab{
-    display:block;
-}
-
 iframe{
     width:80vw;
     height:70vh;
     border:1px solid white;
     background:white;
+}
+
+video{
+    border:2px solid white;
 }
 
 .passwordBoxes{
@@ -80,17 +211,17 @@ iframe{
     width:120px;
     padding:10px;
     text-align:center;
+
     background:black;
     color:white;
+
     border:1px solid white;
     font-size:18px;
 }
 
-video{
-    border:2px solid white;
-}
-
-/* CRT EFFECT */
+/* =========================
+   CRT EFFECT
+========================= */
 
 body::before{
     content:"";
@@ -99,6 +230,7 @@ body::before{
     left:0;
     width:100%;
     height:100%;
+
     pointer-events:none;
 
     background:
@@ -110,10 +242,8 @@ body::before{
         rgba(0,0,0,0.15) 4px
     );
 
-    z-index:9999;
+    z-index:9998;
 }
-
-/* SCREEN FLICKER */
 
 body::after{
     content:"";
@@ -122,37 +252,24 @@ body::after{
     left:0;
     width:100%;
     height:100%;
+
     pointer-events:none;
 
     background:rgba(255,255,255,0.015);
-
     animation:flicker 0.12s infinite;
 
-    z-index:9998;
+    z-index:9997;
 }
 
 @keyframes flicker{
-
-    0%{
-        opacity:0.95;
-    }
-
-    50%{
-        opacity:1;
-    }
-
-    100%{
-        opacity:0.97;
-    }
+    0%{ opacity:0.95; }
+    50%{ opacity:1; }
+    100%{ opacity:0.97; }
 }
 
-/* SLIGHT SCREEN GLOW */
-
-body{
-    text-shadow:0 0 5px rgba(255,255,255,0.4);
-}
-
-/* OLD TV FEEL */
+/* =========================
+   OPTIONAL GLOW
+========================= */
 
 video,
 iframe,
@@ -161,150 +278,19 @@ input{
     box-shadow:0 0 10px rgba(255,255,255,0.2);
 }
 
-/* CONTINUE PROMPT */
+/* =========================
+   VECTOR BOOT ANIMATION
+========================= */
 
-#continueScreen{
+.vline{
+    fill:none;
+    stroke:white;
+    stroke-width:2;
 
-    justify-content:flex-end;
-    align-items:center;
-
-    padding-bottom:60px;
-}
-
-#continuePrompt{
-
-    font-size:28px;
-
-    letter-spacing:3px;
-
-    animation:pulseText 1.5s infinite;
-
-    opacity:0.8;
-}
-
-@keyframes pulseText{
-
-    0%{
-        opacity:0.3;
-    }
-
-    50%{
-        opacity:1;
-    }
-
-    100%{
-        opacity:0.3;
-    }
-}
-
-/* 3 PANEL MENU */
-
-.menuGrid{
-
-    display:flex;
-
-    width:100vw;
-    height:100vh;
-}
-
-.menuPanel{
-
-    position:relative;
-
-    flex:1;
-
-    overflow:hidden;
-
-    cursor:pointer;
-
-    border-right:1px solid white;
-
-    transition:0.3s;
-}
-
-.menuPanel:hover{
-
-    flex:1.2;
-}
-
-/* PANEL IMAGES */
-
-.panelImage{
-
-    position:absolute;
-
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
+    stroke-dasharray:1000;
+    stroke-dashoffset:1000;
 
     opacity:0;
 
-    transition:0.4s;
-
-    filter:brightness(0.45)
-    grayscale(40%);
-}
-
-.menuPanel:hover .panelImage{
-
-    opacity:1;
-}
-
-/* OVERLAY */
-
-.panelOverlay{
-
-    position:absolute;
-
-    width:100%;
-    height:100%;
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    backdrop-filter:blur(2px);
-
-    transition:0.3s;
-}
-
-.panelOverlay h1{
-
-    font-size:42px;
-
-    letter-spacing:4px;
-
-    text-align:center;
-
-    transition:0.3s;
-}
-
-.menuPanel:hover .panelOverlay h1{
-
-    transform:scale(1.08);
-
-    text-shadow:0 0 20px white;
-}
-
-/* HIDE MENU WHEN TAB OPEN */
-
-.tabContent{
-
-    position:absolute;
-
-    top:50%;
-    left:50%;
-
-    transform:translate(-50%, -50%);
-
-    background:black;
-
-    width:90%;
-    height:85%;
-
-    z-index:100;
-
-    overflow:auto;
+    filter: drop-shadow(0 0 6px white);
 }
