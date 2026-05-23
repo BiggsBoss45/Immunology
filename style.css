@@ -306,13 +306,15 @@ body::before{
 
     background:repeating-linear-gradient(
         to bottom,
-        rgba(255,255,255,0.03) 0px,
-        rgba(255,255,255,0.03) 1px,
-        rgba(0,0,0,0.15) 2px,
-        rgba(0,0,0,0.15) 4px
+        rgba(255,255,255,0.06) 0px,
+        rgba(255,255,255,0.06) 1px,
+        rgba(0,0,0,0.22) 2px,
+        rgba(0,0,0,0.22) 4px
     );
 
-    z-index:5;
+    opacity:0.45;
+
+    z-index:9998;
 }
 
 body::after{
@@ -324,14 +326,15 @@ body::after{
     height:100%;
     pointer-events:none;
 
-    background:rgba(255,255,255,0.015);
+    background:rgba(255,255,255,0.02);
+
     animation:flicker 0.12s infinite;
 
-    z-index:6;
+    z-index:9999;
 }
 
 @keyframes flicker{
-    0%{ opacity:0.95; }
+    0%{ opacity:0.96; }
     50%{ opacity:1; }
     100%{ opacity:0.97; }
 }
