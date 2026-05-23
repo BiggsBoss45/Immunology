@@ -22,6 +22,7 @@ const sequences = [
 ];
 
 let sequencesLoaded = false;
+let dnaLoaded = false;
 
 /* =========================
    INPUT LISTENERS
@@ -35,7 +36,6 @@ document.addEventListener("click", handleStart);
 ========================= */
 
 function playClick(){
-
     clickSound.currentTime = 0;
     clickSound.play();
 }
@@ -45,12 +45,9 @@ function playClick(){
 ========================= */
 
 function stopVideoLog(){
-
-    const video =
-    document.getElementById("mainVideo");
+    const video = document.getElementById("mainVideo");
 
     if(video){
-
         video.pause();
         video.currentTime = 0;
         video.muted = true;
@@ -62,36 +59,24 @@ function stopVideoLog(){
 ========================= */
 
 function initVectorLines(){
-
-    const elements =
-    document.querySelectorAll(".vline");
-
+    const elements = document.querySelectorAll(".vline");
     const beatInterval = 700;
 
     elements.forEach((el, i) => {
-
         setTimeout(() => {
-
             el.style.opacity = "1";
-            el.style.transition = "1.2s linear";
             el.style.strokeDashoffset = "0";
-
+            el.style.transition = "1.2s linear";
         }, i * beatInterval);
-
     });
 }
 
 function destroyVector(){
-
-    const elements =
-    document.querySelectorAll(".vline");
-
+    const elements = document.querySelectorAll(".vline");
     const beatInterval = 150;
 
     elements.forEach((el, i) => {
-
         setTimeout(() => {
-
             el.style.transition = "none";
             el.style.strokeDashoffset = "1000";
             el.style.opacity = "0";
@@ -99,9 +84,7 @@ function destroyVector(){
             setTimeout(() => {
                 el.style.transition = "1.2s linear";
             }, 50);
-
         }, i * beatInterval);
-
     });
 }
 
@@ -111,48 +94,33 @@ function destroyVector(){
 
 function handleStart(){
 
-    if(bootState === "booting"){
-        return;
-    }
+    if(bootState === "booting") return;
 
     if(stage === 0){
 
         bootState = "booting";
-
         playClick();
 
-        document.getElementById("startScreen")
-        .classList.remove("active");
+        document.getElementById("startScreen")?.classList.remove("active");
+        document.getElementById("bootScreen")?.classList.add("active");
 
-        document.getElementById("bootScreen")
-        .classList.add("active");
+        const bootAudio = document.getElementById("bootAudio");
+        if(bootAudio){
+            bootAudio.currentTime = 0;
+            bootAudio.play();
+        }
 
-        const bootAudio =
-        document.getElementById("bootAudio");
-
-        bootAudio.currentTime = 0;
-        bootAudio.play();
-
-        setTimeout(() => {
-            initVectorLines();
-        }, 300);
+        setTimeout(initVectorLines, 300);
 
         stage = 1;
 
         setTimeout(() => {
-
             destroyVector();
 
             setTimeout(() => {
-
-                document.getElementById("bootScreen")
-                .classList.remove("active");
-
-                document.getElementById("continueScreen")
-                .classList.add("active");
-
+                document.getElementById("bootScreen")?.classList.remove("active");
+                document.getElementById("continueScreen")?.classList.add("active");
                 bootState = "continue";
-
             }, 1200);
 
         }, 7000);
@@ -162,11 +130,8 @@ function handleStart(){
 
         playClick();
 
-        document.getElementById("continueScreen")
-        .classList.remove("active");
-
-        document.getElementById("menuScreen")
-        .classList.add("active");
+        document.getElementById("continueScreen")?.classList.remove("active");
+        document.getElementById("menuScreen")?.classList.add("active");
 
         stage = 2;
         bootState = "menu";
@@ -180,40 +145,40 @@ function handleStart(){
 function openTab(tabId){
 
     playClick();
-
     stopVideoLog();
 
-    document.querySelector(".menuGrid")
-    .style.display = "none";
+    document.querySelector(".menuGrid").style.display = "none";
 
-    document.querySelectorAll(".tabContent")
-    .forEach(tab => {
+    document.querySelectorAll(".tabContent").forEach(tab => {
         tab.classList.remove("activeTab");
     });
 
     const target = document.getElementById(tabId);
-    target.classList.add("activeTab");
+    if(target) target.classList.add("activeTab");
 
-    // LOAD SEQUENCES ONLY ONCE
+    // Load audio sequences once
     if(tabId === "audioTab" && !sequencesLoaded){
         loadSequences();
         sequencesLoaded = true;
+    }
+
+    // Load DNA system once
+    if(tabId === "dnaTab" && !dnaLoaded){
+        loadDNASequences();
+        dnaLoaded = true;
     }
 }
 
 function closeTabs(){
 
     playClick();
-
     stopVideoLog();
 
-    document.querySelectorAll(".tabContent")
-    .forEach(tab => {
+    document.querySelectorAll(".tabContent").forEach(tab => {
         tab.classList.remove("activeTab");
     });
 
-    document.querySelector(".menuGrid")
-    .style.display = "flex";
+    document.querySelector(".menuGrid").style.display = "flex";
 }
 
 /* =========================
@@ -224,22 +189,21 @@ function revealVideo(){
 
     playClick();
 
-    const video =
-    document.getElementById("mainVideo");
+    const video = document.getElementById("mainVideo");
 
     if(video){
         video.muted = false;
     }
 
-    document.getElementById("videoContainer")
-    .style.display = "block";
+    const container = document.getElementById("videoContainer");
+    if(container) container.style.display = "block";
 
-    document.getElementById("revealButton")
-    .style.display = "none";
+    const button = document.getElementById("revealButton");
+    if(button) button.style.display = "none";
 }
 
 /* =========================
-   SEQUENCE LOADER
+   SEQUENCE LOADER (IFRAMES)
 ========================= */
 
 function shuffleArray(arr){
@@ -255,9 +219,7 @@ function shuffleArray(arr){
 
 function loadSequences(){
 
-    const container =
-    document.getElementById("sequenceContainer");
-
+    const container = document.getElementById("sequenceContainer");
     if(!container) return;
 
     container.innerHTML = "";
@@ -265,13 +227,83 @@ function loadSequences(){
     const shuffled = shuffleArray(sequences);
 
     shuffled.forEach(file => {
-
-        const frame =
-        document.createElement("iframe");
-
+        const frame = document.createElement("iframe");
         frame.src = file;
-
         container.appendChild(frame);
+    });
+}
+
+/* =========================
+   DNA SEQUENCE SYSTEM (NEW MENU)
+========================= */
+
+const dnaFiles = [
+    "B-01.html",
+    "C-09.html",
+    "E-13.html",
+    "L-12.html",
+    "M-22.html",
+    "P-09.html",
+    "S-05.html",
+    "V-03.html",
+    "H-07.html"
+];
+
+function loadDNASequences(){
+
+    const container = document.getElementById("dnaList");
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    dnaFiles.forEach(file => {
+
+        const name = file.replace(".html", "");
+
+        const block = document.createElement("div");
+        block.className = "block collapsed";
+
+        const button = document.createElement("button");
+        button.className = "seqButton";
+        button.textContent = name;
+
+        const content = document.createElement("div");
+        content.className = "seqContent";
+
+        const iframe = document.createElement("iframe");
+        iframe.src = file;
+        iframe.style.width = "100%";
+        iframe.style.height = "350px";
+        iframe.style.border = "1px solid white";
+
+        content.appendChild(iframe);
+
+        button.addEventListener("click", () => {
+
+            const isOpen = content.classList.contains("active");
+
+            // close others
+            document.querySelectorAll("#dnaList .seqContent")
+                .forEach(c => c.classList.remove("active"));
+
+            document.querySelectorAll("#dnaList .block")
+                .forEach(b => {
+                    b.classList.add("collapsed");
+                    b.classList.remove("expanded");
+                });
+
+            // toggle clicked
+            if(!isOpen){
+                content.classList.add("active");
+                block.classList.add("expanded");
+                block.classList.remove("collapsed");
+            }
+        });
+
+        block.appendChild(button);
+        block.appendChild(content);
+
+        container.appendChild(block);
     });
 }
 
@@ -283,30 +315,26 @@ function checkPhase2(){
 
     playClick();
 
-    const selected =
-    Array.from(
+    const selected = Array.from(
         document.querySelectorAll("#orgList input:checked")
     ).map(el => el.value);
 
-    const correct = [
-        "V-03",
-        "E-13",
-        "H-07",
-        "P-09"
-    ];
+    const correct = ["V-03", "E-13", "H-07", "P-09"];
 
     const success =
         selected.length === correct.length &&
         correct.every(code => selected.includes(code));
 
-    const result =
-    document.getElementById("phase2Result");
+    const result = document.getElementById("phase2Result");
+
+    if(result){
+        result.innerHTML = success
+            ? "SEQUENCE VALIDATED"
+            : "INVALID VECTOR COMBINATION";
+    }
 
     if(success){
-        result.innerHTML = "SEQUENCE VALIDATED";
         unlockPhase2();
-    } else {
-        result.innerHTML = "INVALID VECTOR COMBINATION";
     }
 }
 
@@ -316,20 +344,25 @@ function checkPhase2(){
 
 function unlockPhase2(){
 
-    const unlock =
-    document.getElementById("phase2Access");
+    const unlock = document.getElementById("phase2Access");
 
-    unlock.style.display = "block";
+    if(unlock){
+        unlock.style.display = "block";
+    }
 
     document.body.style.filter =
-    "contrast(1.1) brightness(1.05)";
+        "contrast(1.1) brightness(1.05)";
 }
+
+/* =========================
+   BLOCK VIEWER (OLD SUPPORT)
+========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
     initBlockViewer();
 });
 
-function initBlockViewer() {
+function initBlockViewer(){
 
     const blocks = document.querySelectorAll(".block");
 
@@ -341,26 +374,23 @@ function initBlockViewer() {
 
             const isOpen = block.classList.contains("expanded");
 
-            // close all
             blocks.forEach(b => {
                 b.classList.remove("expanded");
                 b.classList.add("collapsed");
             });
 
-            // toggle clicked
-            if (!isOpen) {
+            if(!isOpen){
                 block.classList.remove("collapsed");
                 block.classList.add("expanded");
             }
         });
     });
 
-    // auto-open first TARGET block (vector block preferred)
-    const firstVectorBlock =
+    const firstVector =
         document.querySelector(".vector")?.closest(".block");
 
-    if (firstVectorBlock) {
-        firstVectorBlock.classList.remove("collapsed");
-        firstVectorBlock.classList.add("expanded");
+    if(firstVector){
+        firstVector.classList.add("expanded");
+        firstVector.classList.remove("collapsed");
     }
 }
