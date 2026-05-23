@@ -20,10 +20,30 @@ h1{
     margin-bottom:30px;
 }
 
-/* BLOCKS */
-.block{
+/* CLICK HEADERS */
+.blockHeader{
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.3);
+    padding:10px;
+    margin-bottom:10px;
+    text-align:center;
+    transition:0.2s;
+}
+
+.blockHeader:hover{
+    background:white;
+    color:black;
+}
+
+/* COLLAPSIBLE CONTENT */
+.blockContent{
+    display:none;
     margin-bottom:40px;
     line-height:2.2;
+}
+
+.blockContent.active{
+    display:block;
 }
 
 /* CODONS */
@@ -46,14 +66,24 @@ h1{
 }
 </style>
 
+<script>
+function toggleBlock(id){
+    document.getElementById(id).classList.toggle("active");
+}
+</script>
+
 </head>
 
 <body>
 
 <h1>H-07 (Viral Sequence)</h1>
 
-<!-- TARGET SEQUENCE (14 AA) -->
-<div class="block">
+<!-- BLOCK 1 -->
+<div class="blockHeader" onclick="toggleBlock('h07b1')">
+    BLOCK 1 — TARGET SEQUENCE
+</div>
+
+<div class="blockContent" id="h07b1">
 
 <span class="codon vector">ATG</span>
 <span class="codon vector">CCT</span>
@@ -72,8 +102,12 @@ h1{
 
 </div>
 
-<!-- DECOY 1 -->
-<div class="block">
+<!-- BLOCK 2 -->
+<div class="blockHeader" onclick="toggleBlock('h07b2')">
+    BLOCK 2 — DECOY
+</div>
+
+<div class="blockContent" id="h07b2">
 
 <span class="codon">ATG</span>
 <span class="codon">GTT</span>
@@ -92,8 +126,12 @@ h1{
 
 </div>
 
-<!-- DECOY 2 -->
-<div class="block">
+<!-- BLOCK 3 -->
+<div class="blockHeader" onclick="toggleBlock('h07b3')">
+    BLOCK 3 — DECOY
+</div>
+
+<div class="blockContent" id="h07b3">
 
 <span class="codon">ATG</span>
 <span class="codon">GCT</span>
@@ -112,8 +150,12 @@ h1{
 
 </div>
 
-<!-- DECOY 3 -->
-<div class="block">
+<!-- BLOCK 4 -->
+<div class="blockHeader" onclick="toggleBlock('h07b4')">
+    BLOCK 4 — DECOY
+</div>
+
+<div class="blockContent" id="h07b4">
 
 <span class="codon">ATG</span>
 <span class="codon">GGT</span>
@@ -131,5 +173,6 @@ h1{
 <span class="codon">TAA</span>
 
 </div>
+
 </body>
 </html>
