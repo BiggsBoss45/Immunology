@@ -486,3 +486,51 @@ input{
     background:#aaa;
     color:black;
 }
+/* =========================
+   PHASE 3 SCREEN FIX
+========================= */
+
+#phase3Screen{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    z-index:2000;
+    background:#2a2a2a;
+    flex-direction:column;
+}
+
+#phase3Screen.active{
+    display:flex !important;
+}
+
+/* =========================
+   REBOOT EFFECT
+========================= */
+
+#rebootOverlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:99999;
+}
+
+.rebootText{
+    font-size:28px;
+    letter-spacing:4px;
+    animation:blink 0.5s infinite;
+}
+
+@keyframes blink{
+    0%{opacity:0.2;}
+    50%{opacity:1;}
+    100%{opacity:0.2;}
+}
