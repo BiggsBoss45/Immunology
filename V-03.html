@@ -20,10 +20,28 @@ h1{
     margin-bottom:30px;
 }
 
-/* SEQUENCE BLOCKS */
+/* BLOCK SYSTEM (UPDATED) */
 .block{
     margin-bottom:40px;
     line-height:2.2;
+    border:1px solid rgba(255,255,255,0.15);
+    padding:12px;
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+/* COLLAPSED STATE */
+.block.collapsed{
+    max-height:60px;
+    overflow:hidden;
+    opacity:0.6;
+}
+
+/* EXPANDED STATE */
+.block.expanded{
+    max-height:600px;
+    opacity:1;
+    border-color:rgba(255,255,255,0.6);
 }
 
 /* CODONS */
@@ -34,7 +52,7 @@ h1{
     border:1px solid rgba(255,255,255,0.2);
 }
 
-/* VECTOR (hidden target gene styling hook for later puzzles) */
+/* VECTOR */
 .vector{
     border-color:rgba(255,255,255,0.6);
     transition:0.2s;
@@ -52,7 +70,7 @@ h1{
 
 <h1>V-03 (Viral Sequence)</h1>
 
-<!-- TARGET PROTEIN (14 CODONS / AMINO ACIDS) -->
+<!-- TARGET BLOCK -->
 <div class="block">
 
 <span class="codon vector">ATG</span>
@@ -131,6 +149,41 @@ h1{
 <span class="codon">TAA</span>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const blocks = document.querySelectorAll(".block");
+
+    blocks.forEach(block => {
+
+        block.classList.add("collapsed");
+
+        block.addEventListener("click", () => {
+
+            const isOpen = block.classList.contains("expanded");
+
+            // close all blocks
+            blocks.forEach(b => {
+                b.classList.remove("expanded");
+                b.classList.add("collapsed");
+            });
+
+            // toggle clicked block
+            if(!isOpen){
+                block.classList.remove("collapsed");
+                block.classList.add("expanded");
+            }
+        });
+    });
+
+    // auto-open TARGET sequence (first block)
+    const first = document.querySelector(".block");
+    if(first){
+        first.classList.remove("collapsed");
+        first.classList.add("expanded");
+    }
+});
+</script>
 
 </body>
 </html>
