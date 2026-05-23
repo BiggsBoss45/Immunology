@@ -126,9 +126,31 @@
              AUDIO LOG TAB
         ========================== -->
 
-        <div id="audioTab"
-        class="tabContent">
+       <div id="audioTab" class="tabContent">
 
+    <div style="margin-bottom:20px;">
+        <button id="revealButton" onclick="revealVideo()">
+            OPEN AUDIO LOG
+        </button>
+
+        <div id="videoContainer" style="display:none; margin-top:20px;">
+            <video controls width="700">
+                <source src="video1.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <hr style="border:1px solid white; margin:20px 0;">
+
+    <h2>Amino Acid Sequence</h2>
+
+    <div id="sequenceContainer"></div>
+
+    <button class="backButton" onclick="closeTabs()">
+        BACK
+    </button>
+
+</div>
             <h2>VIDEO LOG ARCHIVE</h2>
 
             <button id="revealButton"
