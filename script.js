@@ -6,7 +6,6 @@ let stage = 0;
 // 4 = phase3
 
 let bootState = "idle";
-
 let inputLocked = false;
 
 const clickSound = new Audio("click.mp3");
@@ -32,7 +31,7 @@ let sequencesLoaded = false;
 let dnaLoaded = false;
 
 /* =========================
-   INIT (FORCES START SCREEN)
+   INIT
 ========================= */
 
 window.addEventListener("load", () => {
@@ -40,7 +39,7 @@ window.addEventListener("load", () => {
 });
 
 /* =========================
-   INPUT LISTENERS
+   INPUT
 ========================= */
 
 document.addEventListener("keydown", (e) => {
@@ -76,28 +75,45 @@ function showScreen(id) {
 }
 
 /* =========================
-   CRT BOOT EFFECT
+   START FLOW
 ========================= */
 
-function triggerCRTBoot() {
-    document.body.classList.add("crtBoot");
+function handleStart() {
 
-    setTimeout(() => {
-        document.body.classList.remove("crtBoot");
-    }, 2000);
-}
+    if (bootState === "booting") return;
 
-/* =========================
-   GLITCH TRANSITION
-========================= */
+    if (stage === 0) {
 
-function glitchTransition(callback) {
-    document.body.classList.add("glitch");
+        bootState = "booting";
+        playClick();
 
-    setTimeout(() => {
-        document.body.classList.remove("glitch");
-        callback();
-    }, 600);
+        showScreen("bootScreen");
+
+        const bootAudio = document.getElementById("bootAudio");
+        if (bootAudio) {
+            bootAudio.currentTime = 0;
+            bootAudio.play();
+        }
+
+        stage = 1;
+
+        setTimeout(() => {
+            showScreen("continueScreen");
+            bootState = "continue";
+        }, 8000);
+    }
+
+    else if (stage === 1 && bootState === "continue") {
+
+        playClick();
+
+        showScreen("menuScreen");
+
+        stage = 3;
+        bootState = "menu";
+
+        inputLocked = true;
+    }
 }
 
 /* =========================
@@ -139,50 +155,6 @@ function revealVideo() {
     video.src = "video1.mp4";
     video.muted = false;
     video.load();
-}
-
-/* =========================
-   START FLOW
-========================= */
-
-function handleStart() {
-
-    if (bootState === "booting") return;
-
-    if (stage === 0) {
-
-        bootState = "booting";
-        playClick();
-
-        showScreen("bootScreen");
-
-        triggerCRTBoot();
-
-        const bootAudio = document.getElementById("bootAudio");
-        if (bootAudio) {
-            bootAudio.currentTime = 0;
-            bootAudio.play();
-        }
-
-        stage = 1;
-
-        setTimeout(() => {
-            showScreen("continueScreen");
-            bootState = "continue";
-        }, 8000);
-    }
-
-    else if (stage === 1 && bootState === "continue") {
-
-        playClick();
-
-        showScreen("menuScreen");
-
-        stage = 3;
-        bootState = "menu";
-
-        inputLocked = true; // 🔥 prevents restart bug
-    }
 }
 
 /* =========================
@@ -319,35 +291,32 @@ function checkPhase2() {
         playClick();
 
         /* =========================
-           REBOOT SEQUENCE (NEW)
+           REBOOT SEQUENCE
         ========================= */
 
         rebootSound.currentTime = 0;
         rebootSound.play();
 
-        rebootSound.currentTime = 0;
-rebootSound.play();
+        showScreen("rebootScreen");
 
-// show reboot screen instead of boot logo
-showScreen("rebootScreen");
+        document.body.classList.add("glitch");
 
-document.body.classList.add("glitch");
+        setTimeout(() => {
+            document.body.classList.remove("glitch");
 
-setTimeout(() => {
-    document.body.classList.remove("glitch");
+            showScreen("phase3Screen");
+            stage = 4;
+            bootState = "phase3";
 
-    showScreen("phase3Screen");
-    stage = 4;
-    bootState = "phase3";
+            const p3Audio = document.getElementById("phase3Audio");
+            if (p3Audio) {
+                p3Audio.currentTime = 0;
+                p3Audio.play();
+            }
 
-    // optional Phase 3 sound
-    const p3Audio = document.getElementById("phase3Audio");
-    if (p3Audio) {
-        p3Audio.currentTime = 0;
-        p3Audio.play();
+        }, 2200);
     }
-
-}, 2200);
+}
 
 /* =========================
    PHASE 3
