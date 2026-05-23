@@ -8,7 +8,7 @@ body{
 }
 
 /* =========================
-   GLOBAL SCREEN SYSTEM (FIXED)
+   GLOBAL SCREEN SYSTEM
 ========================= */
 
 .screen{
@@ -32,7 +32,7 @@ body{
     z-index:1000;
 }
 
-/* REMOVE INDIVIDUAL Z-INDEX CONFLICTS */
+/* FIXED LAYER ORDER */
 #startScreen,
 #bootScreen,
 #continueScreen,
@@ -95,8 +95,6 @@ body{
     flex:1.2;
 }
 
-/* PANEL IMAGE */
-
 .panelImage{
     position:absolute;
     width:100%;
@@ -110,8 +108,6 @@ body{
 .menuPanel:hover .panelImage{
     opacity:1;
 }
-
-/* PANEL OVERLAY */
 
 .panelOverlay{
     position:absolute;
@@ -236,7 +232,7 @@ video{
 }
 
 /* =========================
-   PHASE 2 ORGANISM GRID
+   PHASE 2 GRID
 ========================= */
 
 #orgList{
@@ -304,7 +300,6 @@ body::before{
     position:fixed;
     top:0;
     left:0;
-
     width:100%;
     height:100%;
     pointer-events:none;
@@ -325,7 +320,6 @@ body::after{
     position:fixed;
     top:0;
     left:0;
-
     width:100%;
     height:100%;
     pointer-events:none;
@@ -354,28 +348,26 @@ input{
 }
 
 /* =========================
-   VECTOR BOOT SYSTEM
+   VECTOR SYSTEM
 ========================= */
 
 .vline{
     fill:none;
     stroke:white;
     stroke-width:2;
-
     stroke-dasharray:1000;
     stroke-dashoffset:1000;
-
     opacity:0;
-
     transition:1.2s linear;
     filter:drop-shadow(0 0 6px white);
 }
 
 /* =========================
-   SEQUENCE SYSTEM
+   SEQUENCE / DNA SYSTEM
 ========================= */
 
-#sequenceContainer{
+#sequenceContainer,
+#dnaList{
     display:flex;
     flex-direction:column;
     gap:20px;
@@ -386,21 +378,24 @@ input{
 }
 
 /* =========================
-   DNA / BLOCK VIEWER SYSTEM (NEW)
+   DNA BLOCKS (UPDATED SYSTEM)
 ========================= */
 
 .block{
-    max-height:200px;
-    overflow:hidden;
-    transition:all 0.4s ease;
     border:1px solid rgba(255,255,255,0.2);
     padding:10px;
     margin-bottom:15px;
+
     cursor:pointer;
+    transition:0.4s ease;
+
+    max-height:160px;
+    overflow:hidden;
+    opacity:0.7;
 }
 
 .block.collapsed{
-    opacity:0.7;
+    opacity:0.6;
 }
 
 .block.expanded{
@@ -410,14 +405,14 @@ input{
 }
 
 /* =========================
-   SEQUENCE BUTTONS
+   SEQUENCE BUTTONS (DNA MENU)
 ========================= */
 
 .seqButton{
     width:100%;
     text-align:left;
-    padding:12px;
 
+    padding:12px;
     background:black;
     color:white;
 
@@ -435,6 +430,7 @@ input{
     color:black;
 }
 
+/* content hidden by default */
 .seqContent{
     display:none;
     margin-top:10px;
