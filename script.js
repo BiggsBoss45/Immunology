@@ -325,27 +325,29 @@ function checkPhase2() {
         rebootSound.currentTime = 0;
         rebootSound.play();
 
-        showScreen("bootScreen");
-        triggerCRTBoot();
+        rebootSound.currentTime = 0;
+rebootSound.play();
 
-        setTimeout(() => {
+// show reboot screen instead of boot logo
+showScreen("rebootScreen");
 
-            glitchTransition(() => {
-                showScreen("phase3Screen");
-                stage = 4;
-                bootState = "phase3";
+document.body.classList.add("glitch");
 
-                // optional: phase3 ambience audio
-                const p3Audio = document.getElementById("phase3Audio");
-                if (p3Audio) {
-                    p3Audio.currentTime = 0;
-                    p3Audio.play();
-                }
-            });
+setTimeout(() => {
+    document.body.classList.remove("glitch");
 
-        }, 2000);
+    showScreen("phase3Screen");
+    stage = 4;
+    bootState = "phase3";
+
+    // optional Phase 3 sound
+    const p3Audio = document.getElementById("phase3Audio");
+    if (p3Audio) {
+        p3Audio.currentTime = 0;
+        p3Audio.play();
     }
-}
+
+}, 2200);
 
 /* =========================
    PHASE 3
