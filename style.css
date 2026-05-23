@@ -24,16 +24,21 @@ body{
     flex-direction:column;
 
     background:black;
+
+    /* FIX: ensure screens don't block clicks when hidden */
+    pointer-events:none;
+
     z-index:100;
 }
 
-.active{
+.screen.active{
     display:flex !important;
+    pointer-events:auto;
     z-index:1000;
 }
 
 /* =========================
-   BOOT + MENU (UNCHANGED CORE)
+   START / BOOT
 ========================= */
 
 #immuneLogo{
@@ -61,13 +66,16 @@ body{
 }
 
 /* =========================
-   MENU GRID
+   MENU GRID (CRITICAL FIX)
 ========================= */
 
 .menuGrid{
     display:flex;
     width:100vw;
     height:100vh;
+
+    /* FIX: ensure it is clickable */
+    pointer-events:auto;
 }
 
 .menuPanel{
@@ -75,8 +83,13 @@ body{
     flex:1;
     overflow:hidden;
     cursor:pointer;
+
     border-right:1px solid white;
     transition:0.3s ease;
+
+    /* FIX: prevent overlay blocking clicks */
+    pointer-events:auto;
+    z-index:2;
 }
 
 .menuPanel:hover{
@@ -91,6 +104,8 @@ body{
     opacity:0;
     transition:0.4s;
     filter:brightness(0.45) grayscale(40%);
+
+    pointer-events:none;
 }
 
 .menuPanel:hover .panelImage{
@@ -105,6 +120,9 @@ body{
     justify-content:center;
     align-items:center;
     backdrop-filter:blur(2px);
+
+    /* FIX: allows clicks through overlay */
+    pointer-events:none;
 }
 
 .panelOverlay h1{
@@ -113,7 +131,7 @@ body{
 }
 
 /* =========================
-   TAB SYSTEM
+   TAB SYSTEM (BIG FIX HERE)
 ========================= */
 
 .tabContent{
@@ -124,10 +142,16 @@ body{
     transform:translate(-50%, -50%);
     width:90%;
     height:85%;
+
     background:black;
-    z-index:500;
+
+    z-index:2000;
+
     overflow:auto;
     padding:30px;
+
+    /* FIX: ensure it doesn't block menu when hidden */
+    pointer-events:auto;
 }
 
 .activeTab{
@@ -144,21 +168,13 @@ button{
     border:1px solid white;
     padding:12px 24px;
     cursor:pointer;
+
+    pointer-events:auto;
 }
 
 button:hover{
     background:white;
     color:black;
-}
-
-/* =========================
-   DNA SYSTEM
-========================= */
-
-#dnaList{
-    display:flex;
-    flex-direction:column;
-    gap:20px;
 }
 
 /* =========================
@@ -172,9 +188,12 @@ button:hover{
     left:0;
     width:100vw;
     height:100vh;
-    z-index:2000;
+    z-index:3000;
+
     flex-direction:column;
     background:#2a2a2a;
+
+    pointer-events:auto;
 }
 
 #phase3Screen.active{
@@ -182,7 +201,7 @@ button:hover{
 }
 
 /* =========================
-   🔬 MICROSCOPE ZOOM
+   MICROSCOPE ZOOM
 ========================= */
 
 #simulationArea{
@@ -191,6 +210,7 @@ button:hover{
     justify-content:space-around;
     align-items:center;
     flex-wrap:wrap;
+
     transform-origin:center;
     transition:transform 1.2s ease, filter 1.2s ease;
 }
@@ -201,7 +221,7 @@ button:hover{
 }
 
 /* =========================
-   🧫 CELL VISUAL SYSTEM
+   CELL SYSTEM
 ========================= */
 
 #bacteriaContainer{
@@ -231,21 +251,6 @@ button:hover{
     transition:0.6s ease;
 }
 
-/* cell glow */
-#bacteriaCell::before{
-    content:"";
-    position:absolute;
-    inset:18px;
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(0,255,153,0.15), transparent 70%);
-    animation:cellPulse 3s infinite;
-}
-
-@keyframes cellPulse{
-    0%,100%{ transform:scale(1); opacity:0.5; }
-    50%{ transform:scale(1.06); opacity:1; }
-}
-
 /* nucleus */
 #bacteriaCell::after{
     content:"";
@@ -257,11 +262,10 @@ button:hover{
     left:50%;
     transform:translate(-50%,-50%);
     background:rgba(0,255,153,0.25);
-    box-shadow:0 0 20px rgba(0,255,153,0.5);
 }
 
 /* =========================
-   🦠 VIRUS
+   VIRUS
 ========================= */
 
 #virusParticle{
@@ -287,7 +291,7 @@ button:hover{
 }
 
 /* =========================
-   🧬 RNA STRAND
+   RNA
 ========================= */
 
 #rnaStrand{
@@ -299,7 +303,6 @@ button:hover{
     transform:translateX(-50%);
     background:linear-gradient(to bottom, #00ff99, transparent);
     opacity:0;
-    box-shadow:0 0 10px #00ff99;
 }
 
 .rnaInject{
@@ -313,24 +316,18 @@ button:hover{
 }
 
 /* =========================
-   ☠️ LYSIS (DEATH)
+   STATES
 ========================= */
 
 .deadCell{
     background:red;
-    box-shadow:0 0 60px red;
     animation:lysis 0.9s forwards;
 }
 
 @keyframes lysis{
     0%{ transform:scale(1); }
-    40%{ transform:scale(1.1); }
-    100%{ transform:scale(0.1) rotate(25deg); opacity:0; }
+    100%{ transform:scale(0.1); opacity:0; }
 }
-
-/* =========================
-   ⚠️ FAILED MUTATION
-========================= */
 
 .failedMutation{
     background:orange;
@@ -339,19 +336,12 @@ button:hover{
 
 @keyframes shake{
     0%{ transform:translate(0); }
-    25%{ transform:translate(-2px,2px); }
     50%{ transform:translate(2px,-2px); }
-    75%{ transform:translate(-1px,1px); }
     100%{ transform:translate(0); }
 }
 
-/* =========================
-   🧬 SUCCESS MUTATION
-========================= */
-
 .mutatedCell{
     background:#00ff99;
-    box-shadow:0 0 60px #00ff99;
     animation:mutateGlow 2s infinite;
 }
 
@@ -359,10 +349,6 @@ button:hover{
     0%,100%{ filter:brightness(1); }
     50%{ filter:brightness(1.8); }
 }
-
-/* =========================
-   🟢 STABLE
-========================= */
 
 .stableCell{
     background:#008844;
