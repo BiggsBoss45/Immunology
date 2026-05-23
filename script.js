@@ -1,6 +1,13 @@
 let stage = 0;
+// 0 = start
+// 1 = booting
+// 2 = continue
+// 3 = main menu
+// 4 = phase3
+
 let bootState = "idle";
-// idle → booting → continue → menu → phase3
+
+let inputLocked = false;
 
 const clickSound = new Audio("click.mp3");
 const rebootSound = new Audio("reboot.mp3");
@@ -25,14 +32,29 @@ let sequencesLoaded = false;
 let dnaLoaded = false;
 
 /* =========================
+   INIT (FORCES START SCREEN)
+========================= */
+
+window.addEventListener("load", () => {
+    showScreen("startScreen");
+});
+
+/* =========================
    INPUT LISTENERS
 ========================= */
 
-document.addEventListener("keydown", handleStart);
-document.addEventListener("click", handleStart);
+document.addEventListener("keydown", (e) => {
+    if (inputLocked) return;
+    if (e.key === "Enter") handleStart();
+});
+
+document.addEventListener("click", () => {
+    if (inputLocked) return;
+    handleStart();
+});
 
 /* =========================
-   CLICK SOUND
+   SOUND
 ========================= */
 
 function playClick() {
@@ -41,7 +63,7 @@ function playClick() {
 }
 
 /* =========================
-   SCREEN SYSTEM (CRITICAL FIX)
+   SCREEN SYSTEM
 ========================= */
 
 function showScreen(id) {
@@ -54,11 +76,35 @@ function showScreen(id) {
 }
 
 /* =========================
+   CRT BOOT EFFECT
+========================= */
+
+function triggerCRTBoot() {
+    document.body.classList.add("crtBoot");
+
+    setTimeout(() => {
+        document.body.classList.remove("crtBoot");
+    }, 2000);
+}
+
+/* =========================
+   GLITCH TRANSITION
+========================= */
+
+function glitchTransition(callback) {
+    document.body.classList.add("glitch");
+
+    setTimeout(() => {
+        document.body.classList.remove("glitch");
+        callback();
+    }, 600);
+}
+
+/* =========================
    VIDEO CONTROL
 ========================= */
 
 function stopVideoLog() {
-
     const video = document.getElementById("mainVideo");
     const container = document.getElementById("videoContainer");
     const button = document.getElementById("revealButton");
@@ -75,12 +121,7 @@ function stopVideoLog() {
     if (button) button.style.display = "inline-block";
 }
 
-/* =========================
-   VIDEO REVEAL (NO AUTOPLAY)
-========================= */
-
 function revealVideo() {
-
     playClick();
 
     const video = document.getElementById("mainVideo");
@@ -106,9 +147,6 @@ function revealVideo() {
 
 function handleStart() {
 
-    // 🔥 HARD STOP: once menu is reached, ignore startup logic
-    if (stage >= 2) return;
-
     if (bootState === "booting") return;
 
     if (stage === 0) {
@@ -116,8 +154,9 @@ function handleStart() {
         bootState = "booting";
         playClick();
 
-        document.getElementById("startScreen")?.classList.remove("active");
-        document.getElementById("bootScreen")?.classList.add("active");
+        showScreen("bootScreen");
+
+        triggerCRTBoot();
 
         const bootAudio = document.getElementById("bootAudio");
         if (bootAudio) {
@@ -128,8 +167,7 @@ function handleStart() {
         stage = 1;
 
         setTimeout(() => {
-            document.getElementById("bootScreen")?.classList.remove("active");
-            document.getElementById("continueScreen")?.classList.add("active");
+            showScreen("continueScreen");
             bootState = "continue";
         }, 8000);
     }
@@ -138,15 +176,12 @@ function handleStart() {
 
         playClick();
 
-        document.getElementById("continueScreen")?.classList.remove("active");
-        document.getElementById("menuScreen")?.classList.add("active");
+        showScreen("menuScreen");
 
-        stage = 2;
+        stage = 3;
         bootState = "menu";
 
-        // 🔥 OPTIONAL: remove startup listeners completely
-        document.removeEventListener("click", handleStart);
-        document.removeEventListener("keydown", handleStart);
+        inputLocked = true; // 🔥 prevents restart bug
     }
 }
 
@@ -179,10 +214,6 @@ function openTab(tabId) {
     }
 }
 
-/* =========================
-   CLOSE TABS
-========================= */
-
 function closeTabs() {
 
     playClick();
@@ -206,10 +237,9 @@ function loadDNASequences() {
 
     container.innerHTML = "";
 
-    const dnaFiles = [...sequences];
     const labels = ["Sequence A", "Sequence B", "Sequence C", "Sequence D"];
 
-    dnaFiles.forEach((file, index) => {
+    sequences.forEach((file, index) => {
 
         const block = document.createElement("div");
         block.className = "block collapsed";
@@ -217,8 +247,8 @@ function loadDNASequences() {
         const button = document.createElement("button");
         button.className = "seqButton";
 
-        const baseName = file.replace(".html", "");
         const label = labels[index % labels.length];
+        const baseName = file.replace(".html", "");
 
         button.textContent = `${baseName} — ${label}`;
 
@@ -227,10 +257,6 @@ function loadDNASequences() {
 
         const iframe = document.createElement("iframe");
         iframe.src = file;
-
-        iframe.style.width = "100%";
-        iframe.style.height = "350px";
-        iframe.style.border = "1px solid white";
 
         content.appendChild(iframe);
 
@@ -261,7 +287,7 @@ function loadDNASequences() {
 }
 
 /* =========================
-   PHASE 2 → PHASE 3 REBOOT
+   PHASE 2
 ========================= */
 
 function checkPhase2() {
@@ -280,32 +306,49 @@ function checkPhase2() {
 
     const result = document.getElementById("phase2Result");
 
-    result.textContent = success
-        ? "SEQUENCE VALIDATED"
-        : "INVALID VECTOR COMBINATION";
+    if (result) {
+        result.textContent = success
+            ? "SEQUENCE VALIDATED"
+            : "INVALID VECTOR COMBINATION";
+    }
 
     if (success) {
 
         document.getElementById("phase2Access").style.display = "block";
-        document.body.style.filter = "contrast(1.1) brightness(1.05)";
 
-        // 🔥 REBOOT SEQUENCE
-        showScreen("bootScreen"); // reuse boot screen as reboot
+        playClick();
+
+        /* =========================
+           REBOOT SEQUENCE (NEW)
+        ========================= */
 
         rebootSound.currentTime = 0;
         rebootSound.play();
 
+        showScreen("bootScreen");
+        triggerCRTBoot();
+
         setTimeout(() => {
 
-            showScreen("phase3Screen");
-            bootState = "phase3";
+            glitchTransition(() => {
+                showScreen("phase3Screen");
+                stage = 4;
+                bootState = "phase3";
 
-        }, 2500);
+                // optional: phase3 ambience audio
+                const p3Audio = document.getElementById("phase3Audio");
+                if (p3Audio) {
+                    p3Audio.currentTime = 0;
+                    p3Audio.play();
+                }
+            });
+
+        }, 2000);
     }
 }
 
 /* =========================
-   PHASE 3 SYSTEM
+   PHASE 3
 ========================= */
 
 function openPhase3Tab(tabId) {
@@ -315,7 +358,8 @@ function openPhase3Tab(tabId) {
     document.querySelectorAll("#phase3Screen .tabContent")
         .forEach(t => t.classList.remove("activeTab"));
 
-    document.getElementById(tabId)?.classList.add("activeTab");
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add("activeTab");
 }
 
 function closePhase3() {
@@ -333,7 +377,9 @@ function checkPhase3() {
     const input = document.getElementById("phase3Answer").value.trim();
     const result = document.getElementById("phase3Result");
 
-    result.textContent = (input === "19")
-        ? "SEQUENCE COMPLETE"
-        : "INCORRECT";
+    if (input === "19") {
+        result.textContent = "SEQUENCE COMPLETE";
+    } else {
+        result.textContent = "INCORRECT";
+    }
 }
