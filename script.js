@@ -9,7 +9,6 @@ let bootState = "idle";
 let started = false;
 
 const clickSound = new Audio("click.mp3");
-
 const rebootSound = new Audio("reboot.mp3");
 rebootSound.preload = "auto";
 
@@ -30,7 +29,6 @@ let dnaLoaded = false;
 ========================= */
 
 window.addEventListener("load", () => {
-
     stage = 0;
     bootState = "idle";
     started = false;
@@ -39,7 +37,7 @@ window.addEventListener("load", () => {
 });
 
 /* =========================
-   INPUT
+   INPUT (SAFE)
 ========================= */
 
 document.addEventListener("keydown", (e) => {
@@ -74,7 +72,6 @@ function showScreen(id) {
 ========================= */
 
 function startSequence() {
-
     if (started) return;
     started = true;
 
@@ -102,11 +99,9 @@ function startSequence() {
 ========================= */
 
 document.addEventListener("click", () => {
-
     if (stage !== 2 || bootState !== "continue") return;
 
     playClick();
-
     stage = 3;
     bootState = "menu";
 
@@ -114,11 +109,10 @@ document.addEventListener("click", () => {
 });
 
 /* =========================
-   MENU SYSTEM
+   MENU
 ========================= */
 
 function openTab(tabId) {
-
     playClick();
     stopVideoLog();
 
@@ -131,11 +125,7 @@ function openTab(tabId) {
     const target = document.getElementById(tabId);
     if (target) target.classList.add("activeTab");
 
-    if (tabId === "audioTab" && !sequencesLoaded) {
-        loadSequences?.();
-        sequencesLoaded = true;
-    }
-
+    // FIXED: DNA TAB ALWAYS LOADS CORRECTLY
     if (tabId === "dnaTab" && !dnaLoaded) {
         loadDNASequences();
         dnaLoaded = true;
@@ -143,7 +133,6 @@ function openTab(tabId) {
 }
 
 function closeTabs() {
-
     playClick();
     stopVideoLog();
 
@@ -186,50 +175,75 @@ function revealVideo() {
     button.style.display = "none";
 
     video.src = "video1.mp4";
-    video.muted = false;
     video.load();
 }
 
 /* =========================
-   🔥 REBOOT SYSTEM (FIXED)
+   🔥 DNA TAB FIX (THIS WAS MISSING)
 ========================= */
 
-function triggerReboot() {
+function loadDNASequences() {
 
-    stage = 4;
-    bootState = "phase3";
+    const container = document.getElementById("dnaList");
+    if (!container) return;
 
-    document.querySelector(".menuGrid").style.display = "none";
+    container.innerHTML = "";
 
-    showScreen("bootScreen");
+    const labels = ["Sequence A", "Sequence B", "Sequence C", "Sequence D"];
 
-    document.body.classList.add("glitch");
+    sequences.forEach((file, index) => {
 
-    rebootSound.pause();
-    rebootSound.currentTime = 0;
-    rebootSound.load();
+        const block = document.createElement("div");
+        block.className = "block collapsed";
 
-    rebootSound.play().catch(() => {
-        console.log("Reboot blocked");
+        const button = document.createElement("button");
+        button.className = "seqButton";
+
+        const baseName = file.replace(".html", "");
+        const label = labels[index % labels.length];
+
+        button.textContent = `${baseName} — ${label}`;
+
+        const content = document.createElement("div");
+        content.className = "seqContent";
+
+        const iframe = document.createElement("iframe");
+        iframe.src = file;
+
+        iframe.style.width = "100%";
+        iframe.style.height = "350px";
+        iframe.style.border = "1px solid white";
+
+        content.appendChild(iframe);
+
+        button.addEventListener("click", () => {
+
+            const isOpen = content.classList.contains("active");
+
+            document.querySelectorAll("#dnaList .seqContent")
+                .forEach(c => c.classList.remove("active"));
+
+            document.querySelectorAll("#dnaList .block")
+                .forEach(b => {
+                    b.classList.remove("expanded");
+                    b.classList.add("collapsed");
+                });
+
+            if (!isOpen) {
+                content.classList.add("active");
+                block.classList.add("expanded");
+                block.classList.remove("collapsed");
+            }
+        });
+
+        block.appendChild(button);
+        block.appendChild(content);
+        container.appendChild(block);
     });
-
-    setTimeout(() => {
-
-        document.body.classList.remove("glitch");
-
-        showScreen("phase3Screen");
-
-        const p3Audio = document.getElementById("phase3Audio");
-        if (p3Audio) {
-            p3Audio.currentTime = 0;
-            p3Audio.play().catch(() => {});
-        }
-
-    }, 7000);
 }
 
 /* =========================
-   PHASE 2
+   PHASE 2 → REBOOT
 ========================= */
 
 function checkPhase2() {
@@ -256,7 +270,18 @@ function checkPhase2() {
 
     document.getElementById("phase2Access").style.display = "block";
 
-    triggerReboot();
+    rebootSound.currentTime = 0;
+    rebootSound.play().catch(() => {});
+
+    showScreen("bootScreen");
+    document.body.classList.add("glitch");
+
+    setTimeout(() => {
+        document.body.classList.remove("glitch");
+        showScreen("phase3Screen");
+        stage = 4;
+        bootState = "phase3";
+    }, 7000);
 }
 
 /* =========================
