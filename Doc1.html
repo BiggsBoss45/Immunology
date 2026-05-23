@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>E. coli Sequence Archive</title>
+
+<style>
+
+body{
+
+    background:black;
+    color:white;
+
+    font-family:Courier New, monospace;
+
+    padding:50px;
+
+    line-height:2.4;
+
+    text-shadow:0 0 6px rgba(255,255,255,0.35);
+
+    overflow-y:auto;
+}
+
+h1{
+
+    font-size:42px;
+
+    margin-bottom:10px;
+
+    letter-spacing:4px;
+}
+
+h2{
+
+    color:#888;
+
+    margin-bottom:50px;
+
+    font-size:24px;
+}
+
+.sequence{
+
+    font-size:26px;
+
+    word-wrap:break-word;
+
+    max-width:1600px;
+}
+
+.codon{
+
+    transition:0.2s;
+
+    cursor:pointer;
+
+    padding:2px 4px;
+
+    display:inline-block;
+}
+
+.codon:hover{
+
+    color:red;
+
+    text-shadow:0 0 12px red;
+
+    transform:scale(1.08);
+}
+
+/* IMPORTANT VECTOR SEGMENTS */
+
+.vector{
+
+    color:#ff4444;
+
+    text-shadow:0 0 10px red;
+
+    border-bottom:1px solid rgba(255,0,0,0.5);
+}
+
+/* TERMINAL NOTE */
+
+.note{
+
+    margin-top:80px;
+
+    color:#888;
+
+    font-size:18px;
+
+    line-height:1.8;
+}
+
+/* CRT EFFECT */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    pointer-events:none;
+
+    background:
+    repeating-linear-gradient(
+
+        to bottom,
+
+        rgba(255,255,255,0.03) 0px,
+        rgba(255,255,255,0.03) 1px,
+
+        rgba(0,0,0,0.15) 2px,
+        rgba(0,0,0,0.15) 4px
+    );
+
+    z-index:9999;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>
+E. COLI mRNA TRANSLATION RECORD
+</h1>
+
+<h2>
+ARCHIVED PROTEIN RECONSTRUCTION SEQUENCE
+</h2>
+
+<div class="sequence">
+
+<!-- BLOCK 1 -->
+
+<span class="codon">AUG</span>
+<span class="codon">GCU</span>
+<span class="codon">GAA</span>
+<span class="codon">UUU</span>
+<span class="codon">CCG</span>
+<span class="codon">GGC</span>
+<span class="codon">AAA</span>
+<span class="codon">UAC</span>
+<span class="codon">GUG</span>
+<span class="codon">CUA</span>
+<span class="codon">ACC</span>
+<span class="codon">GAU</span>
+<span class="codon">CGU</span>
+<span class="codon">UGG</span>
+<span class="codon">AAG</span>
+<span class="codon">CGA</span>
+<span class="codon">UUU</span>
+<span class="codon">GCA</span>
+<span class="codon">GGU</span>
+<span class="codon">UUC</span>
+
+<span class="codon vector">GAA</span>
+<span class="codon vector">CCU</span>
+<span class="codon vector">AUG</span>
+<span class="codon vector">UGC</span>
+<span class="codon vector">AAA</span>
+
+<span class="codon">GGC</span>
+<span class="codon">UUA</span>
+<span class="codon">CGA</span>
+<span class="codon">ACG</span>
+<span class="codon">UCU</span>
+<span class="codon">GAG</span>
+<span class="codon">AUC</span>
+<span class="codon">GCU</span>
+<span class="codon">AAA</span>
+<span class="codon">UGA</span>
+
+<br><br>
+
+<!-- BLOCK 2 -->
+
+<span class="codon">AUG</span>
+<span class="codon">CGC</span>
+<span class="codon">GAA</span>
+<span class="codon">UUC</span>
+<span class="codon">AAG</span>
+<span class="codon">GCU</span>
+<span class="codon">CCA</span>
+<span class="codon">UGU</span>
+<span class="codon">UCG</span>
+<span class="codon">GGA</span>
+<span class="codon">AAC</span>
+<span class="codon">GUA</span>
+<span class="codon">CUU</span>
+<span class="codon">AAG</span>
+<span class="codon">GCU</span>
+<span class="codon">UGA</span>
+
+<span class="codon vector">AUG</span>
+<span class="codon vector">GGA</span>
+<span class="codon vector">UUC</span>
+<span class="codon vector">CGA</span>
+<span class="codon vector">AAA</span>
+
+<span class="codon">CCU</span>
+<span class="codon">UGG</span>
+<span class="codon">AUC</span>
+<span class="codon">GAA</span>
+<span class="codon">UUU</span>
+<span class="codon">CGC</span>
+<span class="codon">AAG</span>
+<span class="codon">UGA</span>
+
+<br><br>
+
+<!-- BLOCK 3 -->
+
+<span class="codon">AUG</span>
+<span class="codon">GCU</span>
+<span class="codon">CGA</span>
+<span class="codon">UUU</span>
+<span class="codon">AAA</span>
+<span class="codon">GGG</span>
+<span class="codon">UAC</span>
+<span class="codon">CGA</span>
+<span class="codon">UGG</span>
+<span class="codon">UUA</span>
+<span class="codon">AUC</span>
+<span class="codon">GCU</span>
+<span class="codon">CCA</span>
+<span class="codon">GGA</span>
+
+<span class="codon vector">UUU</span>
+<span class="codon vector">AUG</span>
+<span class="codon vector">GAA</span>
+<span class="codon vector">CCG</span>
+<span class="codon vector">UGC</span>
+
+<span class="codon">AAA</span>
+<span class="codon">GCU</span>
+<span class="codon">UGA</span>
+
+<br><br>
+
+<!-- BLOCK 4 -->
+
+<span class="codon">AUG</span>
+<span class="codon">GGA</span>
+<span class="codon">AUC</span>
+<span class="codon">CGA</span>
+<span class="codon">UGC</span>
+<span class="codon">AAA</span>
+<span class="codon">GCU</span>
+<span class="codon">CCA</span>
+<span class="codon">UGG</span>
+<span class="codon">UUC</span>
+<span class="codon">GAA</span>
+<span class="codon">CGC</span>
+
+<span class="codon vector">AUG</span>
+<span class="codon vector">CCG</span>
+<span class="codon vector">GAA</span>
+<span class="codon vector">UUU</span>
+<span class="codon vector">UGC</span>
+
+<span class="codon">AAG</span>
+<span class="codon">GGA</span>
+<span class="codon">UAA</span>
+
+<br><br>
+
+<!-- EXTRA FILLER -->
+
+<span class="codon">AUG</span>
+<span class="codon">GCU</span>
+<span class="codon">CCA</span>
+<span class="codon">UGA</span>
+<span class="codon">GGA</span>
+<span class="codon">UUU</span>
+<span class="codon">AAC</span>
+<span class="codon">CGU</span>
+<span class="codon">UGC</span>
+<span class="codon">AAA</span>
+<span class="codon">GCU</span>
+<span class="codon">CCA</span>
+<span class="codon">GGA</span>
+<span class="codon">UUU</span>
+<span class="codon">AAC</span>
+<span class="codon">UGA</span>
+
+</div>
+
+<div class="note">
+
+WARNING: MULTIPLE VECTOR SIGNATURES DETECTED<br><br>
+
+Cross-reference organism genome fragments to determine
+which hosts contain compatible translated protein regions.<br><br>
+
+Only a limited number of organisms possess all required
+reconstruction markers.
+
+</div>
+
+</body>
+</html>
