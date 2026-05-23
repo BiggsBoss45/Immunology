@@ -46,13 +46,17 @@ window.addEventListener("load", () => {
 });
 
 /* =========================
-   INPUT
+   INPUT (FULLY FIXED)
 ========================= */
 
 document.addEventListener("keydown", (e) => {
 
     /* START SCREEN */
-    if (stage === 0 && e.key === "Enter") {
+    if (
+        stage === 0 &&
+        e.key === "Enter"
+    ) {
+
         startSequence();
         return;
     }
@@ -63,24 +67,30 @@ document.addEventListener("keydown", (e) => {
         bootState === "continue" &&
         e.key === "Enter"
     ) {
+
         continueToMenu();
+        return;
     }
 
 });
 
-/* ONLY START SCREEN CLICK */
-document.addEventListener("click", (e) => {
+document.addEventListener("click", () => {
 
+    /* START SCREEN */
     if (stage === 0) {
+
         startSequence();
         return;
     }
 
+    /* CONTINUE SCREEN */
     if (
         stage === 2 &&
         bootState === "continue"
     ) {
+
         continueToMenu();
+        return;
     }
 
 });
@@ -537,7 +547,6 @@ function runSimulation() {
         document.getElementById("atpValue");
 
     bacteria.className = "";
-
     virus.className = "";
 
     result.textContent =
