@@ -557,3 +557,45 @@ input{
     80% { transform: translate(1px, 2px); }
     100% { transform: translate(0); }
 }
+.rebootScreen {
+    background: black;
+    z-index: 99999;
+    justify-content: center;
+    align-items: center;
+    font-family: Courier New, monospace;
+}
+
+.rebootText {
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: #bbb;
+    animation: rebootFlicker 0.08s infinite;
+    text-shadow: 0 0 10px white;
+}
+
+@keyframes rebootFlicker {
+    0% { opacity: 0.6; transform: translateX(0); }
+    25% { opacity: 1; transform: translateX(-1px); }
+    50% { opacity: 0.7; transform: translateX(1px); }
+    75% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0.8; }
+}
+
+/* scanline distortion overlay */
+.rebootScreen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.05) 0px,
+        rgba(0,0,0,0.2) 2px
+    );
+    animation: scanMove 0.2s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes scanMove {
+    from { transform: translateY(0); }
+    to { transform: translateY(10px); }
+}
