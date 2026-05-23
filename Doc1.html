@@ -19,84 +19,99 @@ body{
 
     font-family:Courier New, monospace;
 
-    padding:50px;
+    padding:70px;
 
-    line-height:2.4;
+    line-height:3;
 
-    text-shadow:0 0 6px rgba(255,255,255,0.35);
+    text-shadow:0 0 8px rgba(255,255,255,0.35);
 
     overflow-y:auto;
 }
 
 h1{
 
-    font-size:42px;
+    font-size:64px;
 
-    margin-bottom:10px;
+    margin-bottom:20px;
 
-    letter-spacing:4px;
+    letter-spacing:6px;
 }
 
 h2{
 
     color:#888;
 
-    margin-bottom:50px;
+    margin-bottom:70px;
 
-    font-size:24px;
+    font-size:36px;
 }
 
 .sequence{
 
-    font-size:26px;
+    font-size:52px;
 
     word-wrap:break-word;
 
-    max-width:1600px;
+    max-width:1800px;
 }
 
 .codon{
 
-    transition:0.2s;
+    transition:0.25s;
 
     cursor:pointer;
 
-    padding:2px 4px;
+    padding:4px 8px;
 
     display:inline-block;
 }
 
+/* NORMAL HOVER */
+
 .codon:hover{
 
-    color:red;
+    color:white;
 
-    text-shadow:0 0 12px red;
+    text-shadow:0 0 18px white;
 
     transform:scale(1.08);
 }
 
-/* IMPORTANT VECTOR SEGMENTS */
+/* HIDDEN VECTOR SEGMENTS */
 
 .vector{
 
-    color:#ff4444;
+    color:white;
 
-    text-shadow:0 0 10px red;
+    border-bottom:2px solid rgba(255,255,255,0.05);
 
-    border-bottom:1px solid rgba(255,0,0,0.5);
+    transition:0.25s;
+}
+
+/* REVEAL WHEN HOVERED */
+
+.vector:hover{
+
+    color:#ff2222;
+
+    text-shadow:0 0 20px red;
+
+    background:rgba(255,0,0,0.08);
+
+    border-bottom:2px solid red;
 }
 
 /* TERMINAL NOTE */
 
 .note{
 
-    margin-top:80px;
+    margin-top:120px;
 
     color:#888;
 
-    font-size:18px;
+    font-size:28px;
 
-    line-height:1.8;
+    line-height:2;
 }
 
 /* CRT EFFECT */
