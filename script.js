@@ -1,5 +1,5 @@
 let stage = 0;
-let bootLocked = false;
+let bootState = "idle"; // idle → booting → continue → menu
 
 const clickSound = new Audio("click.mp3");
 
@@ -64,10 +64,15 @@ function destroyVector(){
 
 function handleStart(){
 
-    // START SCREEN (LOCKED SAFE VERSION)
-    if(stage === 0 && !bootLocked){
+    // 🚨 HARD BLOCK ALL INPUT DURING BOOT
+    if(bootState === "booting"){
+        return;
+    }
 
-        bootLocked = true;
+    // START SCREEN
+    if(stage === 0){
+
+        bootState = "booting"; // LOCK INPUT IMMEDIATELY
 
         playClick();
 
@@ -99,15 +104,15 @@ function handleStart(){
                 document.getElementById("continueScreen")
                 .classList.add("active");
 
-                bootLocked = false; // unlock AFTER boot completes
+                bootState = "continue"; // UNLOCK HERE
 
             }, 1200);
 
         }, 7000);
     }
 
-    // CONTINUE SCREEN (SAFE)
-    else if(stage === 1 && !bootLocked){
+    // CONTINUE SCREEN
+    else if(stage === 1 && bootState === "continue"){
 
         playClick();
 
@@ -118,6 +123,7 @@ function handleStart(){
         .classList.add("active");
 
         stage = 2;
+        bootState = "menu";
     }
 }
 
@@ -200,9 +206,6 @@ function checkPassword(){
         values.includes(code)
     );
 
-    if(success){
-        document.getElementById("passwordResult").innerHTML = "ACCESS GRANTED";
-    } else {
-        document.getElementById("passwordResult").innerHTML = "ACCESS DENIED";
-    }
+    document.getElementById("passwordResult").innerHTML =
+        success ? "ACCESS GRANTED" : "ACCESS DENIED";
 }
