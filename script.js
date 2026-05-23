@@ -106,6 +106,9 @@ function revealVideo() {
 
 function handleStart() {
 
+    // 🔥 HARD STOP: once menu is reached, ignore startup logic
+    if (stage >= 2) return;
+
     if (bootState === "booting") return;
 
     if (stage === 0) {
@@ -140,6 +143,10 @@ function handleStart() {
 
         stage = 2;
         bootState = "menu";
+
+        // 🔥 OPTIONAL: remove startup listeners completely
+        document.removeEventListener("click", handleStart);
+        document.removeEventListener("keydown", handleStart);
     }
 }
 
