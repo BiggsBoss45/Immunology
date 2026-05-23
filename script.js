@@ -149,6 +149,8 @@ function loadDNASequences() {
 
     container.innerHTML = "";
 
+    const dnaFiles = [...sequences]; // 🔥 FIX: ensure it exists
+
     const labels = ["Sequence A", "Sequence B", "Sequence C", "Sequence D"];
 
     dnaFiles.forEach((file, index) => {
@@ -169,8 +171,8 @@ function loadDNASequences() {
 
         const iframe = document.createElement("iframe");
         iframe.src = file;
-        iframe.style.width = "100%";
-        iframe.style.height = "350px";
+        iframe.width = "100%";
+        iframe.height = "350";
         iframe.style.border = "1px solid white";
 
         content.appendChild(iframe);
