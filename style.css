@@ -599,3 +599,123 @@ input{
     from { transform: translateY(0); }
     to { transform: translateY(10px); }
 }
+
+/* =========================
+   PHASE 3 SIMULATION
+========================= */
+
+.simControls{
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+.simBlock{
+    border:1px solid #00ff99;
+    padding:15px;
+    width:220px;
+    background:rgba(0,0,0,0.5);
+}
+
+.simBlock select{
+    width:100%;
+    padding:10px;
+    background:black;
+    color:#00ff99;
+    border:1px solid #00ff99;
+}
+
+#simulationArea{
+    margin-top:40px;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+#bacteriaContainer{
+    width:300px;
+    height:300px;
+    position:relative;
+}
+
+#bacteriaCell{
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    border:4px solid #00ff99;
+    margin:auto;
+    position:relative;
+    overflow:hidden;
+    transition:0.5s;
+}
+
+#virusParticle{
+    width:35px;
+    height:35px;
+    background:#ff0040;
+    border-radius:50%;
+    position:absolute;
+    top:-40px;
+    left:90px;
+}
+
+.injecting{
+    animation:injectVirus 1.8s forwards;
+}
+
+@keyframes injectVirus{
+
+    0%{
+        top:-40px;
+    }
+
+    100%{
+        top:90px;
+    }
+}
+
+.deadCell{
+    background:red;
+    box-shadow:0 0 40px red;
+}
+
+.failedMutation{
+    background:orange;
+    box-shadow:0 0 30px orange;
+}
+
+.mutatedCell{
+    background:#00ff99;
+    box-shadow:0 0 40px #00ff99;
+}
+
+.stableCell{
+    background:#008844;
+}
+
+#atpContainer{
+    width:300px;
+}
+
+#atpBarOuter{
+    width:100%;
+    height:30px;
+    border:2px solid #00ff99;
+    margin-top:10px;
+}
+
+#atpBarInner{
+    width:0%;
+    height:100%;
+    background:#00ff99;
+    transition:1s;
+}
+
+#simulationResult{
+    margin-top:40px;
+    font-size:22px;
+    text-align:center;
+}
