@@ -41,6 +41,19 @@ function playClick() {
 }
 
 /* =========================
+   SCREEN SWITCH (NEW CORE FIX)
+========================= */
+
+function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(s => {
+        s.classList.remove("active");
+    });
+
+    const el = document.getElementById(id);
+    if (el) el.classList.add("active");
+}
+
+/* =========================
    VIDEO CONTROL (HARD RESET)
 ========================= */
 
@@ -271,11 +284,15 @@ function checkPhase2() {
         document.getElementById("phase2Access").style.display = "block";
         document.body.style.filter = "contrast(1.1) brightness(1.05)";
 
+        playClick();
+
+        // 🔥 REBOOT TRANSITION
+        showScreen("rebootScreen");
+
         setTimeout(() => {
-            document.getElementById("menuScreen").classList.remove("active");
-            document.getElementById("phase3Screen").classList.add("active");
+            showScreen("phase3Screen");
             bootState = "phase3";
-        }, 1500);
+        }, 2000);
     }
 }
 
