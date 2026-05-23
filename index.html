@@ -2,192 +2,160 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Immunology System</title>
-
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-    <!-- AUDIO -->
-    <audio id="bootAudio" src="BootupIm.mp3"></audio>
+<!-- AUDIO -->
+<audio id="bootAudio" src="BootupIm.mp3"></audio>
 
-    <!-- START SCREEN -->
-    <div id="startScreen" class="screen active">
-        <h1>PRESS ENTER / TAP SCREEN</h1>
+<!-- START SCREEN -->
+<div id="startScreen" class="screen active">
+    <h1>PRESS ENTER / TAP SCREEN</h1>
+</div>
+
+<!-- BOOT SCREEN -->
+<div id="bootScreen" class="screen">
+    <div id="vectorContainer">
+        <div class="scanCircle"></div>
+        <div class="scanLine horizontal"></div>
+        <div class="scanLine vertical"></div>
+        <img src="Immune.png" id="immuneLogo">
     </div>
+</div>
 
-    <!-- BOOT SCREEN -->
-    <div id="bootScreen" class="screen">
-
-        <div id="vectorContainer">
-            <div class="scanCircle"></div>
-            <div class="scanLine horizontal"></div>
-            <div class="scanLine vertical"></div>
-            <img src="Immune.png" id="immuneLogo">
-        </div>
-
+<!-- CONTINUE SCREEN -->
+<div id="continueScreen" class="screen">
+    <div id="continuePrompt">
+        PRESS ENTER / TAP TO CONTINUE
     </div>
+</div>
 
-    <!-- CONTINUE SCREEN -->
-    <div id="continueScreen" class="screen">
+<!-- MAIN MENU -->
+<div id="menuScreen" class="screen">
 
-        <div id="continuePrompt">
-            PRESS ENTER / TAP TO CONTINUE
+    <!-- MENU GRID -->
+    <div class="menuGrid">
+
+        <div class="menuPanel" onclick="openTab('audioTab')">
+            <img src="preview1.png" class="panelImage">
+            <div class="panelOverlay">
+                <h1>VIDEO LOGS</h1>
+            </div>
         </div>
 
-    </div>
-
-    <!-- MAIN MENU -->
-    <div id="menuScreen" class="screen">
-
-        <!-- MENU GRID -->
-        <div class="menuGrid">
-
-            <!-- VIDEO LOGS -->
-            <div class="menuPanel" onclick="openTab('audioTab')">
-
-                <img src="preview1.png" class="panelImage">
-
-                <div class="panelOverlay">
-                    <h1>VIDEO LOGS</h1>
-                </div>
-
+        <div class="menuPanel" onclick="openTab('docTab')">
+            <img src="preview2.png" class="panelImage">
+            <div class="panelOverlay">
+                <h1>AMINO ACID SEQUENCE</h1>
             </div>
-
-            <!-- AMINO ACID -->
-            <div class="menuPanel" onclick="openTab('docTab')">
-
-                <img src="preview2.png" class="panelImage">
-
-                <div class="panelOverlay">
-                    <h1>AMINO ACID SEQUENCE</h1>
-                </div>
-
-            </div>
-
-            <!-- PHASE 2 -->
-            <div class="menuPanel" onclick="openTab('phase2Tab')">
-
-                <img src="preview3.png" class="panelImage">
-
-                <div class="panelOverlay">
-                    <h1>PHASE 2</h1>
-                </div>
-
-            </div>
-
-            <!-- DNA ARCHIVE (NEW) -->
-            <div class="menuPanel" onclick="openTab('dnaTab')">
-
-                <img src="preview4.png" class="panelImage">
-
-                <div class="panelOverlay">
-                    <h1>RECOVERED DNA</h1>
-                </div>
-
-            </div>
-
         </div>
 
-        <!-- =========================
-             AUDIO TAB
-        ========================== -->
-        <div id="audioTab" class="tabContent">
-
-            <button id="revealButton" onclick="revealVideo()">
-                OPEN AUDIO LOG
-            </button>
-
-            <div id="videoContainer" style="display:none; margin-top:20px;">
-                <video id="mainVideo" controls width="700">
-                    <source src="video1.mp4" type="video/mp4">
-                </video>
+        <div class="menuPanel" onclick="openTab('phase2Tab')">
+            <img src="preview3.png" class="panelImage">
+            <div class="panelOverlay">
+                <h1>PHASE 2</h1>
             </div>
-
-            <hr style="border:1px solid white; margin:20px 0;">
-
-            <h2>Amino Acid Sequence</h2>
-
-            <div id="sequenceContainer"></div>
-
-            <button class="backButton" onclick="closeTabs()">BACK</button>
-
         </div>
 
-        <!-- =========================
-             DOCUMENT TAB
-        ========================== -->
-        <div id="docTab" class="tabContent">
-
-            <h2>AMINO ACID SEQUENCE</h2>
-
-            <iframe src="Doc1.html"></iframe>
-
-            <button class="backButton" onclick="closeTabs()">BACK</button>
-
-        </div>
-
-        <!-- =========================
-             PHASE 2 TAB
-        ========================== -->
-        <div id="phase2Tab" class="tabContent">
-
-            <h2>PHASE 2 // VECTOR VALIDATION</h2>
-
-            <p>
-                Select all valid organisms capable of producing the reconstructed protein.
-            </p>
-
-            <div id="orgList">
-
-                <label><input type="checkbox" value="V-03"> V-03</label>
-                <label><input type="checkbox" value="E-13"> E-13</label>
-                <label><input type="checkbox" value="H-07"> H-07</label>
-                <label><input type="checkbox" value="P-09"> P-09</label>
-                <label><input type="checkbox" value="S-05"> S-05</label>
-                <label><input type="checkbox" value="M-22"> M-22</label>
-                <label><input type="checkbox" value="L-12"> L-12</label>
-                <label><input type="checkbox" value="B-01"> B-01</label>
-                <label><input type="checkbox" value="C-09"> C-09</label>
-
+        <!-- NEW DNA MENU -->
+        <div class="menuPanel" onclick="openTab('dnaTab')">
+            <img src="preview4.png" class="panelImage">
+            <div class="panelOverlay">
+                <h1>RECOVERED DNA</h1>
             </div>
-
-            <button onclick="checkPhase2()">VALIDATE SEQUENCE</button>
-
-            <p id="phase2Result"></p>
-
-            <div id="phase2Access" style="display:none; margin-top:30px;">
-                <h2>PHASE 2 UNLOCKED</h2>
-                <p>RECONSTRUCTED PROTEIN CONFIRMED</p>
-            </div>
-
-            <button class="backButton" onclick="closeTabs()">BACK</button>
-
-        </div>
-
-        <!-- =========================
-             DNA TAB (FIXED)
-        ========================== -->
-        <div id="dnaTab" class="tabContent">
-
-            <h2>Recovered DNA Sequences</h2>
-
-            <div id="dnaList"></div>
-
-            <button class="backButton" onclick="closeTabs()">BACK</button>
-
         </div>
 
     </div>
 
-    <script src="script.js"></script>
+    <!-- =========================
+         AUDIO TAB
+    ========================== -->
+    <div id="audioTab" class="tabContent">
+
+        <button id="revealButton" onclick="revealVideo()">
+            OPEN AUDIO LOG
+        </button>
+
+        <div id="videoContainer" style="display:none; margin-top:20px;">
+            <video id="mainVideo" controls width="700">
+                <source src="video1.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <button class="backButton" onclick="closeTabs()">BACK</button>
+
+    </div>
+
+    <!-- =========================
+         DOCUMENT TAB
+    ========================== -->
+    <div id="docTab" class="tabContent">
+
+        <h2>AMINO ACID SEQUENCE</h2>
+
+        <iframe src="Doc1.html"></iframe>
+
+        <button class="backButton" onclick="closeTabs()">BACK</button>
+
+    </div>
+
+    <!-- =========================
+         PHASE 2 TAB
+    ========================== -->
+    <div id="phase2Tab" class="tabContent">
+
+        <h2>PHASE 2 // VECTOR VALIDATION</h2>
+
+        <p>Select all valid organisms capable of producing the reconstructed protein.</p>
+
+        <div id="orgList">
+
+            <label><input type="checkbox" value="V-03"> V-03</label>
+            <label><input type="checkbox" value="E-13"> E-13</label>
+            <label><input type="checkbox" value="H-07"> H-07</label>
+            <label><input type="checkbox" value="P-09"> P-09</label>
+            <label><input type="checkbox" value="S-05"> S-05</label>
+            <label><input type="checkbox" value="M-22"> M-22</label>
+            <label><input type="checkbox" value="L-12"> L-12</label>
+            <label><input type="checkbox" value="B-01"> B-01</label>
+            <label><input type="checkbox" value="C-09"> C-09</label>
+
+        </div>
+
+        <button onclick="checkPhase2()">VALIDATE SEQUENCE</button>
+
+        <p id="phase2Result"></p>
+
+        <div id="phase2Access" style="display:none; margin-top:30px;">
+            <h2>PHASE 2 UNLOCKED</h2>
+            <p>RECONSTRUCTED PROTEIN CONFIRMED</p>
+        </div>
+
+        <button class="backButton" onclick="closeTabs()">BACK</button>
+
+    </div>
+
+    <!-- =========================
+         DNA TAB (FIXED)
+    ========================== -->
+    <div id="dnaTab" class="tabContent">
+
+        <h2>Recovered DNA Sequences</h2>
+
+        <div id="dnaList"></div>
+
+        <button class="backButton" onclick="closeTabs()">BACK</button>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
-
 </html>
