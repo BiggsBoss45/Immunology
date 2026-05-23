@@ -8,7 +8,7 @@ body{
 }
 
 /* =========================
-   SCREEN SYSTEM (FIXED)
+   GLOBAL SCREEN SYSTEM (FIXED)
 ========================= */
 
 .screen{
@@ -24,19 +24,21 @@ body{
     flex-direction:column;
 
     background:black;
+    z-index:100;
 }
 
 .active{
     display:flex !important;
-    z-index:999;
+    z-index:1000;
 }
 
-/* Screen layering safety */
-
-#startScreen{ z-index:1000; }
-#bootScreen{ z-index:1000; }
-#continueScreen{ z-index:1000; }
-#menuScreen{ z-index:900; }
+/* REMOVE INDIVIDUAL Z-INDEX CONFLICTS */
+#startScreen,
+#bootScreen,
+#continueScreen,
+#menuScreen{
+    z-index:100;
+}
 
 /* =========================
    BOOT LOGO
@@ -57,12 +59,6 @@ body{
    CONTINUE SCREEN
 ========================= */
 
-#continueScreen{
-    justify-content:center;
-    align-items:center;
-    padding-bottom:0;
-}
-
 #continuePrompt{
     font-size:28px;
     letter-spacing:3px;
@@ -71,11 +67,8 @@ body{
 }
 
 @keyframes pulseText{
-
     0%{ opacity:0.3; }
-
     50%{ opacity:1; }
-
     100%{ opacity:0.3; }
 }
 
@@ -95,7 +88,7 @@ body{
     overflow:hidden;
     cursor:pointer;
     border-right:1px solid white;
-    transition:0.3s;
+    transition:0.3s ease;
 }
 
 .menuPanel:hover{
@@ -156,14 +149,13 @@ body{
 
     top:50%;
     left:50%;
-
     transform:translate(-50%, -50%);
 
     width:90%;
     height:85%;
 
     background:black;
-    z-index:200;
+    z-index:500;
 
     overflow:auto;
 
@@ -185,7 +177,6 @@ body{
 
 .tabs button,
 button{
-
     background:black;
     color:white;
     border:1px solid white;
@@ -203,7 +194,6 @@ button{
 
 .tabs button:hover,
 button:hover{
-
     background:white;
     color:black;
 }
@@ -215,7 +205,6 @@ button:hover{
 iframe{
     width:80vw;
     height:70vh;
-
     border:1px solid white;
     background:white;
 }
@@ -237,7 +226,6 @@ video{
 }
 
 .passwordBoxes input{
-
     width:120px;
     padding:10px;
 
@@ -257,12 +245,8 @@ video{
 ========================= */
 
 #orgList{
-
     display:grid;
-
-    grid-template-columns:
-    repeat(3, 1fr);
-
+    grid-template-columns:repeat(3, 1fr);
     gap:12px;
 
     margin-top:25px;
@@ -270,25 +254,19 @@ video{
 }
 
 #orgList label{
-
     border:1px solid white;
-
     padding:15px;
-
     cursor:pointer;
 
     transition:0.2s;
 
     text-align:center;
-
     user-select:none;
 }
 
 #orgList label:hover{
-
     background:white;
     color:black;
-
     box-shadow:0 0 12px white;
 }
 
@@ -297,7 +275,7 @@ video{
 }
 
 /* =========================
-   MUTATION HIGHLIGHT SYSTEM
+   MUTATION SYSTEM
 ========================= */
 
 .mut{
@@ -306,16 +284,11 @@ video{
     border-radius:4px;
 }
 
-/* HOVER RED MUTATION EFFECT */
-
 .mut:hover{
-
     background:rgba(255,0,0,0.22);
-
     color:#ff4d4d;
 
     text-shadow:0 0 8px red;
-
     box-shadow:0 0 12px red;
 
     cursor:pointer;
@@ -324,38 +297,20 @@ video{
 }
 
 @keyframes glitchPulse{
-
-    0%{
-        transform:translate(0px);
-    }
-
-    25%{
-        transform:translate(1px,-1px);
-    }
-
-    50%{
-        transform:translate(-1px,1px);
-    }
-
-    75%{
-        transform:translate(1px,1px);
-    }
-
-    100%{
-        transform:translate(0px);
-    }
+    0%{ transform:translate(0px); }
+    25%{ transform:translate(1px,-1px); }
+    50%{ transform:translate(-1px,1px); }
+    75%{ transform:translate(1px,1px); }
+    100%{ transform:translate(0px); }
 }
 
 /* =========================
-   CRT EFFECT
+   CRT EFFECT (LOWER Z-INDEX FIX)
 ========================= */
 
 body::before{
-
     content:"";
-
     position:fixed;
-
     top:0;
     left:0;
 
@@ -364,8 +319,7 @@ body::before{
 
     pointer-events:none;
 
-    background:
-    repeating-linear-gradient(
+    background:repeating-linear-gradient(
         to bottom,
         rgba(255,255,255,0.03) 0px,
         rgba(255,255,255,0.03) 1px,
@@ -373,15 +327,12 @@ body::before{
         rgba(0,0,0,0.15) 4px
     );
 
-    z-index:9998;
+    z-index:5;
 }
 
 body::after{
-
     content:"";
-
     position:fixed;
-
     top:0;
     left:0;
 
@@ -391,18 +342,14 @@ body::after{
     pointer-events:none;
 
     background:rgba(255,255,255,0.015);
-
     animation:flicker 0.12s infinite;
 
-    z-index:9997;
+    z-index:6;
 }
 
 @keyframes flicker{
-
     0%{ opacity:0.95; }
-
     50%{ opacity:1; }
-
     100%{ opacity:0.97; }
 }
 
@@ -414,9 +361,7 @@ video,
 iframe,
 button,
 input{
-
-    box-shadow:
-    0 0 10px rgba(255,255,255,0.2);
+    box-shadow:0 0 10px rgba(255,255,255,0.2);
 }
 
 /* =========================
@@ -424,7 +369,6 @@ input{
 ========================= */
 
 .vline{
-
     fill:none;
     stroke:white;
     stroke-width:2;
@@ -440,11 +384,10 @@ input{
 }
 
 /* =========================
-   SEQUENCE CONTAINER
+   SEQUENCE SYSTEM (IMPROVED TOGGLE READY)
 ========================= */
 
 #sequenceContainer{
-
     display:flex;
     flex-direction:column;
     gap:20px;
@@ -455,11 +398,36 @@ input{
     overflow-y:auto;
 }
 
-#sequenceContainer iframe{
-
+.seqButton{
     width:100%;
-    height:350px;
+    text-align:left;
+    padding:12px;
+
+    background:black;
+    color:white;
 
     border:1px solid white;
-    background:black;
+
+    cursor:pointer;
+    font-family:inherit;
+    font-size:16px;
+
+    transition:0.2s;
+}
+
+.seqButton:hover{
+    background:white;
+    color:black;
+}
+
+.seqContent{
+    display:none;
+    margin-top:10px;
+
+    border:1px solid white;
+    padding:15px;
+}
+
+.seqContent.active{
+    display:block;
 }
