@@ -10,9 +10,10 @@ let started = false;
 
 const clickSound = new Audio("click.mp3");
 const rebootSound = new Audio("reboot.mp3");
+rebootSound.preload = "auto";
 
 /* =========================
-   SEQUENCE DATA
+   DATA
 ========================= */
 
 const sequences = [
@@ -31,7 +32,7 @@ let sequencesLoaded = false;
 let dnaLoaded = false;
 
 /* =========================
-   INIT
+   INIT (FORCE CLEAN START)
 ========================= */
 
 window.addEventListener("load", () => {
@@ -42,33 +43,21 @@ window.addEventListener("load", () => {
 
     showScreen("startScreen");
 
-    document.querySelector(".menuGrid")?.style &&
+    document.querySelector(".menuGrid")?.style && 
         (document.querySelector(".menuGrid").style.display = "flex");
 });
 
 /* =========================
-   INPUT SYSTEM (FIXED)
+   INPUT (ONLY START FLOW)
 ========================= */
 
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") handleInput();
+    if (e.key === "Enter") startSequence();
 });
 
-/* ONLY ONE INPUT CONTROLLER */
-function handleInput() {
-
-    // START
-    if (stage === 0 && !started) {
-        startSequence();
-        return;
-    }
-
-    // CONTINUE → MENU
-    if (stage === 2 && bootState === "continue") {
-        continueSequence();
-        return;
-    }
-}
+document.addEventListener("click", () => {
+    startSequence();
+});
 
 /* =========================
    SOUND
@@ -80,21 +69,16 @@ function playClick() {
 }
 
 /* =========================
-   SCREEN SYSTEM (FIXED RENDER BUG)
+   SCREEN SYSTEM
 ========================= */
 
 function showScreen(id) {
-
     document.querySelectorAll(".screen").forEach(s => {
-        s.style.display = "none";
         s.classList.remove("active");
     });
 
     const el = document.getElementById(id);
-    if (el) {
-        el.style.display = "flex";
-        el.classList.add("active");
-    }
+    if (el) el.classList.add("active");
 }
 
 /* =========================
@@ -103,7 +87,9 @@ function showScreen(id) {
 
 function startSequence() {
 
+    if (started) return;
     started = true;
+
     stage = 1;
     bootState = "booting";
 
@@ -116,9 +102,6 @@ function startSequence() {
         bootAudio.play().catch(() => {});
     }
 
-    const mg = document.querySelector(".menuGrid");
-    if (mg) mg.style.display = "none";
-
     setTimeout(() => {
         showScreen("continueScreen");
         stage = 2;
@@ -127,10 +110,10 @@ function startSequence() {
 }
 
 /* =========================
-   CONTINUE SEQUENCE
+   CONTINUE → MENU
 ========================= */
 
-function continueSequence() {
+document.addEventListener("click", () => {
 
     if (stage !== 2 || bootState !== "continue") return;
 
@@ -140,53 +123,7 @@ function continueSequence() {
     bootState = "menu";
 
     showScreen("menuScreen");
-
-    const mg = document.querySelector(".menuGrid");
-    if (mg) mg.style.display = "flex";
-}
-
-/* =========================
-   VIDEO CONTROL
-========================= */
-
-function stopVideoLog() {
-
-    const video = document.getElementById("mainVideo");
-    const container = document.getElementById("videoContainer");
-    const button = document.getElementById("revealButton");
-
-    if (video) {
-        video.pause();
-        video.removeAttribute("src");
-        video.load();
-        video.currentTime = 0;
-        video.muted = true;
-    }
-
-    if (container) container.style.display = "none";
-    if (button) button.style.display = "inline-block";
-}
-
-function revealVideo() {
-
-    playClick();
-
-    const video = document.getElementById("mainVideo");
-    const container = document.getElementById("videoContainer");
-    const button = document.getElementById("revealButton");
-
-    if (!video) return;
-
-    container.style.display = "block";
-    button.style.display = "none";
-
-    video.pause();
-    video.currentTime = 0;
-
-    video.src = "video1.mp4";
-    video.muted = false;
-    video.load();
-}
+});
 
 /* =========================
    MENU SYSTEM
@@ -197,8 +134,7 @@ function openTab(tabId) {
     playClick();
     stopVideoLog();
 
-    const menuGrid = document.querySelector(".menuGrid");
-    if (menuGrid) menuGrid.style.display = "none";
+    document.querySelector(".menuGrid").style.display = "none";
 
     document.querySelectorAll(".tabContent").forEach(tab => {
         tab.classList.remove("activeTab");
@@ -227,72 +163,49 @@ function closeTabs() {
         tab.classList.remove("activeTab");
     });
 
-    const menuGrid = document.querySelector(".menuGrid");
-    if (menuGrid) menuGrid.style.display = "flex";
+    document.querySelector(".menuGrid").style.display = "flex";
 }
 
 /* =========================
-   DNA SYSTEM
+   VIDEO
 ========================= */
 
-function loadDNASequences() {
+function stopVideoLog() {
+    const video = document.getElementById("mainVideo");
+    const container = document.getElementById("videoContainer");
+    const button = document.getElementById("revealButton");
 
-    const container = document.getElementById("dnaList");
-    if (!container) return;
+    if (video) {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+        video.currentTime = 0;
+        video.muted = true;
+    }
 
-    container.innerHTML = "";
+    if (container) container.style.display = "none";
+    if (button) button.style.display = "inline-block";
+}
 
-    const labels = ["Sequence A", "Sequence B", "Sequence C", "Sequence D"];
+function revealVideo() {
+    playClick();
 
-    sequences.forEach((file, index) => {
+    const video = document.getElementById("mainVideo");
+    const container = document.getElementById("videoContainer");
+    const button = document.getElementById("revealButton");
 
-        const block = document.createElement("div");
-        block.className = "block collapsed";
+    if (!video) return;
 
-        const button = document.createElement("button");
-        button.className = "seqButton";
+    container.style.display = "block";
+    button.style.display = "none";
 
-        const label = labels[index % labels.length];
-        const baseName = file.replace(".html", "");
-
-        button.textContent = `${baseName} — ${label}`;
-
-        const content = document.createElement("div");
-        content.className = "seqContent";
-
-        const iframe = document.createElement("iframe");
-        iframe.src = file;
-
-        content.appendChild(iframe);
-
-        button.addEventListener("click", () => {
-
-            const isOpen = content.classList.contains("active");
-
-            document.querySelectorAll("#dnaList .seqContent")
-                .forEach(c => c.classList.remove("active"));
-
-            document.querySelectorAll("#dnaList .block")
-                .forEach(b => {
-                    b.classList.remove("expanded");
-                    b.classList.add("collapsed");
-                });
-
-            if (!isOpen) {
-                content.classList.add("active");
-                block.classList.add("expanded");
-                block.classList.remove("collapsed");
-            }
-        });
-
-        block.appendChild(button);
-        block.appendChild(content);
-        container.appendChild(block);
-    });
+    video.src = "video1.mp4";
+    video.muted = false;
+    video.load();
 }
 
 /* =========================
-   PHASE 2 → REBOOT → PHASE 3
+   PHASE 2 → REBOOT → PHASE 3 (FIXED SYNC)
 ========================= */
 
 function checkPhase2() {
@@ -307,33 +220,49 @@ function checkPhase2() {
 
     const success =
         selected.length === correct.length &&
-        correct.every(code => selected.includes(code));
+        correct.every(v => selected.includes(v));
 
     const result = document.getElementById("phase2Result");
 
     if (result) {
-        result.textContent =
-            success ? "SEQUENCE VALIDATED" : "INVALID VECTOR COMBINATION";
+        result.textContent = success
+            ? "SEQUENCE VALIDATED"
+            : "INVALID VECTOR COMBINATION";
     }
 
     if (!success) return;
 
     document.getElementById("phase2Access").style.display = "block";
 
-    rebootSound.currentTime = 0;
-    rebootSound.play().catch(() => {});
+    // =========================
+    // REBOOT SEQUENCE (SYNC FIX)
+    // =========================
+
+    stage = 4;
+    bootState = "phase3";
 
     showScreen("bootScreen");
 
     document.body.classList.add("glitch");
+
+    // RESET AUDIO + PLAY FULL REBOOT SOUND
+    rebootSound.pause();
+    rebootSound.currentTime = 0;
+
+    const playPromise = rebootSound.play();
+    if (playPromise) {
+        playPromise.catch(() => {});
+    }
+
+    // keep screen locked during reboot
+    const menuGrid = document.querySelector(".menuGrid");
+    if (menuGrid) menuGrid.style.display = "none";
 
     setTimeout(() => {
 
         document.body.classList.remove("glitch");
 
         showScreen("phase3Screen");
-        stage = 4;
-        bootState = "phase3";
 
         const p3Audio = document.getElementById("phase3Audio");
         if (p3Audio) {
@@ -341,7 +270,7 @@ function checkPhase2() {
             p3Audio.play().catch(() => {});
         }
 
-    }, 2200);
+    }, 7000); // 🔥 MATCHES reboot.mp3 LENGTH
 }
 
 /* =========================
