@@ -159,7 +159,6 @@ function loadDNASequences() {
         const button = document.createElement("button");
         button.className = "seqButton";
 
-        // 🔥 FIX: rename ALL labels consistently
         const baseName = file.replace(".html", "");
         const label = labels[index % labels.length];
 
@@ -173,25 +172,6 @@ function loadDNASequences() {
         iframe.style.width = "100%";
         iframe.style.height = "350px";
         iframe.style.border = "1px solid white";
-
-        // OPTIONAL: auto-rename inside iframe after load
-        iframe.onload = () => {
-            try {
-                const doc = iframe.contentDocument;
-
-                if (!doc) return;
-
-                doc.body.innerHTML = doc.body.innerHTML
-                    .replace(/Target Sequence/g, "Sequence A")
-                    .replace(/Sequence A/g, "Sequence A")
-                    .replace(/Sequence B/g, "Sequence B")
-                    .replace(/Sequence C/g, "Sequence C")
-                    .replace(/Fragment/g, "Sequence D");
-
-            } catch (e) {
-                // cross-origin safe fallback (ignored)
-            }
-        };
 
         content.appendChild(iframe);
 
