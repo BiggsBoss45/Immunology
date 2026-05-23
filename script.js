@@ -1,14 +1,25 @@
 let stage = 0;
-let bootState = "idle"; // idle → booting → continue → menu
+
+let bootState = "idle";
+// idle → booting → continue → menu
 
 const clickSound = new Audio("click.mp3");
+
+/* =========================
+   INPUT LISTENERS
+========================= */
 
 document.addEventListener("keydown", handleStart);
 document.addEventListener("click", handleStart);
 
+/* =========================
+   CLICK AUDIO
+========================= */
+
 function playClick(){
 
     clickSound.currentTime = 0;
+
     clickSound.play();
 }
 
@@ -18,23 +29,27 @@ function playClick(){
 
 function stopVideoLog(){
 
-    const video = document.querySelector("#videoContainer video");
+    const video =
+    document.getElementById("mainVideo");
 
     if(video){
 
         video.pause();
+
         video.currentTime = 0;
+
         video.muted = true;
     }
 }
 
 /* =========================
-   BOOT VECTOR SYSTEM
+   VECTOR DRAW SYSTEM
 ========================= */
 
 function initVectorLines(){
 
-    const elements = document.querySelectorAll(".vline");
+    const elements =
+    document.querySelectorAll(".vline");
 
     const beatInterval = 700;
 
@@ -43,7 +58,10 @@ function initVectorLines(){
         setTimeout(() => {
 
             el.style.opacity = "1";
-            el.style.transition = "1.2s linear";
+
+            el.style.transition =
+            "1.2s linear";
+
             el.style.strokeDashoffset = "0";
 
         }, i * beatInterval);
@@ -53,7 +71,8 @@ function initVectorLines(){
 
 function destroyVector(){
 
-    const elements = document.querySelectorAll(".vline");
+    const elements =
+    document.querySelectorAll(".vline");
 
     const beatInterval = 150;
 
@@ -62,11 +81,17 @@ function destroyVector(){
         setTimeout(() => {
 
             el.style.transition = "none";
-            el.style.strokeDashoffset = "1000";
+
+            el.style.strokeDashoffset =
+            "1000";
+
             el.style.opacity = "0";
 
             setTimeout(() => {
-                el.style.transition = "1.2s linear";
+
+                el.style.transition =
+                "1.2s linear";
+
             }, 50);
 
         }, i * beatInterval);
@@ -80,11 +105,16 @@ function destroyVector(){
 
 function handleStart(){
 
+    // HARD LOCK INPUT DURING BOOT
+
     if(bootState === "booting"){
         return;
     }
 
-    // START SCREEN
+    /* =========================
+       START SCREEN
+    ========================= */
+
     if(stage === 0){
 
         bootState = "booting";
@@ -97,12 +127,17 @@ function handleStart(){
         document.getElementById("bootScreen")
         .classList.add("active");
 
-        const bootAudio = document.getElementById("bootAudio");
+        const bootAudio =
+        document.getElementById("bootAudio");
+
         bootAudio.currentTime = 0;
+
         bootAudio.play();
 
         setTimeout(() => {
+
             initVectorLines();
+
         }, 300);
 
         stage = 1;
@@ -126,8 +161,14 @@ function handleStart(){
         }, 7000);
     }
 
-    // CONTINUE SCREEN
-    else if(stage === 1 && bootState === "continue"){
+    /* =========================
+       CONTINUE SCREEN
+    ========================= */
+
+    else if(
+        stage === 1 &&
+        bootState === "continue"
+    ){
 
         playClick();
 
@@ -138,6 +179,7 @@ function handleStart(){
         .classList.add("active");
 
         stage = 2;
+
         bootState = "menu";
     }
 }
@@ -150,7 +192,6 @@ function openTab(tabId){
 
     playClick();
 
-    // STOP VIDEO WHEN SWITCHING TABS
     stopVideoLog();
 
     document.querySelector(".menuGrid")
@@ -158,7 +199,9 @@ function openTab(tabId){
 
     document.querySelectorAll(".tabContent")
     .forEach(tab => {
+
         tab.classList.remove("activeTab");
+
     });
 
     document.getElementById(tabId)
@@ -169,12 +212,13 @@ function closeTabs(){
 
     playClick();
 
-    // STOP VIDEO WHEN EXITING TABS
     stopVideoLog();
 
     document.querySelectorAll(".tabContent")
     .forEach(tab => {
+
         tab.classList.remove("activeTab");
+
     });
 
     document.querySelector(".menuGrid")
@@ -189,9 +233,11 @@ function revealVideo(){
 
     playClick();
 
-    const video = document.querySelector("#videoContainer video");
+    const video =
+    document.getElementById("mainVideo");
 
     if(video){
+
         video.muted = false;
     }
 
@@ -203,31 +249,76 @@ function revealVideo(){
 }
 
 /* =========================
-   PASSWORD SYSTEM
+   PHASE 2 VALIDATION
 ========================= */
 
-function checkPassword(){
+function checkPhase2(){
 
     playClick();
 
-    const values = [
-        document.getElementById("box1").value.trim().toUpperCase(),
-        document.getElementById("box2").value.trim().toUpperCase(),
-        document.getElementById("box3").value.trim().toUpperCase(),
-        document.getElementById("box4").value.trim().toUpperCase()
-    ];
+    const selected =
+    Array.from(
+
+        document.querySelectorAll(
+            "#orgList input:checked"
+        )
+
+    ).map(el => el.value);
 
     const correct = [
+
         "V-03",
         "E-13",
         "H-07",
         "P-09"
     ];
 
-    const success = correct.every(code =>
-        values.includes(code)
+    // MUST MATCH EXACT SET
+
+    const success =
+
+        selected.length === correct.length &&
+
+        correct.every(code =>
+            selected.includes(code)
+        );
+
+    const result =
+    document.getElementById(
+        "phase2Result"
     );
 
-    document.getElementById("passwordResult").innerHTML =
-        success ? "ACCESS GRANTED" : "ACCESS DENIED";
+    if(success){
+
+        result.innerHTML =
+        "SEQUENCE VALIDATED";
+
+        unlockPhase2();
+
+    }
+
+    else{
+
+        result.innerHTML =
+        "INVALID VECTOR COMBINATION";
+    }
+}
+
+/* =========================
+   PHASE 2 UNLOCK
+========================= */
+
+function unlockPhase2(){
+
+    const unlock =
+    document.getElementById(
+        "phase2Access"
+    );
+
+    unlock.style.display = "block";
+
+    // OPTIONAL SCREEN FX
+
+    document.body.style.filter =
+    "contrast(1.1) brightness(1.05)";
 }
