@@ -1,9 +1,9 @@
 let stage = 0;
-
 let bootState = "idle";
 // idle → booting → continue → menu → phase3
 
 const clickSound = new Audio("click.mp3");
+const rebootSound = new Audio("reboot.mp3");
 
 /* =========================
    SEQUENCE DATA
@@ -41,7 +41,7 @@ function playClick() {
 }
 
 /* =========================
-   SCREEN SWITCH (NEW CORE FIX)
+   SCREEN SYSTEM (CRITICAL FIX)
 ========================= */
 
 function showScreen(id) {
@@ -54,7 +54,7 @@ function showScreen(id) {
 }
 
 /* =========================
-   VIDEO CONTROL (HARD RESET)
+   VIDEO CONTROL
 ========================= */
 
 function stopVideoLog() {
@@ -76,7 +76,7 @@ function stopVideoLog() {
 }
 
 /* =========================
-   VIDEO REVEAL
+   VIDEO REVEAL (NO AUTOPLAY)
 ========================= */
 
 function revealVideo() {
@@ -254,7 +254,7 @@ function loadDNASequences() {
 }
 
 /* =========================
-   PHASE 2
+   PHASE 2 → PHASE 3 REBOOT
 ========================= */
 
 function checkPhase2() {
@@ -273,31 +273,32 @@ function checkPhase2() {
 
     const result = document.getElementById("phase2Result");
 
-    if (result) {
-        result.textContent = success
-            ? "SEQUENCE VALIDATED"
-            : "INVALID VECTOR COMBINATION";
-    }
+    result.textContent = success
+        ? "SEQUENCE VALIDATED"
+        : "INVALID VECTOR COMBINATION";
 
     if (success) {
 
         document.getElementById("phase2Access").style.display = "block";
         document.body.style.filter = "contrast(1.1) brightness(1.05)";
 
-        playClick();
+        // 🔥 REBOOT SEQUENCE
+        showScreen("bootScreen"); // reuse boot screen as reboot
 
-        // 🔥 REBOOT TRANSITION
-        showScreen("rebootScreen");
+        rebootSound.currentTime = 0;
+        rebootSound.play();
 
         setTimeout(() => {
+
             showScreen("phase3Screen");
             bootState = "phase3";
-        }, 2000);
+
+        }, 2500);
     }
 }
 
 /* =========================
-   PHASE 3
+   PHASE 3 SYSTEM
 ========================= */
 
 function openPhase3Tab(tabId) {
@@ -307,8 +308,7 @@ function openPhase3Tab(tabId) {
     document.querySelectorAll("#phase3Screen .tabContent")
         .forEach(t => t.classList.remove("activeTab"));
 
-    const target = document.getElementById(tabId);
-    if (target) target.classList.add("activeTab");
+    document.getElementById(tabId)?.classList.add("activeTab");
 }
 
 function closePhase3() {
@@ -326,9 +326,7 @@ function checkPhase3() {
     const input = document.getElementById("phase3Answer").value.trim();
     const result = document.getElementById("phase3Result");
 
-    if (input === "19") {
-        result.textContent = "SEQUENCE COMPLETE";
-    } else {
-        result.textContent = "INCORRECT";
-    }
+    result.textContent = (input === "19")
+        ? "SEQUENCE COMPLETE"
+        : "INCORRECT";
 }
