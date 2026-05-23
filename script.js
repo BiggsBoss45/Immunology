@@ -90,33 +90,29 @@ function revealVideo() {
 
     if (!video) return;
 
-    // make visible FIRST
+    // show video container
     if (container) {
         container.style.display = "block";
     }
 
+    // hide open button
     if (button) {
         button.style.display = "none";
     }
 
-    // reset everything
+    // reset video state
     video.pause();
     video.currentTime = 0;
 
-    // explicitly assign source ONLY when opened
+    // load source ONLY after button press
     video.src = "video1.mp4";
 
-    // stop muted autoplay weirdness
+    // ensure sound works when user presses play manually
     video.muted = false;
 
+    // load video WITHOUT autoplay
     video.load();
-
-    // manual play only
-    video.play().catch(err => {
-        console.log("Playback blocked:", err);
-    });
 }
-
 /* =========================
    START FLOW
 ========================= */
