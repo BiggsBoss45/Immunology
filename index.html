@@ -5,113 +5,192 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Immunology System</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- AUDIO -->
+<!-- =========================
+     AUDIO
+========================= -->
+
 <audio id="bootAudio" src="BootupIm.mp3"></audio>
 
-<!-- REBOOT SCREEN -->
-<div id="rebootScreen" class="screen">
-    <div class="rebootText">SYSTEM REBOOTING...</div>
-</div>
+<!-- =========================
+     START SCREEN
+========================= -->
 
-<!-- START SCREEN -->
 <div id="startScreen" class="screen active">
+
     <h1>PRESS ENTER / TAP SCREEN</h1>
+
 </div>
 
-<!-- BOOT SCREEN -->
+<!-- =========================
+     BOOT SCREEN
+========================= -->
+
 <div id="bootScreen" class="screen">
+
     <div id="vectorContainer">
+
         <div class="scanCircle"></div>
+
         <div class="scanLine horizontal"></div>
+
         <div class="scanLine vertical"></div>
+
         <img src="Immune.png" id="immuneLogo">
+
     </div>
+
 </div>
 
-<!-- CONTINUE SCREEN -->
+<!-- =========================
+     CONTINUE SCREEN
+========================= -->
+
 <div id="continueScreen" class="screen">
+
     <div id="continuePrompt">
+
         PRESS ENTER / TAP TO CONTINUE
+
     </div>
+
 </div>
 
 <!-- =========================
      MAIN MENU
 ========================= -->
+
 <div id="menuScreen" class="screen">
 
     <div class="menuGrid">
 
+        <!-- VIDEO -->
         <div class="menuPanel" onclick="openTab('audioTab')">
+
             <img src="preview1.png" class="panelImage">
+
             <div class="panelOverlay">
+
                 <h1>VIDEO LOGS</h1>
+
             </div>
+
         </div>
 
+        <!-- DOC -->
         <div class="menuPanel" onclick="openTab('docTab')">
+
             <img src="preview2.png" class="panelImage">
+
             <div class="panelOverlay">
+
                 <h1>AMINO ACID SEQUENCE</h1>
+
             </div>
+
         </div>
 
+        <!-- PHASE 2 -->
         <div class="menuPanel" onclick="openTab('phase2Tab')">
+
             <img src="preview3.png" class="panelImage">
+
             <div class="panelOverlay">
+
                 <h1>PHASE 2</h1>
+
             </div>
+
         </div>
 
+        <!-- DNA -->
         <div class="menuPanel" onclick="openTab('dnaTab')">
+
             <img src="preview4.png" class="panelImage">
+
             <div class="panelOverlay">
+
                 <h1>RECOVERED DNA</h1>
+
             </div>
+
         </div>
 
-    </div>
-
-    <!-- AUDIO TAB -->
-    <div id="audioTab" class="tabContent">
-
-        <button id="revealButton" onclick="revealVideo()">OPEN VIDEO LOG</button>
-
-        <div id="videoContainer" style="display:none; margin-top:20px;">
-            <video id="mainVideo" controls></video>
-        </div>
-
-        <button class="backButton" onclick="closeTabs()">BACK</button>
     </div>
 
     <!-- =========================
-         AMINO ACID TAB (FIXED)
+         VIDEO TAB
     ========================= -->
+
+    <div id="audioTab" class="tabContent">
+
+        <button id="revealButton"
+                onclick="revealVideo()">
+
+            OPEN VIDEO LOG
+
+        </button>
+
+        <div id="videoContainer"
+             style="display:none; margin-top:20px;">
+
+            <video id="mainVideo"
+                   controls></video>
+
+        </div>
+
+        <button class="backButton"
+                onclick="closeTabs()">
+
+            BACK
+
+        </button>
+
+    </div>
+
+    <!-- =========================
+         DOC TAB
+    ========================= -->
+
     <div id="docTab" class="tabContent">
 
         <h2>AMINO ACID SEQUENCE</h2>
 
-        <!-- iframe kept but safe fallback added -->
-        <iframe src="Doc1.html" style="width:100%; height:400px; border:1px solid white;"></iframe>
+        <iframe src="Doc1.html"
+                style="
+                    width:100%;
+                    height:400px;
+                    border:1px solid white;
+                ">
 
-        <div style="margin-top:15px; opacity:0.7;">
-            If this appears blank, ensure <b>Doc1.html</b> exists in the same directory.
-        </div>
+        </iframe>
 
-        <button class="backButton" onclick="closeTabs()">BACK</button>
+        <button class="backButton"
+                onclick="closeTabs()">
+
+            BACK
+
+        </button>
+
     </div>
 
-    <!-- PHASE 2 TAB -->
+    <!-- =========================
+         PHASE 2 TAB
+    ========================= -->
+
     <div id="phase2Tab" class="tabContent">
 
         <h2>PHASE 2 // VECTOR VALIDATION</h2>
 
-        <p>Select all valid organisms capable of producing the reconstructed protein.</p>
+        <p>
+            Select all valid organisms capable
+            of producing the reconstructed protein.
+        </p>
 
         <div id="orgList">
 
@@ -127,26 +206,54 @@
 
         </div>
 
-        <button onclick="checkPhase2()">VALIDATE SEQUENCE</button>
+        <button onclick="checkPhase2()">
+
+            VALIDATE SEQUENCE
+
+        </button>
 
         <p id="phase2Result"></p>
 
-        <div id="phase2Access" style="display:none; margin-top:30px;">
+        <div id="phase2Access"
+             style="
+                display:none;
+                margin-top:30px;
+             ">
+
             <h2>PHASE 2 UNLOCKED</h2>
-            <p>RECONSTRUCTED PROTEIN CONFIRMED</p>
+
+            <p>
+                RECONSTRUCTED PROTEIN CONFIRMED
+            </p>
+
         </div>
 
-        <button class="backButton" onclick="closeTabs()">BACK</button>
+        <button class="backButton"
+                onclick="closeTabs()">
+
+            BACK
+
+        </button>
+
     </div>
 
-    <!-- DNA TAB -->
+    <!-- =========================
+         DNA TAB
+    ========================= -->
+
     <div id="dnaTab" class="tabContent">
 
         <h2>Recovered DNA Sequences</h2>
 
         <div id="dnaList"></div>
 
-        <button class="backButton" onclick="closeTabs()">BACK</button>
+        <button class="backButton"
+                onclick="closeTabs()">
+
+            BACK
+
+        </button>
+
     </div>
 
 </div>
@@ -154,181 +261,271 @@
 <!-- =========================
      PHASE 3 SCREEN
 ========================= -->
+
 <div id="phase3Screen" class="screen">
 
     <div class="menuGrid">
 
-        <div class="menuPanel" onclick="openPhase3Tab('p3VideoTab')">
+        <!-- VIDEO -->
+        <div class="menuPanel"
+             onclick="openPhase3Tab('p3VideoTab')">
+
             <div class="panelOverlay">
+
                 <h1>VIDEO LOG</h1>
+
             </div>
+
         </div>
 
-        <div class="menuPanel" onclick="openPhase3Tab('p3MetaTab')">
+        <!-- META -->
+        <div class="menuPanel"
+             onclick="openPhase3Tab('p3MetaTab')">
+
             <div class="panelOverlay">
+
                 <h1>METABOLIC PATHWAYS</h1>
+
             </div>
+
         </div>
 
-        <div class="menuPanel" onclick="openPhase3Tab('p3QuizTab')">
+        <!-- QUIZ -->
+        <div class="menuPanel"
+             onclick="openPhase3Tab('p3QuizTab')">
+
             <div class="panelOverlay">
+
                 <h1>PHASE 3</h1>
+
             </div>
+
         </div>
 
     </div>
 
-    
-    <!-- VIDEO TAB -->
+    <!-- =========================
+         VIDEO TAB
+    ========================= -->
+
     <div id="p3VideoTab" class="tabContent">
 
         <h2>VIDEO LOG</h2>
 
         <video controls width="700">
-            <source src="video2.mp4" type="video/mp4">
+
+            <source src="video2.mp4"
+                    type="video/mp4">
+
         </video>
 
-        <button onclick="closePhase3()">BACK</button>
+        <button onclick="closePhase3()">
+
+            BACK
+
+        </button>
+
     </div>
 
-    <!-- METABOLIC TAB -->
+    <!-- =========================
+         META TAB
+    ========================= -->
+
     <div id="p3MetaTab" class="tabContent">
 
         <h2>METABOLIC PATHWAYS</h2>
 
         <iframe src="doc2.txt"></iframe>
+
         <iframe src="doc3.txt"></iframe>
 
-        <button onclick="closePhase3()">BACK</button>
-    </div>
+        <button onclick="closePhase3()">
 
-  <!-- =========================
-     PHASE 3 SIMULATION TAB
-========================= -->
-<div id="p3QuizTab" class="tabContent">
+            BACK
 
-    <h2>PHASE 3 // VIRAL METABOLIC SIMULATION</h2>
-
-    <p>
-        Reconstruct the viral mutation pathway.
-        Your objective is to produce a viable E.coli strain with
-        abnormal ATP production while maintaining host survival.
-    </p>
-
-    <!-- =========================
-         CONTROL PANEL
-    ========================= -->
-
-    <div class="simControls">
-
-        <!-- PATHWAY -->
-        <div class="simBlock">
-
-            <h3>Metabolic Pathway</h3>
-
-            <select id="pathwaySelect">
-                <option value="glycolysis">Glycolysis Enhancement</option>
-                <option value="krebs">Krebs Cycle Amplification</option>
-                <option value="electron">Electron Transport Overclock</option>
-            </select>
-
-        </div>
-
-        <!-- ATP REGULATION -->
-        <div class="simBlock">
-
-            <h3>ATP Regulation</h3>
-
-            <select id="atpSelect">
-                <option value="stable">Stable</option>
-                <option value="elevated">Elevated</option>
-                <option value="extreme">Extreme</option>
-            </select>
-
-        </div>
-
-        <!-- MUTATION VECTOR -->
-        <div class="simBlock">
-
-            <h3>Mutation Vector</h3>
-
-            <select id="mutationSelect">
-                <option value="repair">DNA Repair</option>
-                <option value="membrane">Membrane Reinforcement</option>
-                <option value="enzyme">Enzyme Duplication</option>
-            </select>
-
-        </div>
+        </button>
 
     </div>
 
     <!-- =========================
-         RUN BUTTON
+         PHASE 3 SIMULATION
     ========================= -->
 
-    <button id="simulateButton" onclick="runSimulation()">
-        RUN SIMULATION
-    </button>
+    <div id="p3QuizTab" class="tabContent">
 
-    <!-- =========================
-         SIMULATION DISPLAY
-    ========================= -->
+        <h2>PHASE 3 // VIRAL METABOLIC SIMULATION</h2>
 
-    <div id="simulationArea">
+        <p>
+            Reconstruct the viral mutation pathway.
+            Produce a viable E.coli strain with abnormal ATP production
+            while maintaining host survival.
+        </p>
 
-        <!-- BACTERIA -->
-        <div id="bacteriaContainer">
+        <!-- CONTROLS -->
 
-            <div id="bacteriaCell">
+        <div class="simControls">
 
-                <div id="virusParticle"></div>
+            <!-- PATHWAY -->
+            <div class="simBlock">
+
+                <h3>Metabolic Pathway</h3>
+
+                <select id="pathwaySelect">
+
+                    <option value="glycolysis">
+                        Glycolysis Enhancement
+                    </option>
+
+                    <option value="krebs">
+                        Krebs Cycle Amplification
+                    </option>
+
+                    <option value="electron">
+                        Electron Transport Overclock
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- ATP -->
+            <div class="simBlock">
+
+                <h3>ATP Regulation</h3>
+
+                <select id="atpSelect">
+
+                    <option value="stable">
+                        Stable
+                    </option>
+
+                    <option value="elevated">
+                        Elevated
+                    </option>
+
+                    <option value="extreme">
+                        Extreme
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- MUTATION -->
+            <div class="simBlock">
+
+                <h3>Mutation Vector</h3>
+
+                <select id="mutationSelect">
+
+                    <option value="repair">
+                        DNA Repair
+                    </option>
+
+                    <option value="membrane">
+                        Membrane Reinforcement
+                    </option>
+
+                    <option value="enzyme">
+                        Enzyme Duplication
+                    </option>
+
+                </select>
 
             </div>
 
         </div>
 
-        <!-- ATP BAR -->
-        <div id="atpContainer">
+        <!-- BUTTON -->
 
-            <h3>ATP OUTPUT</h3>
+        <button id="simulateButton"
+                onclick="runSimulation()">
 
-            <div id="atpBarOuter">
-                <div id="atpBarInner"></div>
+            RUN SIMULATION
+
+        </button>
+
+        <!-- DISPLAY -->
+
+        <div id="simulationArea">
+
+            <!-- CELL -->
+
+            <div id="bacteriaContainer">
+
+                <div id="bacteriaCell">
+
+                    <div id="virusParticle"></div>
+
+                </div>
+
             </div>
 
-            <p id="atpValue">0 ATP</p>
+            <!-- ATP -->
+
+            <div id="atpContainer">
+
+                <h3>ATP OUTPUT</h3>
+
+                <div id="atpBarOuter">
+
+                    <div id="atpBarInner"></div>
+
+                </div>
+
+                <p id="atpValue">0 ATP</p>
+
+            </div>
 
         </div>
 
+        <!-- RESULTS -->
+
+        <div id="simulationResult">
+
+            Awaiting simulation...
+
+        </div>
+
+        <!-- NOTES -->
+
+        <div id="researchNotes">
+
+            <h3>Recovered Notes</h3>
+
+            <ul>
+
+                <li>
+                    Elevated ATP production detected in infected samples.
+                </li>
+
+                <li>
+                    Most samples collapse under excessive energy demand.
+                </li>
+
+                <li>
+                    Membrane destabilization occurs during failed mutation cycles.
+                </li>
+
+                <li>
+                    Successful strain demonstrates sustained ATP increase.
+                </li>
+
+            </ul>
+
+        </div>
+
+        <button onclick="closePhase3()">
+
+            BACK
+
+        </button>
+
     </div>
-
-    <!-- =========================
-         RESULTS
-    ========================= -->
-
-    <div id="simulationResult">
-
-        Awaiting simulation...
-
-    </div>
-
-    <!-- =========================
-         RESEARCH NOTES
-    ========================= -->
-
-    <div id="researchNotes">
-
-        <h3>Recovered Notes</h3>
-
-        <ul>
-            <li>Elevated ATP production detected in infected samples.</li>
-            <li>Most samples collapse under excessive energy demand.</li>
-            <li>Membrane destabilization occurs during failed mutation cycles.</li>
-            <li>Successful strain demonstrates sustained ATP increase.</li>
-        </ul>
-
-    </div>
-
-    <button onclick="closePhase3()">BACK</button>
 
 </div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
