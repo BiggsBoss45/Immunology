@@ -14,10 +14,8 @@
 <audio id="bootAudio" src="BootupIm.mp3"></audio>
 
 <!-- REBOOT SCREEN -->
-<div id="rebootScreen" class="screen rebootScreen">
-    <div class="rebootText">
-        SYSTEM REBOOTING...
-    </div>
+<div id="rebootScreen" class="screen">
+    <div class="rebootText">SYSTEM REBOOTING...</div>
 </div>
 
 <!-- START SCREEN -->
@@ -43,9 +41,9 @@
 </div>
 
 <!-- =========================
-     MAIN MENU (PHASE 1)
+     MAIN MENU
 ========================= -->
-<div id="menuScreen" class="screen active">
+<div id="menuScreen" class="screen">
 
     <div class="menuGrid">
 
@@ -91,12 +89,19 @@
         <button class="backButton" onclick="closeTabs()">BACK</button>
     </div>
 
-    <!-- DOC TAB -->
+    <!-- =========================
+         AMINO ACID TAB (FIXED)
+    ========================= -->
     <div id="docTab" class="tabContent">
 
         <h2>AMINO ACID SEQUENCE</h2>
 
-        <iframe src="Doc1.html"></iframe>
+        <!-- iframe kept but safe fallback added -->
+        <iframe src="Doc1.html" style="width:100%; height:400px; border:1px solid white;"></iframe>
+
+        <div style="margin-top:15px; opacity:0.7;">
+            If this appears blank, ensure <b>Doc1.html</b> exists in the same directory.
+        </div>
 
         <button class="backButton" onclick="closeTabs()">BACK</button>
     </div>
@@ -147,7 +152,7 @@
 </div>
 
 <!-- =========================
-     PHASE 3 SCREEN (NEW SYSTEM)
+     PHASE 3 SCREEN
 ========================= -->
 <div id="phase3Screen" class="screen">
 
