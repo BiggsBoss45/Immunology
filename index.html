@@ -37,7 +37,73 @@
 
 <!-- MAIN MENU -->
 <div id="menuScreen" class="screen">
+<!-- =========================
+     PHASE 3 MENU
+========================= -->
 
+<div id="phase3Screen" class="screen">
+
+    <div class="phase3Grid">
+
+        <div class="menuPanel" onclick="openPhase3Tab('p3VideoTab')">
+            <div class="panelOverlay">
+                <h1>VIDEO LOG</h1>
+            </div>
+        </div>
+
+        <div class="menuPanel" onclick="openPhase3Tab('p3MetaTab')">
+            <div class="panelOverlay">
+                <h1>METABOLIC PATHWAYS</h1>
+            </div>
+        </div>
+
+        <div class="menuPanel" onclick="openPhase3Tab('p3QuizTab')">
+            <div class="panelOverlay">
+                <h1>PHASE 3</h1>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- VIDEO TAB -->
+    <div id="p3VideoTab" class="tabContent">
+        <h2>VIDEO LOG</h2>
+
+        <video controls width="700">
+            <source src="video2.mp4" type="video/mp4">
+        </video>
+
+        <button onclick="closePhase3()">BACK</button>
+    </div>
+
+    <!-- METABOLIC TAB -->
+    <div id="p3MetaTab" class="tabContent">
+        <h2>METABOLIC PATHWAYS</h2>
+
+        <iframe src="doc2.txt"></iframe>
+        <iframe src="doc3.txt"></iframe>
+
+        <button onclick="closePhase3()">BACK</button>
+    </div>
+
+    <!-- QUIZ TAB -->
+    <div id="p3QuizTab" class="tabContent">
+
+        <h2>PHASE 3 QUESTION</h2>
+
+        <p>What is the total energy production?</p>
+
+        <input id="phase3Answer" type="text" />
+
+        <button onclick="checkPhase3()">SUBMIT</button>
+
+        <p id="phase3Result"></p>
+
+        <button onclick="closePhase3()">BACK</button>
+    </div>
+
+</div>
+    
     <!-- MENU GRID -->
     <div class="menuGrid">
 
