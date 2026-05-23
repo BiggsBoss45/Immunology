@@ -32,16 +32,8 @@ body{
     z-index:1000;
 }
 
-/* FIXED LAYER ORDER */
-#startScreen,
-#bootScreen,
-#continueScreen,
-#menuScreen{
-    z-index:100;
-}
-
 /* =========================
-   BOOT LOGO
+   BOOT + MENU (UNCHANGED CORE)
 ========================= */
 
 #immuneLogo{
@@ -54,10 +46,6 @@ body{
     from{ opacity:0; }
     to{ opacity:1; }
 }
-
-/* =========================
-   CONTINUE SCREEN
-========================= */
 
 #continuePrompt{
     font-size:28px;
@@ -122,13 +110,6 @@ body{
 .panelOverlay h1{
     font-size:42px;
     letter-spacing:4px;
-    text-align:center;
-    transition:0.3s;
-}
-
-.menuPanel:hover .panelOverlay h1{
-    transform:scale(1.08);
-    text-shadow:0 0 20px white;
 }
 
 /* =========================
@@ -138,21 +119,15 @@ body{
 .tabContent{
     display:none;
     position:absolute;
-
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
-
     width:90%;
     height:85%;
-
     background:black;
     z-index:500;
-
     overflow:auto;
-
     padding:30px;
-    box-sizing:border-box;
 }
 
 .activeTab{
@@ -163,329 +138,29 @@ body{
    BUTTONS
 ========================= */
 
-.tabs{
-    margin-top:20px;
-}
-
-.tabs button,
 button{
     background:black;
     color:white;
     border:1px solid white;
-
     padding:12px 24px;
-    margin:5px;
-
     cursor:pointer;
-
-    transition:0.2s;
-    font-family:inherit;
-    font-size:16px;
 }
 
-.tabs button:hover,
 button:hover{
     background:white;
     color:black;
 }
 
 /* =========================
-   VIDEO / DOCS
+   DNA SYSTEM
 ========================= */
 
-iframe{
-    width:80vw;
-    height:70vh;
-    border:1px solid white;
-    background:white;
-}
-
-video{
-    border:2px solid white;
-    max-width:90%;
-}
-
-/* =========================
-   PASSWORD SYSTEM
-========================= */
-
-.passwordBoxes{
-    display:flex;
-    gap:10px;
-    margin:20px;
-    flex-wrap:wrap;
-}
-
-.passwordBoxes input{
-    width:120px;
-    padding:10px;
-
-    text-align:center;
-
-    background:black;
-    color:white;
-
-    border:1px solid white;
-
-    font-size:18px;
-    font-family:inherit;
-}
-
-/* =========================
-   PHASE 2 GRID
-========================= */
-
-#orgList{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:12px;
-
-    margin-top:25px;
-    margin-bottom:25px;
-}
-
-#orgList label{
-    border:1px solid white;
-    padding:15px;
-    cursor:pointer;
-
-    transition:0.2s;
-    text-align:center;
-    user-select:none;
-}
-
-#orgList label:hover{
-    background:white;
-    color:black;
-    box-shadow:0 0 12px white;
-}
-
-#orgList input{
-    margin-right:8px;
-}
-
-/* =========================
-   MUTATION SYSTEM
-========================= */
-
-.mut{
-    transition:0.2s ease;
-    padding:2px;
-    border-radius:4px;
-}
-
-.mut:hover{
-    background:rgba(255,0,0,0.22);
-    color:#ff4d4d;
-    text-shadow:0 0 8px red;
-    box-shadow:0 0 12px red;
-    cursor:pointer;
-    animation:glitchPulse 0.6s infinite;
-}
-
-@keyframes glitchPulse{
-    0%{ transform:translate(0px); }
-    25%{ transform:translate(1px,-1px); }
-    50%{ transform:translate(-1px,1px); }
-    75%{ transform:translate(1px,1px); }
-    100%{ transform:translate(0px); }
-}
-
-/* =========================
-   CRT EFFECT
-========================= */
-
-body::before{
-    content:"";
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    pointer-events:none;
-
-    background:repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.06) 0px,
-        rgba(255,255,255,0.06) 1px,
-        rgba(0,0,0,0.22) 2px,
-        rgba(0,0,0,0.22) 4px
-    );
-
-    opacity:0.45;
-
-    z-index:9998;
-}
-
-body::after{
-    content:"";
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    pointer-events:none;
-
-    background:rgba(255,255,255,0.02);
-
-    animation:flicker 0.12s infinite;
-
-    z-index:9999;
-}
-
-@keyframes flicker{
-    0%{ opacity:0.96; }
-    50%{ opacity:1; }
-    100%{ opacity:0.97; }
-}
-
-/* =========================
-   GLOW EFFECTS
-========================= */
-
-video,
-iframe,
-button,
-input{
-    box-shadow:0 0 10px rgba(255,255,255,0.2);
-}
-
-/* =========================
-   VECTOR SYSTEM
-========================= */
-
-.vline{
-    fill:none;
-    stroke:white;
-    stroke-width:2;
-    stroke-dasharray:1000;
-    stroke-dashoffset:1000;
-    opacity:0;
-    transition:1.2s linear;
-    filter:drop-shadow(0 0 6px white);
-}
-
-/* =========================
-   SEQUENCE / DNA SYSTEM
-========================= */
-
-#sequenceContainer,
 #dnaList{
     display:flex;
     flex-direction:column;
     gap:20px;
-
-    margin-top:20px;
-    max-height:60vh;
-    overflow-y:auto;
 }
 
-/* =========================
-   DNA BLOCKS
-========================= */
-
-.block{
-    border:1px solid rgba(255,255,255,0.2);
-    padding:10px;
-    margin-bottom:15px;
-
-    transition:0.4s ease;
-
-    max-height:160px;
-    overflow:visible;
-
-    opacity:1;
-    background:black;
-}
-
-.block.collapsed{
-    opacity:1;
-}
-
-.block.expanded{
-    max-height:2000px;
-    opacity:1;
-    border:1px solid white;
-}
-
-/* =========================
-   SEQUENCE BUTTONS
-========================= */
-
-.block .seqButton{
-    display:block;
-    width:100%;
-
-    background:black !important;
-    color:white !important;
-
-    border:1px solid white !important;
-
-    padding:12px 24px;
-    margin:0;
-
-    cursor:pointer;
-
-    transition:0.2s ease;
-
-    font-family:inherit;
-    font-size:16px;
-    text-align:left;
-
-    box-sizing:border-box;
-
-    box-shadow:0 0 10px rgba(255,255,255,0.2);
-}
-
-.block .seqButton:hover{
-    background:white !important;
-    color:black !important;
-}
-
-/* =========================
-   SEQUENCE CONTENT
-========================= */
-
-.seqContent{
-    display:none;
-    margin-top:10px;
-
-    border:1px solid white;
-    padding:15px;
-}
-
-.seqContent.active{
-    display:block;
-    max-height:none;
-}
-/* =========================
-   PHASE 3 THEME (GREY)
-========================= */
-
-#phase3Screen{
-    background:linear-gradient(to bottom, #2b2b2b, #1a1a1a);
-}
-
-#phase3Screen .menuPanel{
-    background:#2f2f2f;
-    border-right:1px solid #666;
-}
-
-#phase3Screen .panelOverlay h1{
-    color:#ddd;
-    text-shadow:0 0 10px rgba(255,255,255,0.2);
-}
-
-#phase3Screen button{
-    background:#2f2f2f;
-    border:1px solid #888;
-    color:#ddd;
-}
-
-#phase3Screen button:hover{
-    background:#aaa;
-    color:black;
-}
 /* =========================
    PHASE 3 SCREEN FIX
 ========================= */
@@ -498,8 +173,8 @@ input{
     width:100vw;
     height:100vh;
     z-index:2000;
-    background:#2a2a2a;
     flex-direction:column;
+    background:#2a2a2a;
 }
 
 #phase3Screen.active{
@@ -507,125 +182,8 @@ input{
 }
 
 /* =========================
-   REBOOT EFFECT
+   🔬 MICROSCOPE ZOOM
 ========================= */
-
-#rebootOverlay{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-    background:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:99999;
-}
-
-.rebootText{
-    font-size:28px;
-    letter-spacing:4px;
-    animation:blink 0.5s infinite;
-}
-
-@keyframes blink{
-    0%{opacity:0.2;}
-    50%{opacity:1;}
-    100%{opacity:0.2;}
-}
-
-.crtBoot {
-    animation: crtFlash 0.15s infinite;
-}
-
-@keyframes crtFlash {
-    0% { filter: brightness(1); }
-    50% { filter: brightness(1.4) contrast(1.2); }
-    100% { filter: brightness(1); }
-}
-
-.glitch {
-    animation: glitchShake 0.6s;
-}
-
-@keyframes glitchShake {
-    0% { transform: translate(0); }
-    20% { transform: translate(-2px, 2px); }
-    40% { transform: translate(2px, -2px); }
-    60% { transform: translate(-2px, -1px); }
-    80% { transform: translate(1px, 2px); }
-    100% { transform: translate(0); }
-}
-.rebootScreen {
-    background: black;
-    z-index: 99999;
-    justify-content: center;
-    align-items: center;
-    font-family: Courier New, monospace;
-}
-
-.rebootText {
-    font-size: 28px;
-    letter-spacing: 4px;
-    color: #bbb;
-    animation: rebootFlicker 0.08s infinite;
-    text-shadow: 0 0 10px white;
-}
-
-@keyframes rebootFlicker {
-    0% { opacity: 0.6; transform: translateX(0); }
-    25% { opacity: 1; transform: translateX(-1px); }
-    50% { opacity: 0.7; transform: translateX(1px); }
-    75% { opacity: 1; transform: translateX(0); }
-    100% { opacity: 0.8; }
-}
-
-/* scanline distortion overlay */
-.rebootScreen::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.05) 0px,
-        rgba(0,0,0,0.2) 2px
-    );
-    animation: scanMove 0.2s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes scanMove {
-    from { transform: translateY(0); }
-    to { transform: translateY(10px); }
-}
-
-/* =========================
-   PHASE 3 SIMULATION
-========================= */
-
-.simControls{
-    display:flex;
-    gap:20px;
-    justify-content:center;
-    margin-top:20px;
-    flex-wrap:wrap;
-}
-
-.simBlock{
-    border:1px solid #00ff99;
-    padding:15px;
-    width:220px;
-    background:rgba(0,0,0,0.5);
-}
-
-.simBlock select{
-    width:100%;
-    padding:10px;
-    background:black;
-    color:#00ff99;
-    border:1px solid #00ff99;
-}
 
 #simulationArea{
     margin-top:40px;
@@ -633,78 +191,191 @@ input{
     justify-content:space-around;
     align-items:center;
     flex-wrap:wrap;
+    transform-origin:center;
+    transition:transform 1.2s ease, filter 1.2s ease;
 }
 
+.zoomIn{
+    transform:scale(1.6);
+    filter:brightness(1.3) contrast(1.2);
+}
+
+/* =========================
+   🧫 CELL VISUAL SYSTEM
+========================= */
+
 #bacteriaContainer{
-    width:300px;
-    height:300px;
+    width:320px;
+    height:320px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     position:relative;
 }
 
 #bacteriaCell{
-    width:220px;
-    height:220px;
+    width:240px;
+    height:240px;
     border-radius:50%;
-    border:4px solid #00ff99;
-    margin:auto;
     position:relative;
     overflow:hidden;
-    transition:0.5s;
+
+    border:3px solid rgba(0,255,153,0.6);
+
+    background:radial-gradient(circle,
+        rgba(0,255,153,0.15),
+        rgba(0,0,0,0.9)
+    );
+
+    box-shadow:0 0 25px rgba(0,255,153,0.2);
+    transition:0.6s ease;
 }
 
+/* cell glow */
+#bacteriaCell::before{
+    content:"";
+    position:absolute;
+    inset:18px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(0,255,153,0.15), transparent 70%);
+    animation:cellPulse 3s infinite;
+}
+
+@keyframes cellPulse{
+    0%,100%{ transform:scale(1); opacity:0.5; }
+    50%{ transform:scale(1.06); opacity:1; }
+}
+
+/* nucleus */
+#bacteriaCell::after{
+    content:"";
+    position:absolute;
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:rgba(0,255,153,0.25);
+    box-shadow:0 0 20px rgba(0,255,153,0.5);
+}
+
+/* =========================
+   🦠 VIRUS
+========================= */
+
 #virusParticle{
-    width:35px;
-    height:35px;
-    background:#ff0040;
+    width:28px;
+    height:28px;
+    background:red;
     border-radius:50%;
     position:absolute;
-    top:-40px;
-    left:90px;
+    top:-70px;
+    left:50%;
+    transform:translateX(-50%);
+    box-shadow:0 0 20px red;
 }
 
 .injecting{
-    animation:injectVirus 1.8s forwards;
+    animation:injectVirus 1.6s forwards ease-in-out;
 }
 
 @keyframes injectVirus{
-
-    0%{
-        top:-40px;
-    }
-
-    100%{
-        top:90px;
-    }
+    0%{ top:-70px; opacity:1; }
+    70%{ top:120px; opacity:1; }
+    100%{ top:120px; opacity:0; }
 }
+
+/* =========================
+   🧬 RNA STRAND
+========================= */
+
+#rnaStrand{
+    position:absolute;
+    width:4px;
+    height:0;
+    left:50%;
+    top:120px;
+    transform:translateX(-50%);
+    background:linear-gradient(to bottom, #00ff99, transparent);
+    opacity:0;
+    box-shadow:0 0 10px #00ff99;
+}
+
+.rnaInject{
+    animation:rnaTravel 1.8s forwards ease-in-out;
+}
+
+@keyframes rnaTravel{
+    0%{ height:0; opacity:0; }
+    30%{ opacity:1; }
+    100%{ height:140px; opacity:0.9; }
+}
+
+/* =========================
+   ☠️ LYSIS (DEATH)
+========================= */
 
 .deadCell{
     background:red;
-    box-shadow:0 0 40px red;
+    box-shadow:0 0 60px red;
+    animation:lysis 0.9s forwards;
 }
+
+@keyframes lysis{
+    0%{ transform:scale(1); }
+    40%{ transform:scale(1.1); }
+    100%{ transform:scale(0.1) rotate(25deg); opacity:0; }
+}
+
+/* =========================
+   ⚠️ FAILED MUTATION
+========================= */
 
 .failedMutation{
     background:orange;
-    box-shadow:0 0 30px orange;
+    animation:shake 0.5s infinite;
 }
+
+@keyframes shake{
+    0%{ transform:translate(0); }
+    25%{ transform:translate(-2px,2px); }
+    50%{ transform:translate(2px,-2px); }
+    75%{ transform:translate(-1px,1px); }
+    100%{ transform:translate(0); }
+}
+
+/* =========================
+   🧬 SUCCESS MUTATION
+========================= */
 
 .mutatedCell{
     background:#00ff99;
-    box-shadow:0 0 40px #00ff99;
+    box-shadow:0 0 60px #00ff99;
+    animation:mutateGlow 2s infinite;
 }
+
+@keyframes mutateGlow{
+    0%,100%{ filter:brightness(1); }
+    50%{ filter:brightness(1.8); }
+}
+
+/* =========================
+   🟢 STABLE
+========================= */
 
 .stableCell{
     background:#008844;
 }
 
-#atpContainer{
-    width:300px;
-}
+/* =========================
+   ATP BAR
+========================= */
 
 #atpBarOuter{
     width:100%;
     height:30px;
     border:2px solid #00ff99;
-    margin-top:10px;
 }
 
 #atpBarInner{
@@ -715,7 +386,6 @@ input{
 }
 
 #simulationResult{
-    margin-top:40px;
-    font-size:22px;
-    text-align:center;
+    margin-top:20px;
+    font-size:20px;
 }
