@@ -38,15 +38,21 @@ function destroyVector(){
 
     const elements = document.querySelectorAll(".vline");
 
-    const beatInterval = 500;
+    const beatInterval = 150;
 
     elements.forEach((el, i) => {
 
         setTimeout(() => {
 
-            el.style.transition = "0.8s ease";
-            el.style.opacity = "0";
+            // FORCE reflow trick so animation always triggers
+            el.style.transition = "none";
             el.style.strokeDashoffset = "1000";
+            el.style.opacity = "0";
+
+            // re-enable transition for next boot cycle
+            setTimeout(() => {
+                el.style.transition = "1.2s linear";
+            }, 50);
 
         }, i * beatInterval);
 
