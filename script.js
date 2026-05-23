@@ -9,6 +9,7 @@ let bootState = "idle";
 let started = false;
 
 const clickSound = new Audio("click.mp3");
+
 const rebootSound = new Audio("reboot.mp3");
 rebootSound.preload = "auto";
 
@@ -17,11 +18,17 @@ rebootSound.preload = "auto";
 ========================= */
 
 const sequences = [
-    "B-01.html","C-09.html","E-13.html","L-12.html",
-    "M-22.html","P-09.html","S-05.html","V-03.html","H-07.html"
+    "B-01.html",
+    "C-09.html",
+    "E-13.html",
+    "L-12.html",
+    "M-22.html",
+    "P-09.html",
+    "S-05.html",
+    "V-03.html",
+    "H-07.html"
 ];
 
-let sequencesLoaded = false;
 let dnaLoaded = false;
 
 /* =========================
@@ -29,23 +36,53 @@ let dnaLoaded = false;
 ========================= */
 
 window.addEventListener("load", () => {
+
     stage = 0;
     bootState = "idle";
     started = false;
 
     showScreen("startScreen");
+
 });
 
 /* =========================
-   INPUT (SAFE)
+   INPUT
 ========================= */
 
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") startSequence();
+
+    /* START SCREEN */
+    if (stage === 0 && e.key === "Enter") {
+        startSequence();
+        return;
+    }
+
+    /* CONTINUE SCREEN */
+    if (
+        stage === 2 &&
+        bootState === "continue" &&
+        e.key === "Enter"
+    ) {
+        continueToMenu();
+    }
+
 });
 
-document.addEventListener("click", () => {
-    startSequence();
+/* ONLY START SCREEN CLICK */
+document.addEventListener("click", (e) => {
+
+    if (stage === 0) {
+        startSequence();
+        return;
+    }
+
+    if (
+        stage === 2 &&
+        bootState === "continue"
+    ) {
+        continueToMenu();
+    }
+
 });
 
 /* =========================
@@ -53,8 +90,11 @@ document.addEventListener("click", () => {
 ========================= */
 
 function playClick() {
+
     clickSound.currentTime = 0;
+
     clickSound.play().catch(() => {});
+
 }
 
 /* =========================
@@ -62,9 +102,15 @@ function playClick() {
 ========================= */
 
 function showScreen(id) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+
+    document.querySelectorAll(".screen")
+        .forEach(s => s.classList.remove("active"));
+
     const el = document.getElementById(id);
-    if (el) el.classList.add("active");
+
+    if (el) {
+        el.classList.add("active");
+    }
 }
 
 /* =========================
@@ -72,75 +118,115 @@ function showScreen(id) {
 ========================= */
 
 function startSequence() {
+
     if (started) return;
+
     started = true;
 
     stage = 1;
     bootState = "booting";
 
     playClick();
+
     showScreen("bootScreen");
 
-    const bootAudio = document.getElementById("bootAudio");
+    const bootAudio =
+        document.getElementById("bootAudio");
+
     if (bootAudio) {
+
         bootAudio.currentTime = 0;
+
         bootAudio.play().catch(() => {});
+
     }
 
     setTimeout(() => {
+
         showScreen("continueScreen");
+
         stage = 2;
         bootState = "continue";
+
     }, 8000);
+
 }
 
 /* =========================
    CONTINUE → MENU
 ========================= */
 
-document.addEventListener("click", () => {
-    if (stage !== 2 || bootState !== "continue") return;
+function continueToMenu() {
 
     playClick();
+
     stage = 3;
     bootState = "menu";
 
     showScreen("menuScreen");
-});
+
+}
 
 /* =========================
    MENU
 ========================= */
 
 function openTab(tabId) {
+
     playClick();
+
     stopVideoLog();
 
-    document.querySelector(".menuGrid").style.display = "none";
+    const menuGrid =
+        document.querySelector("#menuScreen .menuGrid");
 
-    document.querySelectorAll(".tabContent").forEach(tab => {
-        tab.classList.remove("activeTab");
-    });
+    if (menuGrid) {
+        menuGrid.style.display = "none";
+    }
 
-    const target = document.getElementById(tabId);
-    if (target) target.classList.add("activeTab");
+    document.querySelectorAll("#menuScreen .tabContent")
+        .forEach(tab => {
+            tab.classList.remove("activeTab");
+        });
 
-    // FIXED: DNA TAB ALWAYS LOADS CORRECTLY
-    if (tabId === "dnaTab" && !dnaLoaded) {
+    const target =
+        document.getElementById(tabId);
+
+    if (target) {
+        target.classList.add("activeTab");
+    }
+
+    /* DNA LOAD */
+
+    if (
+        tabId === "dnaTab" &&
+        !dnaLoaded
+    ) {
+
         loadDNASequences();
+
         dnaLoaded = true;
     }
 }
 
 function closeTabs() {
+
     playClick();
+
     stopVideoLog();
 
-    document.querySelectorAll(".tabContent").forEach(tab => {
-        tab.classList.remove("activeTab");
-    });
+    document.querySelectorAll("#menuScreen .tabContent")
+        .forEach(tab => {
+            tab.classList.remove("activeTab");
+        });
 
-    document.querySelector(".menuGrid").style.display = "flex";
+    const menuGrid =
+        document.querySelector("#menuScreen .menuGrid");
+
+    if (menuGrid) {
+        menuGrid.style.display = "flex";
+    }
+
 }
 
 /* =========================
@@ -148,66 +234,109 @@ function closeTabs() {
 ========================= */
 
 function stopVideoLog() {
-    const video = document.getElementById("mainVideo");
-    const container = document.getElementById("videoContainer");
-    const button = document.getElementById("revealButton");
+
+    const video =
+        document.getElementById("mainVideo");
+
+    const container =
+        document.getElementById("videoContainer");
+
+    const button =
+        document.getElementById("revealButton");
 
     if (video) {
+
         video.pause();
+
         video.removeAttribute("src");
+
         video.load();
     }
 
-    if (container) container.style.display = "none";
-    if (button) button.style.display = "inline-block";
+    if (container) {
+        container.style.display = "none";
+    }
+
+    if (button) {
+        button.style.display = "inline-block";
+    }
+
 }
 
 function revealVideo() {
+
     playClick();
 
-    const video = document.getElementById("mainVideo");
-    const container = document.getElementById("videoContainer");
-    const button = document.getElementById("revealButton");
+    const video =
+        document.getElementById("mainVideo");
+
+    const container =
+        document.getElementById("videoContainer");
+
+    const button =
+        document.getElementById("revealButton");
 
     if (!video) return;
 
     container.style.display = "block";
+
     button.style.display = "none";
 
     video.src = "video1.mp4";
+
     video.load();
+
 }
 
 /* =========================
-   🔥 DNA TAB FIX (THIS WAS MISSING)
+   DNA SYSTEM
 ========================= */
 
 function loadDNASequences() {
 
-    const container = document.getElementById("dnaList");
+    const container =
+        document.getElementById("dnaList");
+
     if (!container) return;
 
     container.innerHTML = "";
 
-    const labels = ["Sequence A", "Sequence B", "Sequence C", "Sequence D"];
+    const labels = [
+        "Sequence A",
+        "Sequence B",
+        "Sequence C",
+        "Sequence D"
+    ];
 
     sequences.forEach((file, index) => {
 
-        const block = document.createElement("div");
+        const block =
+            document.createElement("div");
+
         block.className = "block collapsed";
 
-        const button = document.createElement("button");
+        const button =
+            document.createElement("button");
+
         button.className = "seqButton";
 
-        const baseName = file.replace(".html", "");
-        const label = labels[index % labels.length];
+        const baseName =
+            file.replace(".html", "");
 
-        button.textContent = `${baseName} — ${label}`;
+        const label =
+            labels[index % labels.length];
 
-        const content = document.createElement("div");
+        button.textContent =
+            `${baseName} — ${label}`;
+
+        const content =
+            document.createElement("div");
+
         content.className = "seqContent";
 
-        const iframe = document.createElement("iframe");
+        const iframe =
+            document.createElement("iframe");
+
         iframe.src = file;
 
         iframe.style.width = "100%";
@@ -216,12 +345,17 @@ function loadDNASequences() {
 
         content.appendChild(iframe);
 
-        button.addEventListener("click", () => {
+        button.addEventListener("click", (e) => {
 
-            const isOpen = content.classList.contains("active");
+            e.stopPropagation();
+
+            const isOpen =
+                content.classList.contains("active");
 
             document.querySelectorAll("#dnaList .seqContent")
-                .forEach(c => c.classList.remove("active"));
+                .forEach(c => {
+                    c.classList.remove("active");
+                });
 
             document.querySelectorAll("#dnaList .block")
                 .forEach(b => {
@@ -230,20 +364,28 @@ function loadDNASequences() {
                 });
 
             if (!isOpen) {
+
                 content.classList.add("active");
+
                 block.classList.add("expanded");
+
                 block.classList.remove("collapsed");
             }
+
         });
 
         block.appendChild(button);
+
         block.appendChild(content);
+
         container.appendChild(block);
+
     });
+
 }
 
 /* =========================
-   PHASE 2 → REBOOT
+   PHASE 2
 ========================= */
 
 function checkPhase2() {
@@ -251,16 +393,24 @@ function checkPhase2() {
     playClick();
 
     const selected = Array.from(
-        document.querySelectorAll("#orgList input:checked")
+        document.querySelectorAll(
+            "#orgList input:checked"
+        )
     ).map(el => el.value);
 
-    const correct = ["V-03","E-13","H-07","P-09"];
+    const correct = [
+        "V-03",
+        "E-13",
+        "H-07",
+        "P-09"
+    ];
 
     const success =
         selected.length === correct.length &&
         correct.every(v => selected.includes(v));
 
-    const result = document.getElementById("phase2Result");
+    const result =
+        document.getElementById("phase2Result");
 
     result.textContent = success
         ? "SEQUENCE VALIDATED"
@@ -268,58 +418,94 @@ function checkPhase2() {
 
     if (!success) return;
 
-    document.getElementById("phase2Access").style.display = "block";
+    document.getElementById("phase2Access")
+        .style.display = "block";
 
-    rebootSound.currentTime = 0;
-    rebootSound.play().catch(() => {});
+    triggerReboot();
 
-    showScreen("bootScreen");
-    document.body.classList.add("glitch");
-
-    setTimeout(() => {
-        document.body.classList.remove("glitch");
-        showScreen("phase3Screen");
-        stage = 4;
-        bootState = "phase3";
-    }, 7000);
 }
 
 /* =========================
-   PHASE 3
+   REBOOT
+========================= */
+
+function triggerReboot() {
+
+    stage = 4;
+
+    bootState = "phase3";
+
+    rebootSound.pause();
+
+    rebootSound.currentTime = 0;
+
+    rebootSound.play().catch(() => {});
+
+    showScreen("bootScreen");
+
+    document.body.classList.add("glitch");
+
+    setTimeout(() => {
+
+        document.body.classList.remove("glitch");
+
+        showScreen("phase3Screen");
+
+    }, 7000);
+
+}
+
+/* =========================
+   PHASE 3 MENU
 ========================= */
 
 function openPhase3Tab(tabId) {
 
     playClick();
 
-    document.querySelectorAll("#phase3Screen .tabContent")
-        .forEach(t => t.classList.remove("activeTab"));
+    const menuGrid =
+        document.querySelector("#phase3Screen .menuGrid");
 
-    const target = document.getElementById(tabId);
-    if (target) target.classList.add("activeTab");
+    if (menuGrid) {
+        menuGrid.style.display = "none";
+    }
+
+    document.querySelectorAll(
+        "#phase3Screen .tabContent"
+    ).forEach(t => {
+        t.classList.remove("activeTab");
+    });
+
+    const target =
+        document.getElementById(tabId);
+
+    if (target) {
+        target.classList.add("activeTab");
+    }
+
 }
 
 function closePhase3() {
 
     playClick();
 
-    document.querySelectorAll("#phase3Screen .tabContent")
-        .forEach(t => t.classList.remove("activeTab"));
-}
+    document.querySelectorAll(
+        "#phase3Screen .tabContent"
+    ).forEach(t => {
+        t.classList.remove("activeTab");
+    });
 
-function checkPhase3() {
+    const menuGrid =
+        document.querySelector("#phase3Screen .menuGrid");
 
-    playClick();
+    if (menuGrid) {
+        menuGrid.style.display = "flex";
+    }
 
-    const input = document.getElementById("phase3Answer").value.trim();
-    const result = document.getElementById("phase3Result");
-
-    result.textContent =
-        (input === "19") ? "SEQUENCE COMPLETE" : "INCORRECT";
 }
 
 /* =========================
-   PHASE 3 SIMULATION
+   SIMULATION
 ========================= */
 
 function runSimulation() {
@@ -350,22 +536,22 @@ function runSimulation() {
     const atpValue =
         document.getElementById("atpValue");
 
-    /* RESET */
-
     bacteria.className = "";
+
     virus.className = "";
 
-    result.textContent = "Injecting viral strain...";
+    result.textContent =
+        "Injecting viral strain...";
 
     atpBar.style.width = "0%";
 
-    /* VIRUS ANIMATION */
+    atpValue.textContent = "0 ATP";
 
     virus.classList.add("injecting");
 
     setTimeout(() => {
 
-        /* FAILURE STATES */
+        /* FAILURE */
 
         if (
             pathway === "electron" &&
@@ -375,13 +561,17 @@ function runSimulation() {
             bacteria.classList.add("deadCell");
 
             atpBar.style.width = "100%";
-            atpValue.textContent = "ATP OVERLOAD";
+
+            atpValue.textContent =
+                "ATP OVERLOAD";
 
             result.textContent =
-                "Sample destroyed. ATP levels exceeded viable range.";
+                "Sample destroyed. ATP exceeded viable range.";
 
             return;
         }
+
+        /* FAILED MUTATION */
 
         if (
             mutation === "repair" &&
@@ -391,7 +581,9 @@ function runSimulation() {
             bacteria.classList.add("failedMutation");
 
             atpBar.style.width = "45%";
-            atpValue.textContent = "45 ATP";
+
+            atpValue.textContent =
+                "45 ATP";
 
             result.textContent =
                 "Mutation unstable. No sustained adaptation detected.";
@@ -399,7 +591,7 @@ function runSimulation() {
             return;
         }
 
-        /* SUCCESS CONDITION */
+        /* SUCCESS */
 
         if (
             pathway === "krebs" &&
@@ -410,7 +602,9 @@ function runSimulation() {
             bacteria.classList.add("mutatedCell");
 
             atpBar.style.width = "78%";
-            atpValue.textContent = "78 ATP";
+
+            atpValue.textContent =
+                "78 ATP";
 
             result.textContent =
                 "Stable mutation achieved. Sustained ATP amplification confirmed.";
@@ -423,10 +617,13 @@ function runSimulation() {
         bacteria.classList.add("stableCell");
 
         atpBar.style.width = "30%";
-        atpValue.textContent = "30 ATP";
+
+        atpValue.textContent =
+            "30 ATP";
 
         result.textContent =
             "No major mutation observed.";
 
     }, 1800);
+
 }
