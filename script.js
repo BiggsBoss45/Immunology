@@ -11,10 +11,55 @@ function playClick(){
     clickSound.play();
 }
 
+/* =========================
+   BOOT VECTOR SYSTEM
+========================= */
+
+function initVectorLines(){
+
+    const elements = document.querySelectorAll(".vline");
+
+    const beatInterval = 700;
+
+    elements.forEach((el, i) => {
+
+        setTimeout(() => {
+
+            el.style.opacity = "1";
+            el.style.transition = "1.2s linear";
+            el.style.strokeDashoffset = "0";
+
+        }, i * beatInterval);
+
+    });
+}
+
+function destroyVector(){
+
+    const elements = document.querySelectorAll(".vline");
+
+    const beatInterval = 500;
+
+    elements.forEach((el, i) => {
+
+        setTimeout(() => {
+
+            el.style.transition = "0.8s ease";
+            el.style.opacity = "0";
+            el.style.strokeDashoffset = "1000";
+
+        }, i * beatInterval);
+
+    });
+}
+
+/* =========================
+   START / BOOT FLOW
+========================= */
+
 function handleStart(){
 
     // START SCREEN
-
     if(stage === 0){
 
         playClick();
@@ -25,24 +70,37 @@ function handleStart(){
         document.getElementById("bootScreen")
         .classList.add("active");
 
-        document.getElementById("bootAudio")
-        .play();
+        // BOOT AUDIO (clean single version)
+        const bootAudio = document.getElementById("bootAudio");
+        bootAudio.currentTime = 0;
+        bootAudio.play();
+
+        // start vector drawing slightly after audio begins
+        setTimeout(() => {
+            initVectorLines();
+        }, 300);
 
         stage = 1;
 
+        // end boot sequence
         setTimeout(() => {
 
-            document.getElementById("bootScreen")
-            .classList.remove("active");
+            destroyVector();
 
-            document.getElementById("continueScreen")
-            .classList.add("active");
+            setTimeout(() => {
+
+                document.getElementById("bootScreen")
+                .classList.remove("active");
+
+                document.getElementById("continueScreen")
+                .classList.add("active");
+
+            }, 1200);
 
         }, 7000);
     }
 
     // CONTINUE SCREEN
-
     else if(stage === 1){
 
         playClick();
@@ -57,18 +115,16 @@ function handleStart(){
     }
 }
 
-/* OPEN MENU TABS */
+/* =========================
+   MENU SYSTEM
+========================= */
 
 function openTab(tabId){
 
     playClick();
 
-    // HIDE MAIN MENU GRID
-
     document.querySelector(".menuGrid")
     .style.display = "none";
-
-    // CLOSE OTHER TABS
 
     document.querySelectorAll(".tabContent")
     .forEach(tab => {
@@ -76,20 +132,14 @@ function openTab(tabId){
         tab.classList.remove("activeTab");
 
     });
-
-    // OPEN SELECTED TAB
 
     document.getElementById(tabId)
     .classList.add("activeTab");
 }
 
-/* CLOSE MENU TABS */
-
 function closeTabs(){
 
     playClick();
-
-    // CLOSE ALL TABS
 
     document.querySelectorAll(".tabContent")
     .forEach(tab => {
@@ -98,13 +148,13 @@ function closeTabs(){
 
     });
 
-    // SHOW MAIN MENU AGAIN
-
     document.querySelector(".menuGrid")
     .style.display = "flex";
 }
 
-/* AUDIO LOG */
+/* =========================
+   AUDIO LOG
+========================= */
 
 function revealVideo(){
 
@@ -117,7 +167,9 @@ function revealVideo(){
     .style.display = "none";
 }
 
-/* PASSWORD CHECK */
+/* =========================
+   PASSWORD SYSTEM
+========================= */
 
 function checkPassword(){
 
@@ -146,9 +198,6 @@ function checkPassword(){
         "P-09"
     ];
 
-    // CHECKS IF ALL 4 EXIST
-    // REGARDLESS OF ORDER
-
     const success = correct.every(code =>
         values.includes(code)
     );
@@ -158,9 +207,7 @@ function checkPassword(){
         document.getElementById("passwordResult")
         .innerHTML = "ACCESS GRANTED";
 
-    }
-
-    else{
+    } else {
 
         document.getElementById("passwordResult")
         .innerHTML = "ACCESS DENIED";
