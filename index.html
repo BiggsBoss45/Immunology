@@ -178,6 +178,7 @@
 
     </div>
 
+    
     <!-- VIDEO TAB -->
     <div id="p3VideoTab" class="tabContent">
 
@@ -201,25 +202,133 @@
         <button onclick="closePhase3()">BACK</button>
     </div>
 
-    <!-- QUIZ TAB -->
-    <div id="p3QuizTab" class="tabContent">
+  <!-- =========================
+     PHASE 3 SIMULATION TAB
+========================= -->
+<div id="p3QuizTab" class="tabContent">
 
-        <h2>PHASE 3 QUESTION</h2>
+    <h2>PHASE 3 // VIRAL METABOLIC SIMULATION</h2>
 
-        <p>What is the total energy production?</p>
+    <p>
+        Reconstruct the viral mutation pathway.
+        Your objective is to produce a viable E.coli strain with
+        abnormal ATP production while maintaining host survival.
+    </p>
 
-        <input id="phase3Answer" type="text" />
+    <!-- =========================
+         CONTROL PANEL
+    ========================= -->
 
-        <button onclick="checkPhase3()">SUBMIT</button>
+    <div class="simControls">
 
-        <p id="phase3Result"></p>
+        <!-- PATHWAY -->
+        <div class="simBlock">
 
-        <button onclick="closePhase3()">BACK</button>
+            <h3>Metabolic Pathway</h3>
+
+            <select id="pathwaySelect">
+                <option value="glycolysis">Glycolysis Enhancement</option>
+                <option value="krebs">Krebs Cycle Amplification</option>
+                <option value="electron">Electron Transport Overclock</option>
+            </select>
+
+        </div>
+
+        <!-- ATP REGULATION -->
+        <div class="simBlock">
+
+            <h3>ATP Regulation</h3>
+
+            <select id="atpSelect">
+                <option value="stable">Stable</option>
+                <option value="elevated">Elevated</option>
+                <option value="extreme">Extreme</option>
+            </select>
+
+        </div>
+
+        <!-- MUTATION VECTOR -->
+        <div class="simBlock">
+
+            <h3>Mutation Vector</h3>
+
+            <select id="mutationSelect">
+                <option value="repair">DNA Repair</option>
+                <option value="membrane">Membrane Reinforcement</option>
+                <option value="enzyme">Enzyme Duplication</option>
+            </select>
+
+        </div>
+
     </div>
 
+    <!-- =========================
+         RUN BUTTON
+    ========================= -->
+
+    <button id="simulateButton" onclick="runSimulation()">
+        RUN SIMULATION
+    </button>
+
+    <!-- =========================
+         SIMULATION DISPLAY
+    ========================= -->
+
+    <div id="simulationArea">
+
+        <!-- BACTERIA -->
+        <div id="bacteriaContainer">
+
+            <div id="bacteriaCell">
+
+                <div id="virusParticle"></div>
+
+            </div>
+
+        </div>
+
+        <!-- ATP BAR -->
+        <div id="atpContainer">
+
+            <h3>ATP OUTPUT</h3>
+
+            <div id="atpBarOuter">
+                <div id="atpBarInner"></div>
+            </div>
+
+            <p id="atpValue">0 ATP</p>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         RESULTS
+    ========================= -->
+
+    <div id="simulationResult">
+
+        Awaiting simulation...
+
+    </div>
+
+    <!-- =========================
+         RESEARCH NOTES
+    ========================= -->
+
+    <div id="researchNotes">
+
+        <h3>Recovered Notes</h3>
+
+        <ul>
+            <li>Elevated ATP production detected in infected samples.</li>
+            <li>Most samples collapse under excessive energy demand.</li>
+            <li>Membrane destabilization occurs during failed mutation cycles.</li>
+            <li>Successful strain demonstrates sustained ATP increase.</li>
+        </ul>
+
+    </div>
+
+    <button onclick="closePhase3()">BACK</button>
+
 </div>
-
-<script src="script.js"></script>
-
-</body>
-</html>
