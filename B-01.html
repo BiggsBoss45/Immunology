@@ -16,39 +16,87 @@ h1{text-align:center;letter-spacing:4px;margin-bottom:30px;}
 
 <h1>B-01 (Viral Sequence)</h1>
 
-<!-- BLOCK 1 (TARGET / VECTOR - V-03 STYLE) -->
-<div class="block">
-<span class="codon vector">ATG</span><span class="codon vector">CCG</span><span class="codon vector">GGT</span><span class="codon vector">TTT</span>
-<span class="codon vector">AAA</span><span class="codon vector">CGT</span><span class="codon vector">TGT</span><span class="codon vector">GAA</span>
-<span class="codon vector">CTG</span><span class="codon vector">GCT</span><span class="codon vector">CCG</span><span class="codon vector">TGG</span>
-<span class="codon vector">AAT</span><span class="codon vector">TGA</span>
-</div>
+<div id="sequenceContainer">
 
-<br><br>
+    <!-- TARGET -->
+    <div class="seqItem">
 
-<!-- BLOCK 2 (DECOY) -->
-<div class="block">
-<span class="codon">ATG</span><span class="codon">GTT</span><span class="codon">GGT</span><span class="codon">GCT</span><span class="codon">TCT</span>
-<span class="codon">ACT</span><span class="codon">CTG</span><span class="codon">CAT</span><span class="codon">GAA</span><span class="codon">CCG</span>
-<span class="codon">GGT</span><span class="codon">AAA</span><span class="codon">TAC</span><span class="codon">TAA</span>
-</div>
+        <button class="seqButton" onclick="toggleSequence(this)">
+            Target Sequence (Encrypted Strand)
+        </button>
 
-<br><br>
+        <div class="seqContent">
 
-<!-- BLOCK 3 (DECOY) -->
-<div class="block">
-<span class="codon">ATG</span><span class="codon">GCT</span><span class="codon">GAT</span><span class="codon">GGT</span><span class="codon">CTG</span>
-<span class="codon">TCT</span><span class="codon">CGT</span><span class="codon">GTT</span><span class="codon">ACT</span><span class="codon">AAT</span>
-<span class="codon">GAA</span><span class="codon">TTT</span><span class="codon">GGT</span><span class="codon">TGA</span>
-</div>
+            <div class="block">
+                <span class="codon vector">ATG</span><span class="codon vector">CCG</span><span class="codon vector">GGT</span><span class="codon vector">TTT</span>
+                <span class="codon vector">AAA</span><span class="codon vector">CGT</span><span class="codon vector">TGT</span><span class="codon vector">GAA</span>
+                <span class="codon vector">CTG</span><span class="codon vector">GCT</span><span class="codon vector">CCG</span><span class="codon vector">TGG</span>
+                <span class="codon vector">AAT</span><span class="codon vector">TGA</span>
+            </div>
 
-<br><br>
+        </div>
+    </div>
 
-<!-- BLOCK 4 (DECOY) -->
-<div class="block">
-<span class="codon">ATG</span><span class="codon">GCA</span><span class="codon">TCT</span><span class="codon">GGT</span><span class="codon">AAA</span>
-<span class="codon">GAC</span><span class="codon">CTG</span><span class="codon">TAT</span><span class="codon">GGC</span><span class="codon">TTC</span>
-<span class="codon">CCA</span><span class="codon">GAA</span><span class="codon">TGG</span><span class="codon">TAA</span>
+    <br>
+
+    <!-- DECOY 1 -->
+    <div class="seqItem">
+
+        <button class="seqButton" onclick="toggleSequence(this)">
+            Sequence A (Fragment)
+        </button>
+
+        <div class="seqContent">
+
+            <div class="block">
+                <span class="codon">ATG</span><span class="codon">GTT</span><span class="codon">GGT</span><span class="codon">GCT</span><span class="codon">TCT</span>
+                <span class="codon">ACT</span><span class="codon">CTG</span><span class="codon">CAT</span><span class="codon">GAA</span><span class="codon">CCG</span>
+                <span class="codon">GGT</span><span class="codon">AAA</span><span class="codon">TAC</span><span class="codon">TAA</span>
+            </div>
+
+        </div>
+    </div>
+
+    <br>
+
+    <!-- DECOY 2 -->
+    <div class="seqItem">
+
+        <button class="seqButton" onclick="toggleSequence(this)">
+            Sequence B (Fragment)
+        </button>
+
+        <div class="seqContent">
+
+            <div class="block">
+                <span class="codon">ATG</span><span class="codon">GCT</span><span class="codon">GAT</span><span class="codon">GGT</span><span class="codon">CTG</span>
+                <span class="codon">TCT</span><span class="codon">CGT</span><span class="codon">GTT</span><span class="codon">ACT</span><span class="codon">AAT</span>
+                <span class="codon">GAA</span><span class="codon">TTT</span><span class="codon">GGT</span><span class="codon">TGA</span>
+            </div>
+
+        </div>
+    </div>
+
+    <br>
+
+    <!-- DECOY 3 -->
+    <div class="seqItem">
+
+        <button class="seqButton" onclick="toggleSequence(this)">
+            Sequence C (Fragment)
+        </button>
+
+        <div class="seqContent">
+
+            <div class="block">
+                <span class="codon">ATG</span><span class="codon">GCA</span><span class="codon">TCT</span><span class="codon">GGT</span><span class="codon">AAA</span>
+                <span class="codon">GAC</span><span class="codon">CTG</span><span class="codon">TAT</span><span class="codon">GGC</span><span class="codon">TTC</span>
+                <span class="codon">CCA</span><span class="codon">GAA</span><span class="codon">TGG</span><span class="codon">TAA</span>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 </body>
