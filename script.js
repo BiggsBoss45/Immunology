@@ -1,4 +1,5 @@
 let stage = 0;
+let bootLocked = false;
 
 const clickSound = new Audio("click.mp3");
 
@@ -44,12 +45,10 @@ function destroyVector(){
 
         setTimeout(() => {
 
-            // FORCE reflow trick so animation always triggers
             el.style.transition = "none";
             el.style.strokeDashoffset = "1000";
             el.style.opacity = "0";
 
-            // re-enable transition for next boot cycle
             setTimeout(() => {
                 el.style.transition = "1.2s linear";
             }, 50);
@@ -65,8 +64,10 @@ function destroyVector(){
 
 function handleStart(){
 
-    // START SCREEN
-    if(stage === 0){
+    // START SCREEN (LOCKED SAFE VERSION)
+    if(stage === 0 && !bootLocked){
+
+        bootLocked = true;
 
         playClick();
 
@@ -76,19 +77,16 @@ function handleStart(){
         document.getElementById("bootScreen")
         .classList.add("active");
 
-        // BOOT AUDIO (clean single version)
         const bootAudio = document.getElementById("bootAudio");
         bootAudio.currentTime = 0;
         bootAudio.play();
 
-        // start vector drawing slightly after audio begins
         setTimeout(() => {
             initVectorLines();
         }, 300);
 
         stage = 1;
 
-        // end boot sequence
         setTimeout(() => {
 
             destroyVector();
@@ -101,13 +99,15 @@ function handleStart(){
                 document.getElementById("continueScreen")
                 .classList.add("active");
 
+                bootLocked = false; // unlock AFTER boot completes
+
             }, 1200);
 
         }, 7000);
     }
 
-    // CONTINUE SCREEN
-    else if(stage === 1){
+    // CONTINUE SCREEN (SAFE)
+    else if(stage === 1 && !bootLocked){
 
         playClick();
 
@@ -183,21 +183,13 @@ function checkPassword(){
 
     const values = [
 
-        document.getElementById("box1")
-        .value.trim().toUpperCase(),
-
-        document.getElementById("box2")
-        .value.trim().toUpperCase(),
-
-        document.getElementById("box3")
-        .value.trim().toUpperCase(),
-
-        document.getElementById("box4")
-        .value.trim().toUpperCase()
+        document.getElementById("box1").value.trim().toUpperCase(),
+        document.getElementById("box2").value.trim().toUpperCase(),
+        document.getElementById("box3").value.trim().toUpperCase(),
+        document.getElementById("box4").value.trim().toUpperCase()
     ];
 
     const correct = [
-
         "V-03",
         "E-13",
         "H-07",
@@ -209,13 +201,8 @@ function checkPassword(){
     );
 
     if(success){
-
-        document.getElementById("passwordResult")
-        .innerHTML = "ACCESS GRANTED";
-
+        document.getElementById("passwordResult").innerHTML = "ACCESS GRANTED";
     } else {
-
-        document.getElementById("passwordResult")
-        .innerHTML = "ACCESS DENIED";
+        document.getElementById("passwordResult").innerHTML = "ACCESS DENIED";
     }
 }
