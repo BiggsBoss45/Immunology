@@ -6,7 +6,7 @@ let bootState = "idle";
 const clickSound = new Audio("click.mp3");
 
 /* =========================
-   SEQUENCE SYSTEM
+   SEQUENCE DATA (AUDIO TAB)
 ========================= */
 
 const sequences = [
@@ -22,6 +22,13 @@ const sequences = [
 ];
 
 let sequencesLoaded = false;
+
+/* =========================
+   DNA DATA (NEW TAB)
+========================= */
+
+const dnaFiles = [...sequences];
+
 let dnaLoaded = false;
 
 /* =========================
@@ -32,10 +39,10 @@ document.addEventListener("keydown", handleStart);
 document.addEventListener("click", handleStart);
 
 /* =========================
-   CLICK AUDIO
+   CLICK SOUND
 ========================= */
 
-function playClick(){
+function playClick() {
     clickSound.currentTime = 0;
     clickSound.play();
 }
@@ -44,10 +51,10 @@ function playClick(){
    VIDEO SAFETY CONTROL
 ========================= */
 
-function stopVideoLog(){
+function stopVideoLog() {
     const video = document.getElementById("mainVideo");
 
-    if(video){
+    if (video) {
         video.pause();
         video.currentTime = 0;
         video.muted = true;
@@ -55,10 +62,10 @@ function stopVideoLog(){
 }
 
 /* =========================
-   VECTOR DRAW SYSTEM
+   VECTOR ANIMATION SYSTEM
 ========================= */
 
-function initVectorLines(){
+function initVectorLines() {
     const elements = document.querySelectorAll(".vline");
     const beatInterval = 700;
 
@@ -71,7 +78,7 @@ function initVectorLines(){
     });
 }
 
-function destroyVector(){
+function destroyVector() {
     const elements = document.querySelectorAll(".vline");
     const beatInterval = 150;
 
@@ -92,11 +99,11 @@ function destroyVector(){
    START / BOOT FLOW
 ========================= */
 
-function handleStart(){
+function handleStart() {
 
-    if(bootState === "booting") return;
+    if (bootState === "booting") return;
 
-    if(stage === 0){
+    if (stage === 0) {
 
         bootState = "booting";
         playClick();
@@ -105,7 +112,7 @@ function handleStart(){
         document.getElementById("bootScreen")?.classList.add("active");
 
         const bootAudio = document.getElementById("bootAudio");
-        if(bootAudio){
+        if (bootAudio) {
             bootAudio.currentTime = 0;
             bootAudio.play();
         }
@@ -115,6 +122,7 @@ function handleStart(){
         stage = 1;
 
         setTimeout(() => {
+
             destroyVector();
 
             setTimeout(() => {
@@ -126,7 +134,7 @@ function handleStart(){
         }, 7000);
     }
 
-    else if(stage === 1 && bootState === "continue"){
+    else if (stage === 1 && bootState === "continue") {
 
         playClick();
 
@@ -142,7 +150,7 @@ function handleStart(){
    MENU SYSTEM
 ========================= */
 
-function openTab(tabId){
+function openTab(tabId) {
 
     playClick();
     stopVideoLog();
@@ -154,22 +162,22 @@ function openTab(tabId){
     });
 
     const target = document.getElementById(tabId);
-    if(target) target.classList.add("activeTab");
+    if (target) target.classList.add("activeTab");
 
-    // Load audio sequences once
-    if(tabId === "audioTab" && !sequencesLoaded){
+    // AUDIO SEQUENCES
+    if (tabId === "audioTab" && !sequencesLoaded) {
         loadSequences();
         sequencesLoaded = true;
     }
 
-    // Load DNA system once
-    if(tabId === "dnaTab" && !dnaLoaded){
+    // DNA TAB
+    if (tabId === "dnaTab" && !dnaLoaded) {
         loadDNASequences();
         dnaLoaded = true;
     }
 }
 
-function closeTabs(){
+function closeTabs() {
 
     playClick();
     stopVideoLog();
@@ -182,34 +190,28 @@ function closeTabs(){
 }
 
 /* =========================
-   AUDIO LOG
+   VIDEO REVEAL
 ========================= */
 
-function revealVideo(){
+function revealVideo() {
 
     playClick();
 
     const video = document.getElementById("mainVideo");
+    if (video) video.muted = false;
 
-    if(video){
-        video.muted = false;
-    }
-
-    const container = document.getElementById("videoContainer");
-    if(container) container.style.display = "block";
-
-    const button = document.getElementById("revealButton");
-    if(button) button.style.display = "none";
+    document.getElementById("videoContainer")?.style && (document.getElementById("videoContainer").style.display = "block");
+    document.getElementById("revealButton")?.style && (document.getElementById("revealButton").style.display = "none");
 }
 
 /* =========================
-   SEQUENCE LOADER (IFRAMES)
+   SHUFFLE
 ========================= */
 
-function shuffleArray(arr){
+function shuffleArray(arr) {
     let a = [...arr];
 
-    for(let i = a.length - 1; i > 0; i--){
+    for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [a[i], a[j]] = [a[j], a[i]];
     }
@@ -217,10 +219,14 @@ function shuffleArray(arr){
     return a;
 }
 
-function loadSequences(){
+/* =========================
+   AUDIO SEQUENCES (IFRAMES)
+========================= */
+
+function loadSequences() {
 
     const container = document.getElementById("sequenceContainer");
-    if(!container) return;
+    if (!container) return;
 
     container.innerHTML = "";
 
@@ -234,25 +240,13 @@ function loadSequences(){
 }
 
 /* =========================
-   DNA SEQUENCE SYSTEM (NEW MENU)
+   DNA SEQUENCE SYSTEM (NEW TAB)
 ========================= */
 
-const dnaFiles = [
-    "B-01.html",
-    "C-09.html",
-    "E-13.html",
-    "L-12.html",
-    "M-22.html",
-    "P-09.html",
-    "S-05.html",
-    "V-03.html",
-    "H-07.html"
-];
-
-function loadDNASequences(){
+function loadDNASequences() {
 
     const container = document.getElementById("dnaList");
-    if(!container) return;
+    if (!container) return;
 
     container.innerHTML = "";
 
@@ -282,18 +276,18 @@ function loadDNASequences(){
 
             const isOpen = content.classList.contains("active");
 
-            // close others
+            // close all
             document.querySelectorAll("#dnaList .seqContent")
                 .forEach(c => c.classList.remove("active"));
 
             document.querySelectorAll("#dnaList .block")
                 .forEach(b => {
-                    b.classList.add("collapsed");
                     b.classList.remove("expanded");
+                    b.classList.add("collapsed");
                 });
 
             // toggle clicked
-            if(!isOpen){
+            if (!isOpen) {
                 content.classList.add("active");
                 block.classList.add("expanded");
                 block.classList.remove("collapsed");
@@ -302,7 +296,6 @@ function loadDNASequences(){
 
         block.appendChild(button);
         block.appendChild(content);
-
         container.appendChild(block);
     });
 }
@@ -311,7 +304,7 @@ function loadDNASequences(){
    PHASE 2 VALIDATION
 ========================= */
 
-function checkPhase2(){
+function checkPhase2() {
 
     playClick();
 
@@ -327,70 +320,26 @@ function checkPhase2(){
 
     const result = document.getElementById("phase2Result");
 
-    if(result){
-        result.innerHTML = success
+    if (result) {
+        result.textContent = success
             ? "SEQUENCE VALIDATED"
             : "INVALID VECTOR COMBINATION";
     }
 
-    if(success){
-        unlockPhase2();
-    }
+    if (success) unlockPhase2();
 }
 
 /* =========================
    PHASE 2 UNLOCK
 ========================= */
 
-function unlockPhase2(){
+function unlockPhase2() {
 
     const unlock = document.getElementById("phase2Access");
 
-    if(unlock){
+    if (unlock) {
         unlock.style.display = "block";
     }
 
-    document.body.style.filter =
-        "contrast(1.1) brightness(1.05)";
-}
-
-/* =========================
-   BLOCK VIEWER (OLD SUPPORT)
-========================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-    initBlockViewer();
-});
-
-function initBlockViewer(){
-
-    const blocks = document.querySelectorAll(".block");
-
-    blocks.forEach(block => {
-
-        block.classList.add("collapsed");
-
-        block.addEventListener("click", () => {
-
-            const isOpen = block.classList.contains("expanded");
-
-            blocks.forEach(b => {
-                b.classList.remove("expanded");
-                b.classList.add("collapsed");
-            });
-
-            if(!isOpen){
-                block.classList.remove("collapsed");
-                block.classList.add("expanded");
-            }
-        });
-    });
-
-    const firstVector =
-        document.querySelector(".vector")?.closest(".block");
-
-    if(firstVector){
-        firstVector.classList.add("expanded");
-        firstVector.classList.remove("collapsed");
-    }
+    document.body.style.filter = "contrast(1.1) brightness(1.05)";
 }
