@@ -458,3 +458,31 @@ input{
     display:block;
     max-height:none;
 }
+/* =========================
+   PHASE 3 THEME (GREY)
+========================= */
+
+#phase3Screen{
+    background:linear-gradient(to bottom, #2b2b2b, #1a1a1a);
+}
+
+#phase3Screen .menuPanel{
+    background:#2f2f2f;
+    border-right:1px solid #666;
+}
+
+#phase3Screen .panelOverlay h1{
+    color:#ddd;
+    text-shadow:0 0 10px rgba(255,255,255,0.2);
+}
+
+#phase3Screen button{
+    background:#2f2f2f;
+    border:1px solid #888;
+    color:#ddd;
+}
+
+#phase3Screen button:hover{
+    background:#aaa;
+    color:black;
+}
