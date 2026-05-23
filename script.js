@@ -1,7 +1,7 @@
 let stage = 0;
 
 let bootState = "idle";
-// idle → booting → continue → menu
+// idle → booting → continue → menu → phase3
 
 const clickSound = new Audio("click.mp3");
 
@@ -51,33 +51,19 @@ function stopVideoLog() {
     const button = document.getElementById("revealButton");
 
     if (video) {
-
-        // FULL STOP
         video.pause();
-
-        // remove current playback
         video.removeAttribute("src");
-
-        // clears internal media state
         video.load();
-
-        // reset settings
         video.currentTime = 0;
         video.muted = true;
     }
 
-    // hide video again
-    if (container) {
-        container.style.display = "none";
-    }
-
-    // show open button again
-    if (button) {
-        button.style.display = "inline-block";
-    }
+    if (container) container.style.display = "none";
+    if (button) button.style.display = "inline-block";
 }
+
 /* =========================
-   VIDEO REVEAL (SAFE PLAY ONLY)
+   VIDEO REVEAL
 ========================= */
 
 function revealVideo() {
@@ -90,29 +76,17 @@ function revealVideo() {
 
     if (!video) return;
 
-    // show video container
-    if (container) {
-        container.style.display = "block";
-    }
+    container.style.display = "block";
+    button.style.display = "none";
 
-    // hide open button
-    if (button) {
-        button.style.display = "none";
-    }
-
-    // reset video state
     video.pause();
     video.currentTime = 0;
 
-    // load source ONLY after button press
     video.src = "video1.mp4";
-
-    // ensure sound works when user presses play manually
     video.muted = false;
-
-    // load video WITHOUT autoplay
     video.load();
 }
+
 /* =========================
    START FLOW
 ========================= */
@@ -163,8 +137,6 @@ function handleStart() {
 function openTab(tabId) {
 
     playClick();
-
-    // 🔥 IMPORTANT: always kill video state when switching tabs
     stopVideoLog();
 
     document.querySelector(".menuGrid").style.display = "none";
@@ -215,7 +187,6 @@ function loadDNASequences() {
     container.innerHTML = "";
 
     const dnaFiles = [...sequences];
-
     const labels = ["Sequence A", "Sequence B", "Sequence C", "Sequence D"];
 
     dnaFiles.forEach((file, index) => {
@@ -296,7 +267,51 @@ function checkPhase2() {
     }
 
     if (success) {
+
         document.getElementById("phase2Access").style.display = "block";
         document.body.style.filter = "contrast(1.1) brightness(1.05)";
+
+        setTimeout(() => {
+            document.getElementById("menuScreen").classList.remove("active");
+            document.getElementById("phase3Screen").classList.add("active");
+            bootState = "phase3";
+        }, 1500);
+    }
+}
+
+/* =========================
+   PHASE 3
+========================= */
+
+function openPhase3Tab(tabId) {
+
+    playClick();
+
+    document.querySelectorAll("#phase3Screen .tabContent")
+        .forEach(t => t.classList.remove("activeTab"));
+
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add("activeTab");
+}
+
+function closePhase3() {
+
+    playClick();
+
+    document.querySelectorAll("#phase3Screen .tabContent")
+        .forEach(t => t.classList.remove("activeTab"));
+}
+
+function checkPhase3() {
+
+    playClick();
+
+    const input = document.getElementById("phase3Answer").value.trim();
+    const result = document.getElementById("phase3Result");
+
+    if (input === "19") {
+        result.textContent = "SEQUENCE COMPLETE";
+    } else {
+        result.textContent = "INCORRECT";
     }
 }
