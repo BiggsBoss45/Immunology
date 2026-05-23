@@ -55,6 +55,34 @@ function stopVideoLog() {
 }
 
 /* =========================
+   VIDEO REVEAL (FIXED)
+========================= */
+
+function revealVideo() {
+
+    playClick();
+
+    const video = document.getElementById("mainVideo");
+    const container = document.getElementById("videoContainer");
+    const button = document.getElementById("revealButton");
+
+    if (video) {
+        video.muted = false;
+        video.src = "video1.mp4";   // 🔥 FORCE CORRECT FILE
+        video.load();
+        video.play().catch(() => {});
+    }
+
+    if (container) {
+        container.style.display = "block";
+    }
+
+    if (button) {
+        button.style.display = "none";
+    }
+}
+
+/* =========================
    START FLOW
 ========================= */
 
@@ -139,7 +167,7 @@ function closeTabs() {
 }
 
 /* =========================
-   DNA SYSTEM (UPDATED WITH LABEL FIX)
+   DNA SYSTEM
 ========================= */
 
 function loadDNASequences() {
@@ -149,7 +177,7 @@ function loadDNASequences() {
 
     container.innerHTML = "";
 
-    const dnaFiles = [...sequences]; // 🔥 FIX: ensure it exists
+    const dnaFiles = [...sequences];
 
     const labels = ["Sequence A", "Sequence B", "Sequence C", "Sequence D"];
 
@@ -171,8 +199,9 @@ function loadDNASequences() {
 
         const iframe = document.createElement("iframe");
         iframe.src = file;
-        iframe.width = "100%";
-        iframe.height = "350";
+
+        iframe.style.width = "100%";
+        iframe.style.height = "350px";
         iframe.style.border = "1px solid white";
 
         content.appendChild(iframe);
