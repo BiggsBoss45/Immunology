@@ -324,3 +324,43 @@ function unlockPhase2(){
     document.body.style.filter =
     "contrast(1.1) brightness(1.05)";
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    initBlockViewer();
+});
+
+function initBlockViewer() {
+
+    const blocks = document.querySelectorAll(".block");
+
+    blocks.forEach(block => {
+
+        block.classList.add("collapsed");
+
+        block.addEventListener("click", () => {
+
+            const isOpen = block.classList.contains("expanded");
+
+            // close all
+            blocks.forEach(b => {
+                b.classList.remove("expanded");
+                b.classList.add("collapsed");
+            });
+
+            // toggle clicked
+            if (!isOpen) {
+                block.classList.remove("collapsed");
+                block.classList.add("expanded");
+            }
+        });
+    });
+
+    // auto-open first TARGET block (vector block preferred)
+    const firstVectorBlock =
+        document.querySelector(".vector")?.closest(".block");
+
+    if (firstVectorBlock) {
+        firstVectorBlock.classList.remove("collapsed");
+        firstVectorBlock.classList.add("expanded");
+    }
+}
