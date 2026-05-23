@@ -378,7 +378,7 @@ input{
 }
 
 /* =========================
-   DNA BLOCKS (UPDATED SYSTEM)
+   DNA BLOCKS (FIXED)
 ========================= */
 
 .block{
@@ -390,7 +390,7 @@ input{
     transition:0.4s ease;
 
     max-height:160px;
-    overflow:hidden;
+    overflow:visible;   /* 🔥 FIX: prevents iframe cutoff */
     opacity:0.7;
 }
 
@@ -430,7 +430,10 @@ input{
     color:black;
 }
 
-/* content hidden by default */
+/* =========================
+   SEQUENCE CONTENT
+========================= */
+
 .seqContent{
     display:none;
     margin-top:10px;
@@ -441,4 +444,5 @@ input{
 
 .seqContent.active{
     display:block;
+    max-height:none;
 }
