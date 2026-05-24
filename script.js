@@ -9,26 +9,47 @@ let locked = false;
 let audioUnlocked = false;
 
 /* =========================
-   INIT (FIXED — SINGLE ENTRY POINT)
+   SEQUENCE DATA
+========================= */
+
+const recoveredSequences = [
+
+    "ATGCGTACCTGAACTGACCTGA",
+    "TTGACCGTAGGCTAACCGTAAA",
+    "CGTAGCTAGGATCCGTAGCTAA",
+    "GGATCCGTAACCGTAGGCTTAC",
+    "ATCGGATCGTAGCTAACCGATA",
+    "TTAACCGGATCGTAGCTAGCTA",
+    "CCGTAATCGGATCGTAGCTAAC",
+    "GATCGTAGCTAATCGGATCCGA",
+    "AACCGTAGCTAGGATCGTACCA"
+
+];
+
+const correctProtein =
+"MET-VAL-LYS-ARG-THR-GLY-SER-PRO-LEU";
+
+/* =========================
+   INIT
 ========================= */
 
 window.addEventListener("DOMContentLoaded", () => {
 
     console.log("SCRIPT LOADED");
 
-    // HARD RESET EVERYTHING (THIS FIXES YOUR MAIN ISSUE)
     stage = 0;
     bootState = "idle";
     started = false;
     locked = false;
 
-    // hide ALL tabs
     document.querySelectorAll(".tabContent").forEach(t => {
         t.style.display = "none";
         t.classList.remove("activeTab");
     });
 
-    // show ONLY start screen
+    generateRecoveredDNA();
+    generateProteinSequence();
+
     showScreen("startScreen");
 });
 
@@ -41,7 +62,9 @@ const startupSound = new Audio("BootupIm.mp3");
 const rebootSound = new Audio("reboot.mp3");
 
 function unlockAudio() {
+
     if (audioUnlocked) return;
+
     audioUnlocked = true;
 
     clickSound.play().then(() => {
@@ -51,13 +74,17 @@ function unlockAudio() {
 }
 
 function playClick() {
+
     if (!audioUnlocked) return;
+
     clickSound.currentTime = 0;
     clickSound.play().catch(() => {});
 }
 
 function playStartup() {
+
     if (!audioUnlocked) return;
+
     startupSound.currentTime = 0;
     startupSound.play().catch(() => {});
 }
@@ -67,15 +94,19 @@ function playStartup() {
 ========================= */
 
 document.addEventListener("keydown", (e) => {
+
     if (e.key !== "Enter") return;
     if (locked) return;
 
     unlockAudio();
+
     handleStart();
 });
 
 document.addEventListener("click", () => {
+
     if (locked) return;
+
     unlockAudio();
 });
 
@@ -84,14 +115,20 @@ document.addEventListener("click", () => {
 ========================= */
 
 function handleStart() {
+
     if (locked) return;
 
-    if (stage === 0) startSequence();
-    else if (stage === 2 && bootState === "continue") continueToMenu();
+    if (stage === 0) {
+        startSequence();
+    }
+
+    else if (stage === 2 && bootState === "continue") {
+        continueToMenu();
+    }
 }
 
 /* =========================
-   SCREEN SYSTEM (FIXED)
+   SCREEN SYSTEM
 ========================= */
 
 function showScreen(id) {
@@ -99,6 +136,7 @@ function showScreen(id) {
     console.log("SCREEN:", id);
 
     document.querySelectorAll(".screen").forEach(screen => {
+
         screen.classList.remove("active");
         screen.style.display = "none";
     });
@@ -129,12 +167,14 @@ function startSequence() {
     bootState = "booting";
 
     playStartup();
+
     showScreen("bootScreen");
 
     setTimeout(() => {
 
         stage = 2;
         bootState = "continue";
+
         locked = false;
 
         showScreen("continueScreen");
@@ -152,6 +192,7 @@ function continueToMenu() {
     bootState = "menu";
 
     playClick();
+
     showScreen("menuScreen");
 }
 
@@ -163,24 +204,28 @@ function openTab(tabId) {
 
     playClick();
 
-    // hide menu properly
     document.getElementById("menuScreen").style.display = "none";
 
     document.querySelectorAll(".tabContent").forEach(tab => {
+
         tab.classList.remove("activeTab");
         tab.style.display = "none";
     });
 
     const target = document.getElementById(tabId);
 
-    if (target) {
-        target.classList.add("activeTab");
-        target.style.display = "block";
-        target.style.position = "fixed";
-        target.style.inset = "0";
-        target.style.zIndex = "9999";
-        target.style.background = "black";
+    if (!target) {
+        console.error("TAB NOT FOUND:", tabId);
+        return;
     }
+
+    target.classList.add("activeTab");
+
+    target.style.display = "block";
+    target.style.position = "fixed";
+    target.style.inset = "0";
+    target.style.zIndex = "9999";
+    target.style.background = "black";
 }
 
 function closeTabs() {
@@ -188,6 +233,7 @@ function closeTabs() {
     playClick();
 
     document.querySelectorAll(".tabContent").forEach(tab => {
+
         tab.classList.remove("activeTab");
         tab.style.display = "none";
     });
@@ -216,9 +262,160 @@ function revealVideo() {
 }
 
 /* =========================
+   RECOVERED DNA
+========================= */
+
+function generateRecoveredDNA() {
+
+    const container = document.getElementById("recoveredContainer");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    recoveredSequences.forEach((seq, i) => {
+
+        const div = document.createElement("div");
+
+        div.className = "recoveredFile";
+
+        div.innerHTML = `
+            <strong>RECOVERED SAMPLE ${i + 1}</strong>
+            <br><br>
+            ${seq}
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+/* =========================
+   AMINO ACID DISPLAY
+========================= */
+
+function generateProteinSequence() {
+
+    const protein = document.getElementById("proteinSequence");
+
+    if (!protein) return;
+
+    protein.innerHTML = correctProtein;
+}
+
+/* =========================
+   PHASE 2 VALIDATION
+========================= */
+
+function validateSequence() {
+
+    playClick();
+
+    const input = document
+        .getElementById("sequenceInput")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const output = document.getElementById("validationOutput");
+
+    if (!output) return;
+
+    if (input === correctProtein) {
+
+        output.innerHTML = `
+            <span style="color:#4cff88">
+                ACCESS GRANTED
+            </span>
+        `;
+
+        unlockPhase3();
+    }
+
+    else {
+
+        output.innerHTML = `
+            <span style="color:#ff5577">
+                INVALID SEQUENCE
+            </span>
+        `;
+    }
+}
+
+/* =========================
+   PHASE 3 UNLOCK
+========================= */
+
+function unlockPhase3() {
+
+    const phase3 = document.getElementById("phase3Button");
+
+    if (!phase3) return;
+
+    phase3.style.display = "inline-block";
+
+    phase3.style.opacity = "1";
+
+    phase3.style.pointerEvents = "auto";
+}
+
+/* =========================
+   VIRUS SIMULATION
+========================= */
+
+function runInfection() {
+
+    const virus = document.getElementById("virusParticle");
+    const cell = document.getElementById("bacteriaCell");
+
+    if (!virus || !cell) return;
+
+    /* stop idle jitter before animation */
+    virus.style.animation = "none";
+
+    virus.className = "";
+    void virus.offsetWidth;
+
+    virus.classList.add("injecting");
+
+    setTimeout(() => {
+        virus.classList.add("grabbing");
+    }, 2200);
+
+    setTimeout(() => {
+        virus.classList.add("attached");
+    }, 2800);
+
+    setTimeout(() => {
+
+        const rna = document.createElement("div");
+
+        rna.className = "rnaInject";
+
+        virus.appendChild(rna);
+
+        cell.classList.add("infectedPulse");
+
+    }, 3400);
+
+    setTimeout(() => {
+
+        cell.classList.add("deadCell");
+
+    }, 5200);
+
+    setTimeout(() => {
+
+        cell.classList.add("lysing");
+
+    }, 6700);
+}
+
+/* =========================
    EXPORTS
 ========================= */
 
 window.openTab = openTab;
 window.closeTabs = closeTabs;
 window.revealVideo = revealVideo;
+window.validateSequence = validateSequence;
+window.runInfection = runInfection;
