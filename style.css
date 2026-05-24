@@ -246,7 +246,12 @@ button:hover{
     top: 80px;
     z-index: 999;
 
-    outline: 2px solid rgba(255,0,0,0.3); /* debug */
+    /* IMPORTANT: center system */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transform-origin: center;
 }
 
 /* =========================
@@ -254,52 +259,55 @@ button:hover{
 ========================= */
 
 .virusHead {
-    width: 60px;
-    height: 60px;
-    background: radial-gradient(circle, #ff2d55 20%, #7a001a 80%);
+    width: 70px;
+    height: 70px;
+    background: radial-gradient(circle at 30% 30%, #ff4d6d, #7a001a);
     border-radius: 50%;
     position: absolute;
-    left: 30px;
-    top: 30px;
-    box-shadow: 0 0 12px rgba(255, 0, 60, 0.8);
-}
 
+    box-shadow:
+        0 0 18px rgba(255, 0, 80, 0.9),
+        inset 0 0 10px rgba(255,255,255,0.2);
+}
 /* =========================
    VIRUS TAIL
 ========================= */
 
 .virusTail {
-    width: 10px;
-    height: 50px;
-    background: #ff2d55;
+    width: 14px;
+    height: 55px;
+    background: linear-gradient(to bottom, #ff4d6d, #5a0015);
     position: absolute;
-    left: 55px;
-    top: 80px;
-    border-radius: 5px;
-    box-shadow: 0 0 8px rgba(255, 0, 60, 0.6);
+    top: 70px;
+
+    border-radius: 20px;
+    transform: rotate(10deg);
+
+    box-shadow: 0 0 10px rgba(255, 0, 80, 0.5);
 }
 
 /* =========================
-   VIRUS LEGS (SPIKES)
+   VIRUS LEGS (FIXED - NO CONFLICTS)
 ========================= */
 
 .virusLeg {
     position: absolute;
     width: 6px;
-    height: 30px;
-    background: #ff4d6d;
-    top: 20px;
+    height: 35px;
+    background: #ff5c7a;
+    top: 15px;
     transform-origin: top center;
-    box-shadow: 0 0 6px rgba(255, 0, 80, 0.6);
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(255, 0, 80, 0.6);
 }
 
-/* FIX LEG POSITIONS */
-.leg1 { left: 10px; transform: rotate(30deg); }
-.leg2 { left: 25px; transform: rotate(15deg); }
+/* correct layout + stable rotation system */
+.leg1 { left: 10px; transform: rotate(40deg); }
+.leg2 { left: 25px; transform: rotate(20deg); }
 .leg3 { left: 40px; transform: rotate(0deg); }
-.leg4 { left: 60px; transform: rotate(-15deg); }
-.leg5 { left: 75px; transform: rotate(-30deg); }
-.leg6 { left: 90px; transform: rotate(-45deg); }
+.leg4 { left: 60px; transform: rotate(-20deg); }
+.leg5 { left: 75px; transform: rotate(-40deg); }
+.leg6 { left: 90px; transform: rotate(-60deg); }
 /* =========================
    VIRUS APPROACH + BEND
 ========================= */
@@ -376,34 +384,42 @@ button:hover{
    RNA INJECTION (UPGRADED)
 ========================= */
 
-.rnaInject{
-    animation:injectRNA 2.6s forwards;
+.rnaInject {
+    animation: injectRNA 2.6s forwards;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #7dffb0;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #7dffb0;
 }
 
-@keyframes injectRNA{
+@keyframes injectRNA {
 
-    0%{
-        left:-160px;
-        opacity:0;
-        transform:scaleX(0.6);
+    0% {
+        left: -120px;
+        top: 50%;
+        opacity: 0;
+        transform: scale(0.5);
     }
 
-    20%{
-        opacity:1;
+    20% {
+        opacity: 1;
     }
 
-    60%{
-        left:40px;
-        transform:scaleX(1.2);
+    60% {
+        left: 120px;
+        top: 45%;
+        transform: scale(1.2);
     }
 
-    100%{
-        left:120px;
-        opacity:1;
-        transform:scaleX(1);
+    100% {
+        left: 170px;
+        top: 55%;
+        opacity: 0;
+        transform: scale(0.3);
     }
 }
-
 /* =========================
    CELL REACTION
 ========================= */
@@ -412,12 +428,14 @@ button:hover{
     animation:infectPulse 0.6s 3;
 }
 
-@keyframes infectPulse{
+@keyframes infectionPulse {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(2) hue-rotate(25deg); }
+    100% { filter: brightness(1); }
+}
 
-    0%{ filter:brightness(1); }
-    50%{ filter:brightness(1.8) hue-rotate(20deg); }
-    100%{ filter:brightness(1); }
-
+.infectedPulse {
+    animation: infectionPulse 0.4s 4;
 }
 
 /* =========================
@@ -486,4 +504,20 @@ button:hover{
     0%{ opacity:0; }
     30%{ opacity:1; }
     100%{ opacity:0; }
+}
+
+/* =========================
+   VIRUS IDLE JITTER
+========================= */
+
+@keyframes virusJitter {
+    0%   { transform: translate(0px, 0px) rotate(0deg); }
+    25%  { transform: translate(1px, -1px) rotate(1deg); }
+    50%  { transform: translate(-1px, 1px) rotate(-1deg); }
+    75%  { transform: translate(1px, 1px) rotate(0.5deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+#virusParticle {
+    animation: virusJitter 0.25s infinite;
 }
