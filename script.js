@@ -52,8 +52,9 @@ function playReboot() {
 /* =========================
    INIT
 ========================= */
-
 window.addEventListener("load", () => {
+    showScreen("startScreen");
+});
 
     stage = 0;
     bootState = "idle";
