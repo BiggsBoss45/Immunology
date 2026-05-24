@@ -232,8 +232,9 @@ button:hover{
         inset 0 0 30px rgba(255,255,255,0.12);
 }
 
+
 /* =========================
-   VIRUS
+   VIRUS CORE
 ========================= */
 
 #virusParticle{
@@ -243,136 +244,193 @@ button:hover{
     left:70px;
     top:80px;
     z-index:100;
-}
-
-.virusHead{
-    width:70px;
-    height:70px;
-    margin:auto;
-    background:#7be0ff;
-    clip-path:polygon(50% 0%,100% 30%,100% 70%,50% 100%,0% 70%,0% 30%);
-    box-shadow:0 0 25px rgba(123,224,255,0.8);
-}
-
-.virusTail{
-    width:12px;
-    height:70px;
-    background:#d7f8ff;
-    margin:auto;
-    position:relative;
-}
-
-.virusTail::after{
-    content:"";
-    position:absolute;
-    width:40px;
-    height:12px;
-    background:#d7f8ff;
-    left:-14px;
-    bottom:-5px;
-    border-radius:10px;
-}
-
-.virusLeg{
-    position:absolute;
-    width:4px;
-    height:50px;
-    background:#d7f8ff;
-    top:120px;
-    transform-origin:top center;
-}
-
-.leg1{left:26px;transform:rotate(35deg);}
-.leg2{left:42px;transform:rotate(18deg);}
-.leg3{left:58px;transform:rotate(0deg);}
-.leg4{left:72px;transform:rotate(-5deg);}
-.leg5{left:88px;transform:rotate(-18deg);}
-.leg6{left:102px;transform:rotate(-35deg);}
-
-/* =========================
-   RNA
-========================= */
-
-#rnaStrand{
-    position:absolute;
-    width:150px;
-    height:10px;
-    background:linear-gradient(to right,#ff55ff,#ffffff);
-    border-radius:20px;
-    top:85px;
-    left:-160px;
-    opacity:0;
+    transform-origin: bottom center;
 }
 
 /* =========================
-   ANIMATIONS
+   VIRUS APPROACH + BEND
 ========================= */
 
 .injecting{
-    animation:virusApproach 2.2s forwards;
+    animation:virusAttach 2.8s forwards;
 }
 
-@keyframes virusApproach{
-    0%{transform:translateX(0);}
-    70%{transform:translateX(250px);}
-    100%{transform:translateX(285px);}
+@keyframes virusAttach{
+
+    0%{
+        transform:translateX(0) rotate(0deg);
+    }
+
+    45%{
+        transform:translateX(180px) rotate(18deg);
+    }
+
+    70%{
+        transform:translateX(240px) rotate(28deg);
+    }
+
+    100%{
+        transform:translateX(285px) rotate(35deg);
+    }
 }
+
+/* =========================
+   VIRUS GRAB (LEGS EXTEND)
+========================= */
+
+.grabbing .virusLeg{
+    animation:legGrab 0.6s forwards;
+}
+
+@keyframes legGrab{
+
+    0%{
+        transform:scaleY(1) rotate(var(--r));
+        filter:brightness(1);
+    }
+
+    100%{
+        transform:scaleY(1.4) rotate(var(--r));
+        filter:brightness(1.8);
+    }
+}
+
+/* keep original angles */
+.leg1{ left:26px; --r:35deg; transform:rotate(35deg); }
+.leg2{ left:42px; --r:18deg; transform:rotate(18deg); }
+.leg3{ left:58px; --r:0deg; transform:rotate(0deg); }
+.leg4{ left:72px; --r:-5deg; transform:rotate(-5deg); }
+.leg5{ left:88px; --r:-18deg; transform:rotate(-18deg); }
+.leg6{ left:102px; --r:-35deg; transform:rotate(-35deg); }
+
+/* =========================
+   ATTACHMENT SHAKE
+========================= */
+
+.attached{
+    animation:virusClamp 0.35s infinite;
+}
+
+@keyframes virusClamp{
+
+    0%{ transform:translateX(285px) rotate(35deg); }
+    50%{ transform:translateX(287px) rotate(36deg); }
+    100%{ transform:translateX(285px) rotate(35deg); }
+
+}
+
+/* =========================
+   RNA INJECTION (UPGRADED)
+========================= */
 
 .rnaInject{
-    animation:injectRNA 2.5s forwards;
+    animation:injectRNA 2.6s forwards;
 }
 
 @keyframes injectRNA{
-    0%{left:-160px;opacity:0;}
-    20%{opacity:1;}
-    100%{left:120px;opacity:1;}
+
+    0%{
+        left:-160px;
+        opacity:0;
+        transform:scaleX(0.6);
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    60%{
+        left:40px;
+        transform:scaleX(1.2);
+    }
+
+    100%{
+        left:120px;
+        opacity:1;
+        transform:scaleX(1);
+    }
 }
 
-.stableCell{
-    animation:stablePulse 1.5s infinite alternate;
+/* =========================
+   CELL REACTION
+========================= */
+
+.infectedPulse{
+    animation:infectPulse 0.6s 3;
 }
 
-@keyframes stablePulse{
-    from{transform:scale(1);filter:brightness(1);}
-    to{transform:scale(1.03);filter:brightness(1.25);}
+@keyframes infectPulse{
+
+    0%{ filter:brightness(1); }
+    50%{ filter:brightness(1.8) hue-rotate(20deg); }
+    100%{ filter:brightness(1); }
+
 }
 
-.mutatedCell{
-    animation:mutateGlow 1s infinite alternate;
-}
-
-@keyframes mutateGlow{
-    from{filter:hue-rotate(0deg);}
-    to{filter:hue-rotate(90deg);}
-}
-
-.failedMutation{
-    animation:failedShake 0.25s infinite;
-}
-
-@keyframes failedShake{
-    0%{transform:translateX(0);}
-    25%{transform:translateX(-5px);}
-    50%{transform:translateX(5px);}
-    75%{transform:translateX(-5px);}
-    100%{transform:translateX(0);}
-}
+/* =========================
+   LYSIS SEQUENCE (COMBINED FINAL VERSION)
+========================= */
 
 .deadCell{
-    animation:swellCell 1.2s forwards;
+    animation:preBurst 1.2s forwards;
 }
 
-@keyframes swellCell{
-    0%{transform:scale(1);}
-    100%{transform:scale(1.3);filter:brightness(1.8);}
+@keyframes preBurst{
+
+    0%{
+        transform:scale(1);
+        filter:brightness(1);
+    }
+
+    70%{
+        transform:scale(1.25);
+        filter:brightness(2) hue-rotate(25deg);
+    }
+
+    100%{
+        transform:scale(1.35);
+        filter:brightness(2.5) blur(1px);
+    }
 }
 
 .lysing{
-    animation:explodeCell 1s forwards;
+    animation:burstExplosion 0.9s forwards;
 }
 
-@keyframes explodeCell{
-    0%{opacity:1;transform:scale(1.3);}
-    40%{opacity:1;transform:scale(1.55);}
-    100%{opacity:0;transform:scale(2.1);filter:blur(10px);}
+@keyframes burstExplosion{
+
+    0%{
+        opacity:1;
+        transform:scale(1.35);
+        filter:blur(0px);
+    }
+
+    40%{
+        opacity:1;
+        transform:scale(1.8);
+        filter:blur(2px) brightness(2);
+    }
+
+    100%{
+        opacity:0;
+        transform:scale(2.4);
+        filter:blur(14px) brightness(3);
+    }
+}
+
+/* FLASH EFFECT ON LYSIS */
+
+.lysing::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle, rgba(255,255,255,0.9), transparent 60%);
+    opacity:0;
+    animation:flash 0.9s forwards;
+}
+
+@keyframes flash{
+    0%{ opacity:0; }
+    30%{ opacity:1; }
+    100%{ opacity:0; }
 }
