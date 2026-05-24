@@ -12,13 +12,17 @@ let audioUnlocked = false;
 ========================= */
 
 const clickSound = new Audio("click.mp3");
+const startupSound = new Audio("BootupIm.mp3");
 const rebootSound = new Audio("reboot.mp3");
 
 clickSound.preload = "auto";
+startupSound.preload = "auto";
 rebootSound.preload = "auto";
 
 function unlockAudio() {
+
     if (audioUnlocked) return;
+
     audioUnlocked = true;
 
     clickSound.play()
@@ -27,18 +31,34 @@ function unlockAudio() {
             clickSound.currentTime = 0;
         })
         .catch(() => {});
+
 }
 
 function playClick() {
+
     if (!audioUnlocked) return;
+
     clickSound.currentTime = 0;
     clickSound.play().catch(() => {});
+
+}
+
+function playStartup() {
+
+    if (!audioUnlocked) return;
+
+    startupSound.currentTime = 0;
+    startupSound.play().catch(() => {});
+
 }
 
 function playReboot() {
+
     if (!audioUnlocked) return;
+
     rebootSound.currentTime = 0;
     rebootSound.play().catch(() => {});
+
 }
 
 /* =========================
@@ -46,12 +66,14 @@ function playReboot() {
 ========================= */
 
 window.addEventListener("load", () => {
+
     stage = 0;
     bootState = "idle";
     started = false;
     locked = false;
 
     showScreen("startScreen");
+
 });
 
 /* =========================
@@ -59,42 +81,55 @@ window.addEventListener("load", () => {
 ========================= */
 
 document.addEventListener("keydown", (e) => {
+
     if (e.key !== "Enter") return;
 
     unlockAudio();
     handleStart();
+
 });
 
 document.addEventListener("click", () => {
+
     unlockAudio();
-    handleStart();
+
 });
 
 function handleStart() {
+
     if (locked) return;
 
-    if (stage === 0) startSequence();
-    else if (stage === 2 && bootState === "continue") continueToMenu();
+    if (stage === 0) {
+        startSequence();
+    }
+    else if (stage === 2 && bootState === "continue") {
+        continueToMenu();
+    }
+
 }
 
 /* =========================
-   SCREEN SYSTEM (CORE FIX)
-   → guarantees ONLY ONE visible screen
+   SCREEN SYSTEM
 ========================= */
 
 function showScreen(id) {
 
-    // hide ALL screens completely
-    document.querySelectorAll(".screen").forEach(s => {
-        s.classList.remove("active");
-        s.style.display = "none";
+    document.querySelectorAll(".screen").forEach(screen => {
+
+        screen.classList.remove("active");
+        screen.style.display = "none";
+
     });
 
-    const el = document.getElementById(id);
-    if (el) {
-        el.classList.add("active");
-        el.style.display = "flex";
+    const target = document.getElementById(id);
+
+    if (target) {
+
+        target.classList.add("active");
+        target.style.display = "flex";
+
     }
+
 }
 
 /* =========================
@@ -111,16 +146,20 @@ function startSequence() {
     stage = 1;
     bootState = "booting";
 
-    playReboot();
+    playStartup();
+
     showScreen("bootScreen");
 
     setTimeout(() => {
+
         stage = 2;
         bootState = "continue";
         locked = false;
 
         showScreen("continueScreen");
+
     }, 6000);
+
 }
 
 /* =========================
@@ -128,52 +167,58 @@ function startSequence() {
 ========================= */
 
 function continueToMenu() {
+
     stage = 3;
     bootState = "menu";
 
     playClick();
+
     showScreen("menuScreen");
+
 }
 
 /* =========================
-   TAB SYSTEM (FULLSCREEN FIX)
+   TAB SYSTEM
 ========================= */
 
 function openTab(tabId) {
 
     playClick();
 
-    // hide menu completely
     const menu = document.getElementById("menuScreen");
-    if (menu) menu.style.display = "none";
 
-    // close phase 3 if open
-    const phase3 = document.getElementById("phase3Screen");
-    if (phase3) phase3.style.display = "none";
+    if (menu) {
+        menu.style.display = "none";
+    }
 
-    // hide all tabs
     document.querySelectorAll(".tabContent").forEach(tab => {
+
         tab.classList.remove("activeTab");
         tab.style.display = "none";
+
     });
 
     const target = document.getElementById(tabId);
 
     if (target) {
-        target.classList.add("activeTab");
-        target.style.display = "block";
 
-        // force fullscreen overlay
+        target.classList.add("activeTab");
+
+        target.style.display = "block";
         target.style.position = "fixed";
         target.style.inset = "0";
         target.style.width = "100vw";
         target.style.height = "100vh";
         target.style.zIndex = "9999";
         target.style.background = "black";
-        target.style.overflow = "auto";
+        target.style.overflowY = "auto";
+
     }
 
-    if (tabId === "dnaTab") loadDNA();
+    if (tabId === "dnaTab") {
+        loadDNA();
+    }
+
 }
 
 function closeTabs() {
@@ -181,12 +226,18 @@ function closeTabs() {
     playClick();
 
     document.querySelectorAll(".tabContent").forEach(tab => {
+
         tab.classList.remove("activeTab");
         tab.style.display = "none";
+
     });
 
     const menu = document.getElementById("menuScreen");
-    if (menu) menu.style.display = "flex";
+
+    if (menu) {
+        menu.style.display = "flex";
+    }
+
 }
 
 /* =========================
@@ -199,15 +250,15 @@ function revealVideo() {
 
     const video = document.getElementById("mainVideo");
     const container = document.getElementById("videoContainer");
-    const button = document.getElementById("revealButton");
+    const button = document.querySelector("#audioTab button");
 
     if (!video || !container || !button) return;
 
     container.style.display = "block";
     button.style.display = "none";
 
-    video.src = "video1.mp4";
-    video.load();
+    video.play().catch(() => {});
+
 }
 
 /* =========================
@@ -217,23 +268,37 @@ function revealVideo() {
 function loadDNA() {
 
     const dnaList = document.getElementById("dnaList");
+
     if (!dnaList || dnaList.childElementCount > 0) return;
 
     const sequences = [
-        "B-01","C-09","E-13","L-12",
-        "M-22","P-09","S-05","V-03","H-07"
+        "B-01",
+        "C-09",
+        "E-13",
+        "L-12",
+        "M-22",
+        "P-09",
+        "S-05",
+        "V-03",
+        "H-07"
     ];
 
     dnaList.innerHTML = "";
 
     sequences.forEach(seq => {
+
         const item = document.createElement("div");
+
         item.textContent = "DNA SEQUENCE: " + seq;
+
         item.style.padding = "14px";
         item.style.borderBottom = "1px solid #333";
         item.style.fontSize = "18px";
+
         dnaList.appendChild(item);
+
     });
+
 }
 
 /* =========================
@@ -255,6 +320,7 @@ function checkPhase2() {
         correct.every(v => selected.includes(v));
 
     const result = document.getElementById("phase2Result");
+
     if (!result) return;
 
     result.textContent = success
@@ -262,9 +328,17 @@ function checkPhase2() {
         : "INVALID COMBINATION";
 
     if (success) {
+
         document.getElementById("phase2Access").style.display = "block";
-        setTimeout(() => enterPhase3(), 1000);
+
+        setTimeout(() => {
+
+            enterPhase3();
+
+        }, 1000);
+
     }
+
 }
 
 /* =========================
@@ -278,17 +352,21 @@ function enterPhase3() {
     showScreen("phase3Screen");
 
     const screen = document.getElementById("phase3Screen");
+
     if (!screen) return;
 
     screen.classList.add("zoomIn");
 
     setTimeout(() => {
+
         screen.classList.remove("zoomIn");
+
     }, 1200);
+
 }
 
 /* =========================
-   PHASE 3 TAB SYSTEM (FIXED)
+   PHASE 3 TAB SYSTEM
 ========================= */
 
 function openPhase3Tab(tabId) {
@@ -296,40 +374,56 @@ function openPhase3Tab(tabId) {
     playClick();
 
     const menuGrid = document.querySelector("#phase3Screen .menuGrid");
-    if (menuGrid) menuGrid.style.display = "none";
+
+    if (menuGrid) {
+        menuGrid.style.display = "none";
+    }
 
     document.querySelectorAll("#phase3Screen .tabContent")
-        .forEach(t => {
-            t.classList.remove("activeTab");
-            t.style.display = "none";
+        .forEach(tab => {
+
+            tab.classList.remove("activeTab");
+            tab.style.display = "none";
+
         });
 
     const target = document.getElementById(tabId);
 
     if (target) {
-        target.classList.add("activeTab");
-        target.style.display = "block";
 
+        target.classList.add("activeTab");
+
+        target.style.display = "block";
         target.style.position = "fixed";
         target.style.inset = "0";
         target.style.width = "100vw";
         target.style.height = "100vh";
         target.style.zIndex = "9999";
         target.style.background = "black";
+        target.style.overflowY = "auto";
+
     }
+
 }
 
 function closePhase3() {
 
     playClick();
 
-    document.querySelectorAll("#phase3Screen .tabContent").forEach(t => {
-        t.classList.remove("activeTab");
-        t.style.display = "none";
-    });
+    document.querySelectorAll("#phase3Screen .tabContent")
+        .forEach(tab => {
+
+            tab.classList.remove("activeTab");
+            tab.style.display = "none";
+
+        });
 
     const menuGrid = document.querySelector("#phase3Screen .menuGrid");
-    if (menuGrid) menuGrid.style.display = "flex";
+
+    if (menuGrid) {
+        menuGrid.style.display = "flex";
+    }
+
 }
 
 /* =========================
@@ -343,7 +437,9 @@ function runSimulation() {
     const bacteria = document.getElementById("bacteriaCell");
     const virus = document.getElementById("virusParticle");
     const rna = document.getElementById("rnaStrand");
+
     const result = document.getElementById("simulationResult");
+
     const atpBar = document.getElementById("atpBarInner");
     const atpValue = document.getElementById("atpValue");
 
@@ -355,13 +451,19 @@ function runSimulation() {
 
     bacteria.className = "";
     virus.className = "";
-    if (rna) rna.className = "";
+
+    if (rna) {
+        rna.className = "";
+    }
 
     result.textContent = "Injecting viral RNA...";
+
     atpBar.style.width = "0%";
     atpValue.textContent = "0 ATP";
 
-    if (rna) rna.classList.add("rnaInject");
+    if (rna) {
+        rna.classList.add("rnaInject");
+    }
 
     setTimeout(() => {
 
@@ -371,12 +473,19 @@ function runSimulation() {
 
             bacteria.classList.add("deadCell");
 
-            setTimeout(() => bacteria.classList.add("lysing"), 500);
+            setTimeout(() => {
+
+                bacteria.classList.add("lysing");
+
+            }, 500);
 
             atpBar.style.width = "100%";
             atpValue.textContent = "ATP OVERLOAD";
+
             result.textContent = "Cell lysis detected.";
+
             return;
+
         }
 
         if (mutation === "repair" && atp === "elevated") {
@@ -385,27 +494,39 @@ function runSimulation() {
 
             atpBar.style.width = "45%";
             atpValue.textContent = "45 ATP";
+
             result.textContent = "Unstable mutation.";
+
             return;
+
         }
 
-        if (pathway === "krebs" && atp === "elevated" && mutation === "enzyme") {
+        if (
+            pathway === "krebs" &&
+            atp === "elevated" &&
+            mutation === "enzyme"
+        ) {
 
             bacteria.classList.add("mutatedCell");
 
             atpBar.style.width = "78%";
             atpValue.textContent = "78 ATP";
+
             result.textContent = "Stable integration confirmed.";
+
             return;
+
         }
 
         bacteria.classList.add("stableCell");
 
         atpBar.style.width = "30%";
         atpValue.textContent = "30 ATP";
+
         result.textContent = "No significant mutation detected.";
 
     }, 1400);
+
 }
 
 /* =========================
