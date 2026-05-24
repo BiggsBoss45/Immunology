@@ -55,7 +55,7 @@
 </div>
 
 <!-- =========================
-     MAIN MENU (SWIPE READY)
+     MAIN MENU
 ========================= -->
 
 <div id="menuScreen" class="screen">
@@ -86,22 +86,28 @@
 
         </div>
 
+        <div id="swipeHint">SWIPE TO CHANGE SCREEN</div>
+
     </div>
 
-    <div id="swipeHint">SWIPE TO CHANGE SCREEN</div>
+</div>
 
 <!-- =========================
      VIDEO TAB
 ========================= -->
 
 <div id="audioTab" class="tabContent">
+
     <button onclick="revealVideo()">OPEN VIDEO LOG</button>
 
     <div id="videoContainer" style="display:none;">
-        <video id="mainVideo" controls></video>
+        <video id="mainVideo" controls width="100%">
+            <source src="video1.mp4" type="video/mp4">
+        </video>
     </div>
 
     <button onclick="closeTabs()">BACK</button>
+
 </div>
 
 <!-- =========================
@@ -109,11 +115,13 @@
 ========================= -->
 
 <div id="docTab" class="tabContent">
+
     <h2>AMINO ACID SEQUENCE</h2>
 
     <iframe src="Doc1.html"></iframe>
 
     <button onclick="closeTabs()">BACK</button>
+
 </div>
 
 <!-- =========================
@@ -158,15 +166,17 @@
 ========================= -->
 
 <div id="dnaTab" class="tabContent">
+
     <h2>Recovered DNA Sequences</h2>
+
     <div id="dnaList"></div>
+
     <button onclick="closeTabs()">BACK</button>
-</div>
 
 </div>
 
 <!-- =========================
-     PHASE 3 SCREEN (FIXED STRUCTURE)
+     PHASE 3 SCREEN
 ========================= -->
 
 <div id="phase3Screen" class="screen">
@@ -188,56 +198,82 @@
     </div>
 
     <!-- VIDEO -->
+
     <div id="p3VideoTab" class="tabContent">
-        <video controls>
-            <source src="video2.mp4">
+
+        <video controls width="100%">
+            <source src="video2.mp4" type="video/mp4">
         </video>
+
         <button onclick="closePhase3()">BACK</button>
+
     </div>
 
     <!-- META -->
+
     <div id="p3MetaTab" class="tabContent">
+
         <iframe src="doc2.txt"></iframe>
         <iframe src="doc3.txt"></iframe>
+
         <button onclick="closePhase3()">BACK</button>
+
     </div>
 
     <!-- SIMULATION -->
+
     <div id="p3QuizTab" class="tabContent">
 
         <h2>VIRAL RNA MICROSCOPE SIMULATION</h2>
 
-        <p>Swipe-ready simulation viewport active.</p>
-
-        <!-- MICROSCOPE -->
         <div id="microscopeViewport">
 
             <div id="simulationArea">
 
                 <div id="bacteriaContainer">
+
                     <div id="bacteriaCell">
 
                         <div id="rnaStrand"></div>
                         <div id="virusParticle"></div>
 
                     </div>
+
                 </div>
 
                 <div id="atpContainer">
+
                     <h3>ATP OUTPUT</h3>
+
                     <div id="atpBarOuter">
                         <div id="atpBarInner"></div>
                     </div>
+
                     <p id="atpValue">0 ATP</p>
+
                 </div>
 
             </div>
+
         </div>
 
         <div class="simControls">
-            <select id="pathwaySelect"></select>
-            <select id="atpSelect"></select>
-            <select id="mutationSelect"></select>
+
+            <select id="pathwaySelect">
+                <option value="electron">Electron Transport</option>
+                <option value="krebs">Krebs Cycle</option>
+            </select>
+
+            <select id="atpSelect">
+                <option value="elevated">Elevated ATP</option>
+                <option value="extreme">Extreme ATP</option>
+            </select>
+
+            <select id="mutationSelect">
+                <option value="repair">Repair Mutation</option>
+                <option value="enzyme">Enzyme Mutation</option>
+            </select>
+
         </div>
 
         <button onclick="runSimulation()">RUN SIMULATION</button>
@@ -254,6 +290,10 @@
 
 </div>
 
+<script src="script.js"></script>
+
+</body>
+</html>
 <script src="script.js"></script>
 
 </body>
