@@ -372,8 +372,20 @@ function runSimulation() {
     const atpState = document.getElementById("atpSelect")?.value;
     const mutation = document.getElementById("mutationSelect")?.value;
 
-    bacteria.className = "";
-    virus.className = "";
+bacteria.classList.remove(
+    "deadCell",
+    "lysing",
+    "stableCell",
+    "mutatedCell",
+    "failedMutation"
+);
+
+virus.classList.remove(
+    "injecting",
+    "grabbing",
+    "attached"
+);
+   
     if (rna) rna.className = "";
 
     result.textContent = "Injecting viral RNA...";
@@ -382,29 +394,22 @@ function runSimulation() {
 
     if (rna) rna.classList.add("rnaInject");
 
-    setTimeout(() => virus.classList.add("injecting"), 200);
+   setTimeout(() => {
 
-    setTimeout(() => virus.classList.add("grabbing"), 900);
+    virus.classList.remove("injecting","grabbing","attached");
+    void virus.offsetWidth; // 🔥 forces redraw
 
-    setTimeout(() => virus.classList.add("attached"), 1400);
+    virus.classList.add("injecting");
 
-    setTimeout(() => {
+}, 200);
 
-        const infectionScore = 55 - (mutation === "resistant" ? 20 : 0);
+setTimeout(() => {
+    virus.classList.add("grabbing");
+}, 900);
 
-        if (infectionScore > 60) {
-            bacteria.classList.add("deadCell");
-            setTimeout(() => bacteria.classList.add("lysing"), 500);
-            result.textContent = "Cell lysis detected.";
-            return;
-        }
-
-        bacteria.classList.add("stableCell");
-        result.textContent = "No significant infection detected.";
-
-    }, 1800);
-}
-
+setTimeout(() => {
+    virus.classList.add("attached");
+}, 1400);
 /* =========================
    EXPORTS
 ========================= */
