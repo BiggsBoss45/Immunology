@@ -1,3 +1,11 @@
+document.addEventListener("DOMContentLoaded", () => {
+    showScreen("startScreen");
+
+    document.querySelectorAll(".tabContent").forEach(t => {
+        t.style.display = "none";
+    });
+});
+
 alert("SCRIPT IS RUNNING");
 console.log("SCRIPT LOADED");
 
