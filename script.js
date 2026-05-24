@@ -352,7 +352,7 @@ function closePhase3() {
 }
 
 /* =========================
-   SIMULATION CORE (UNCHANGED - WORKING)
+   SIMULATION CORE (UPDATED + STABLE)
 ========================= */
 
 function runSimulation() {
@@ -372,44 +372,130 @@ function runSimulation() {
     const atpState = document.getElementById("atpSelect")?.value;
     const mutation = document.getElementById("mutationSelect")?.value;
 
-bacteria.classList.remove(
-    "deadCell",
-    "lysing",
-    "stableCell",
-    "mutatedCell",
-    "failedMutation"
-);
+    /* =========================
+       SAFE RESET (NO CLASSNAME WIPE)
+    ========================= */
 
-virus.classList.remove(
-    "injecting",
-    "grabbing",
-    "attached"
-);
-   
-    if (rna) rna.className = "";
+    bacteria.classList.remove(
+        "deadCell",
+        "lysing",
+        "stableCell",
+        "mutatedCell",
+        "failedMutation"
+    );
 
+    virus.classList.remove(
+        "injecting",
+        "grabbing",
+        "attached"
+    );
+
+    if (rna) rna.classList.remove("rnaInject");
+
+    /* reset UI */
     result.textContent = "Injecting viral RNA...";
     atpBar.style.width = "0%";
     atpValue.textContent = "0 ATP";
 
-    if (rna) rna.classList.add("rnaInject");
+    /* =========================
+       FORCE REPAINT (CRITICAL FIX FOR ANIMATION VISIBILITY)
+    ========================= */
 
-   setTimeout(() => {
+    void virus.offsetWidth;
 
-    virus.classList.remove("injecting","grabbing","attached");
-    void virus.offsetWidth; // 🔥 forces redraw
+    /* =========================
+       RNA ANIMATION
+    ========================= */
 
-    virus.classList.add("injecting");
+    if (rna) {
+        rna.classList.add("rnaInject");
+    }
 
-}, 200);
+    /* =========================
+       VIRUS ANIMATION TIMELINE
+    ========================= */
 
-setTimeout(() => {
-    virus.classList.add("grabbing");
-}, 900);
+    setTimeout(() => {
+        virus.classList.add("injecting");
+    }, 200);
 
-setTimeout(() => {
-    virus.classList.add("attached");
-}, 1400);
+    setTimeout(() => {
+        virus.classList.add("grabbing");
+    }, 900);
+
+    setTimeout(() => {
+        virus.classList.add("attached");
+    }, 1400);
+
+    /* =========================
+       DYNAMIC SIMULATION LOGIC (FIXED - NO MORE STATIC 55)
+    ========================= */
+
+    let baseRisk = 55;
+
+    // pathway effects
+    switch (pathway) {
+        case "glycolysis": baseRisk += 5; break;
+        case "krebs": baseRisk -= 5; break;
+        case "electron": baseRisk += 10; break;
+        case "fermentation": baseRisk += 0; break;
+        case "pentose": baseRisk -= 10; break;
+        case "fatty": baseRisk -= 5; break;
+    }
+
+    // ATP effects
+    switch (atpState) {
+        case "depleted": baseRisk += 25; break;
+        case "low": baseRisk += 10; break;
+        case "high": baseRisk -= 10; break;
+        case "extreme": baseRisk -= 15; break;
+    }
+
+    // mutation effects
+    switch (mutation) {
+        case "resistant": baseRisk -= 25; break;
+        case "suppression": baseRisk += 15; break;
+        case "error": baseRisk += Math.random() * 20; break;
+        case "collapse": baseRisk += 30; break;
+        case "hypermutation": baseRisk += Math.random() * 40; break;
+    }
+
+    const infectionScore = baseRisk;
+
+    /* =========================
+       OUTCOME ENGINE (VARIED RESULTS NOW)
+    ========================= */
+
+    setTimeout(() => {
+
+        if (infectionScore > 80) {
+
+            bacteria.classList.add("deadCell");
+
+            setTimeout(() => {
+                bacteria.classList.add("lysing");
+            }, 500);
+
+            result.textContent = "CELL LYSIS DETECTED";
+
+        } else if (infectionScore > 60) {
+
+            bacteria.classList.add("failedMutation");
+            result.textContent = "Unstable infection response";
+
+        } else if (infectionScore > 40) {
+
+            bacteria.classList.add("mutatedCell");
+            result.textContent = "Host mutation response triggered";
+
+        } else {
+
+            bacteria.classList.add("stableCell");
+            result.textContent = "No significant infection detected";
+        }
+
+    }, 1800);
+}
 /* =========================
    EXPORTS
 ========================= */
