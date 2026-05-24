@@ -465,37 +465,48 @@ function runSimulation() {
     /* =========================
        OUTCOME ENGINE (VARIED RESULTS NOW)
     ========================= */
+/* =========================
+   OUTCOME ENGINE (VARIED RESULTS NOW)
+========================= */
 
+setTimeout(() => {
+
+    // 🔥 ALWAYS show initial infection response
+    bacteria.classList.add("infectedPulse");
+
+    // optional: remove pulse after it flashes so it doesn’t stack
     setTimeout(() => {
+        bacteria.classList.remove("infectedPulse");
+    }, 1200);
 
-        if (infectionScore > 80) {
+    if (infectionScore > 80) {
 
-            bacteria.classList.add("deadCell");
+        bacteria.classList.add("deadCell");
 
-            setTimeout(() => {
-                bacteria.classList.add("lysing");
-            }, 500);
+        setTimeout(() => {
+            bacteria.classList.add("lysing");
+        }, 500);
 
-            result.textContent = "CELL LYSIS DETECTED";
+        result.textContent = "CELL LYSIS DETECTED";
 
-        } else if (infectionScore > 60) {
+    } else if (infectionScore > 60) {
 
-            bacteria.classList.add("failedMutation");
-            result.textContent = "Unstable infection response";
+        bacteria.classList.add("failedMutation");
+        result.textContent = "Unstable infection response";
 
-        } else if (infectionScore > 40) {
+    } else if (infectionScore > 40) {
 
-            bacteria.classList.add("mutatedCell");
-            result.textContent = "Host mutation response triggered";
+        bacteria.classList.add("mutatedCell");
+        result.textContent = "Host mutation response triggered";
 
-        } else {
+    } else {
 
-            bacteria.classList.add("stableCell");
-            result.textContent = "No significant infection detected";
-        }
+        bacteria.classList.add("stableCell");
+        result.textContent = "No significant infection detected";
+    }
 
-    }, 1800);
-}
+}, 1800);
+    
 /* =========================
    EXPORTS
 ========================= */
