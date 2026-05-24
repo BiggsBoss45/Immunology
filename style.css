@@ -110,6 +110,7 @@ button{
     padding:12px 24px;
     cursor:pointer;
     font-family:inherit;
+    transition:0.25s;
 }
 
 button:hover{
@@ -122,7 +123,7 @@ button:hover{
 ========================= */
 
 #audioTab{
-    display:none; /* IMPORTANT */
+    display:none;
     flex-direction:column;
     justify-content:center;
     align-items:center;
@@ -184,6 +185,125 @@ button:hover{
 }
 
 /* =========================
+   AMINO ACID VIEWER
+========================= */
+
+#proteinSequence{
+    width:95vw;
+    min-height:70vh;
+
+    margin:30px auto;
+
+    padding:35px;
+
+    box-sizing:border-box;
+
+    border:2px solid #22ff88;
+
+    background:rgba(0,0,0,0.92);
+
+    color:#6dff9f;
+
+    font-size:28px;
+    line-height:2.1;
+    letter-spacing:4px;
+
+    overflow-wrap:break-word;
+    word-break:break-word;
+
+    overflow-y:auto;
+
+    box-shadow:
+        0 0 25px rgba(34,255,136,0.2),
+        inset 0 0 30px rgba(34,255,136,0.08);
+}
+
+/* =========================
+   VALIDATION TERMINAL
+========================= */
+
+#phase2Container{
+    width:90%;
+    max-width:1200px;
+
+    margin:40px auto;
+
+    padding:30px;
+
+    border:2px solid #22ff88;
+
+    background:rgba(0,0,0,0.9);
+
+    box-sizing:border-box;
+}
+
+#sequenceInput{
+    width:100%;
+
+    background:black;
+
+    color:#6dff9f;
+
+    border:1px solid #22ff88;
+
+    padding:18px;
+
+    font-size:22px;
+
+    font-family:Courier New, monospace;
+
+    letter-spacing:2px;
+
+    box-sizing:border-box;
+}
+
+#sequenceInput:focus{
+    outline:none;
+
+    box-shadow:0 0 12px rgba(34,255,136,0.4);
+}
+
+/* =========================
+   RECOVERED DNA FILES
+========================= */
+
+#recoveredContainer{
+    width:90%;
+    margin:30px auto;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:18px;
+}
+
+.recoveredFile{
+    padding:20px;
+
+    border:1px solid #22ff88;
+
+    background:rgba(15,15,15,0.9);
+
+    color:#6dff9f;
+
+    font-size:20px;
+
+    letter-spacing:2px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.recoveredFile:hover{
+    background:rgba(34,255,136,0.08);
+
+    transform:scale(1.01);
+
+    box-shadow:0 0 14px rgba(34,255,136,0.25);
+}
+
+/* =========================
    MICROSCOPE AREA
 ========================= */
 
@@ -202,11 +322,11 @@ button:hover{
    SIMULATION AREA
 ========================= */
 
-#simulationArea {
-    position: relative;
-    width: 900px;
-    height: 500px;
-    overflow: visible;
+#simulationArea{
+    position:relative;
+    width:900px;
+    height:500px;
+    overflow:visible;
 }
 
 /* =========================
@@ -233,83 +353,86 @@ button:hover{
         inset 0 0 30px rgba(255,255,255,0.12);
 }
 
-
 /* =========================
    VIRUS BASE
 ========================= */
 
-#virusParticle {
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    left: 70px;
-    top: 80px;
-    z-index: 999;
+#virusParticle{
+    position:absolute;
+    width:120px;
+    height:120px;
+    left:70px;
+    top:80px;
+    z-index:999;
 
-    /* IMPORTANT: center system */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
-    transform-origin: center;
+    transform-origin:center;
+
+    animation:virusJitter 0.25s infinite;
+
+    will-change:transform;
 }
 
 /* =========================
-   VIRUS HEAD (MAIN BODY)
+   VIRUS HEAD
 ========================= */
 
-.virusHead {
-    width: 70px;
-    height: 70px;
-    background: radial-gradient(circle at 30% 30%, #ff4d6d, #7a001a);
-    border-radius: 50%;
-    position: absolute;
+.virusHead{
+    width:70px;
+    height:70px;
+    background:radial-gradient(circle at 30% 30%, #ff4d6d, #7a001a);
+    border-radius:50%;
+    position:absolute;
 
     box-shadow:
-        0 0 18px rgba(255, 0, 80, 0.9),
+        0 0 18px rgba(255,0,80,0.9),
         inset 0 0 10px rgba(255,255,255,0.2);
 }
+
 /* =========================
    VIRUS TAIL
 ========================= */
 
-.virusTail {
-    width: 14px;
-    height: 55px;
-    background: linear-gradient(to bottom, #ff4d6d, #5a0015);
-    position: absolute;
-    top: 70px;
+.virusTail{
+    width:14px;
+    height:55px;
+    background:linear-gradient(to bottom, #ff4d6d, #5a0015);
+    position:absolute;
+    top:70px;
 
-    border-radius: 20px;
-    transform: rotate(10deg);
+    border-radius:20px;
+    transform:rotate(10deg);
 
-    box-shadow: 0 0 10px rgba(255, 0, 80, 0.5);
+    box-shadow:0 0 10px rgba(255,0,80,0.5);
 }
 
 /* =========================
-   VIRUS LEGS (FIXED - NO CONFLICTS)
+   VIRUS LEGS
 ========================= */
 
-.virusLeg {
-    position: absolute;
-    width: 6px;
-    height: 35px;
-    background: #ff5c7a;
-    top: 15px;
-    transform-origin: top center;
-    border-radius: 6px;
-    box-shadow: 0 0 8px rgba(255, 0, 80, 0.6);
+.virusLeg{
+    position:absolute;
+    width:6px;
+    height:35px;
+    background:#ff5c7a;
+    top:15px;
+    transform-origin:top center;
+    border-radius:6px;
+    box-shadow:0 0 8px rgba(255,0,80,0.6);
 }
 
-/* correct layout + stable rotation system */
-.leg1 { left: 10px; transform: rotate(40deg); }
-.leg2 { left: 25px; transform: rotate(20deg); }
-.leg3 { left: 40px; transform: rotate(0deg); }
-.leg4 { left: 60px; transform: rotate(-20deg); }
-.leg5 { left: 75px; transform: rotate(-40deg); }
-.leg6 { left: 90px; transform: rotate(-60deg); }
+.leg1{ left:26px; --r:35deg; transform:rotate(35deg); }
+.leg2{ left:42px; --r:18deg; transform:rotate(18deg); }
+.leg3{ left:58px; --r:0deg; transform:rotate(0deg); }
+.leg4{ left:72px; --r:-5deg; transform:rotate(-5deg); }
+.leg5{ left:88px; --r:-18deg; transform:rotate(-18deg); }
+.leg6{ left:102px; --r:-35deg; transform:rotate(-35deg); }
+
 /* =========================
-   VIRUS APPROACH + BEND
+   VIRUS APPROACH
 ========================= */
 
 .injecting{
@@ -336,7 +459,7 @@ button:hover{
 }
 
 /* =========================
-   VIRUS GRAB (LEGS EXTEND)
+   LEG GRAB
 ========================= */
 
 .grabbing .virusLeg{
@@ -356,16 +479,8 @@ button:hover{
     }
 }
 
-/* keep original angles */
-.leg1{ left:26px; --r:35deg; transform:rotate(35deg); }
-.leg2{ left:42px; --r:18deg; transform:rotate(18deg); }
-.leg3{ left:58px; --r:0deg; transform:rotate(0deg); }
-.leg4{ left:72px; --r:-5deg; transform:rotate(-5deg); }
-.leg5{ left:88px; --r:-18deg; transform:rotate(-18deg); }
-.leg6{ left:102px; --r:-35deg; transform:rotate(-35deg); }
-
 /* =========================
-   ATTACHMENT SHAKE
+   ATTACHED SHAKE
 ========================= */
 
 .attached{
@@ -381,65 +496,62 @@ button:hover{
 }
 
 /* =========================
-   RNA INJECTION (UPGRADED)
+   RNA INJECTION
 ========================= */
 
-.rnaInject {
-    animation: injectRNA 2.6s forwards;
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: #7dffb0;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #7dffb0;
+.rnaInject{
+    animation:injectRNA 2.6s forwards;
+    position:absolute;
+    width:8px;
+    height:8px;
+    background:#7dffb0;
+    border-radius:50%;
+    box-shadow:0 0 10px #7dffb0;
 }
 
-@keyframes injectRNA {
+@keyframes injectRNA{
 
-    0% {
-        left: -120px;
-        top: 50%;
-        opacity: 0;
-        transform: scale(0.5);
+    0%{
+        left:-120px;
+        top:50%;
+        opacity:0;
+        transform:scale(0.5);
     }
 
-    20% {
-        opacity: 1;
+    20%{
+        opacity:1;
     }
 
-    60% {
-        left: 120px;
-        top: 45%;
-        transform: scale(1.2);
+    60%{
+        left:120px;
+        top:45%;
+        transform:scale(1.2);
     }
 
-    100% {
-        left: 170px;
-        top: 55%;
-        opacity: 0;
-        transform: scale(0.3);
+    100%{
+        left:170px;
+        top:55%;
+        opacity:0;
+        transform:scale(0.3);
     }
 }
+
 /* =========================
    CELL REACTION
 ========================= */
 
 .infectedPulse{
-    animation:infectPulse 0.6s 3;
+    animation:infectionPulse 0.4s 4;
 }
 
-@keyframes infectionPulse {
-    0% { filter: brightness(1); }
-    50% { filter: brightness(2) hue-rotate(25deg); }
-    100% { filter: brightness(1); }
-}
-
-.infectedPulse {
-    animation: infectionPulse 0.4s 4;
+@keyframes infectionPulse{
+    0%{ filter:brightness(1); }
+    50%{ filter:brightness(2) hue-rotate(25deg); }
+    100%{ filter:brightness(1); }
 }
 
 /* =========================
-   LYSIS SEQUENCE (COMBINED FINAL VERSION)
+   PRE BURST
 ========================= */
 
 .deadCell{
@@ -463,6 +575,10 @@ button:hover{
         filter:brightness(2.5) blur(1px);
     }
 }
+
+/* =========================
+   LYSIS
+========================= */
 
 .lysing{
     animation:burstExplosion 0.9s forwards;
@@ -489,7 +605,9 @@ button:hover{
     }
 }
 
-/* FLASH EFFECT ON LYSIS */
+/* =========================
+   FLASH EFFECT
+========================= */
 
 .lysing::after{
     content:"";
@@ -510,14 +628,10 @@ button:hover{
    VIRUS IDLE JITTER
 ========================= */
 
-@keyframes virusJitter {
-    0%   { transform: translate(0px, 0px) rotate(0deg); }
-    25%  { transform: translate(1px, -1px) rotate(1deg); }
-    50%  { transform: translate(-1px, 1px) rotate(-1deg); }
-    75%  { transform: translate(1px, 1px) rotate(0.5deg); }
-    100% { transform: translate(0px, 0px) rotate(0deg); }
-}
-
-#virusParticle {
-    animation: virusJitter 0.25s infinite;
+@keyframes virusJitter{
+    0%{ transform:translate(0px,0px) rotate(0deg); }
+    25%{ transform:translate(1px,-1px) rotate(1deg); }
+    50%{ transform:translate(-1px,1px) rotate(-1deg); }
+    75%{ transform:translate(1px,1px) rotate(0.5deg); }
+    100%{ transform:translate(0px,0px) rotate(0deg); }
 }
