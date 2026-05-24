@@ -8,31 +8,44 @@ let locked = false;
 let audioUnlocked = false;
 
 /* =========================
-   AUDIO (FIXED)
+   AUDIO (FULL FIX)
 ========================= */
 
 const clickSound = new Audio("click.mp3");
 const rebootSound = new Audio("reboot.mp3");
 
+clickSound.preload = "auto";
+rebootSound.preload = "auto";
+
 function unlockAudio() {
     if (audioUnlocked) return;
     audioUnlocked = true;
 
-    // trick browser into allowing audio
-    clickSound.play().then(() => {
-        clickSound.pause();
-        clickSound.currentTime = 0;
-    }).catch(() => {});
+    // MUST be inside user gesture
+    clickSound.play()
+        .then(() => {
+            clickSound.pause();
+            clickSound.currentTime = 0;
+        })
+        .catch(() => {});
 }
 
 function playClick() {
     if (!audioUnlocked) return;
+
     clickSound.currentTime = 0;
     clickSound.play().catch(() => {});
 }
 
+function playReboot() {
+    if (!audioUnlocked) return;
+
+    rebootSound.currentTime = 0;
+    rebootSound.play().catch(() => {});
+}
+
 /* =========================
-   DEBUG
+   ERROR DEBUG
 ========================= */
 
 window.addEventListener("error", (e) => {
@@ -53,7 +66,7 @@ window.addEventListener("load", () => {
 });
 
 /* =========================
-   INPUT (FIXED)
+   INPUT
 ========================= */
 
 document.addEventListener("keydown", (e) => {
@@ -84,7 +97,7 @@ function handleStart() {
    SCREEN SYSTEM
 ========================= */
 
-function showScreen(id){
+function showScreen(id) {
 
     document.querySelectorAll(".screen")
         .forEach(s => s.classList.remove("active"));
@@ -97,16 +110,17 @@ function showScreen(id){
    START SEQUENCE
 ========================= */
 
-function startSequence(){
+function startSequence() {
 
     if (started) return;
+
     started = true;
     locked = true;
 
     stage = 1;
     bootState = "booting";
 
-    playClick();
+    playReboot();
     showScreen("bootScreen");
 
     setTimeout(() => {
@@ -115,7 +129,6 @@ function startSequence(){
         bootState = "continue";
         locked = false;
 
-        playClick();
         showScreen("continueScreen");
 
     }, 6000);
@@ -125,7 +138,7 @@ function startSequence(){
    MENU
 ========================= */
 
-function continueToMenu(){
+function continueToMenu() {
     stage = 3;
     bootState = "menu";
 
@@ -150,8 +163,9 @@ function openTab(tabId) {
     const target = document.getElementById(tabId);
     if (target) target.classList.add("activeTab");
 
+    // IMPORTANT FIX: DNA ALWAYS LOADS AFTER TAB IS VISIBLE
     if (tabId === "dnaTab") {
-        loadDNA();
+        setTimeout(loadDNA, 50);
     }
 }
 
@@ -188,13 +202,20 @@ function revealVideo() {
 }
 
 /* =========================
-   DNA FIX (MISSING PIECE)
+   DNA FIX (REAL FIX)
 ========================= */
 
-function loadDNA(){
+function loadDNA() {
 
     const dnaList = document.getElementById("dnaList");
-    if (!dnaList || dnaList.childElementCount > 0) return;
+
+    if (!dnaList) {
+        console.warn("dnaList missing in HTML");
+        return;
+    }
+
+    // prevent duplicate injection
+    if (dnaList.childElementCount > 0) return;
 
     const sequences = [
         "B-01","C-09","E-13","L-12",
@@ -204,12 +225,20 @@ function loadDNA(){
     dnaList.innerHTML = "";
 
     sequences.forEach(seq => {
-        const div = document.createElement("div");
-        div.textContent = "DNA SEQUENCE: " + seq;
-        div.style.padding = "10px";
-        div.style.borderBottom = "1px solid #444";
-        dnaList.appendChild(div);
+
+        const item = document.createElement("div");
+
+        item.textContent = "DNA SEQUENCE: " + seq;
+
+        item.style.padding = "14px";
+        item.style.borderBottom = "1px solid #333";
+        item.style.fontSize = "18px";
+        item.style.letterSpacing = "1px";
+
+        dnaList.appendChild(item);
     });
+
+    console.log("DNA LOADED");
 }
 
 /* =========================
@@ -218,17 +247,21 @@ function loadDNA(){
 
 function checkPhase2() {
 
+    playClick();
+
     const selected = Array.from(
         document.querySelectorAll("#orgList input:checked")
     ).map(el => el.value);
 
-    const correct = ["V-03","E-13","H-07","P-09"];
+    const correct = ["V-03", "E-13", "H-07", "P-09"];
 
     const success =
         selected.length === correct.length &&
         correct.every(v => selected.includes(v));
 
     const result = document.getElementById("phase2Result");
+
+    if (!result) return;
 
     result.textContent = success
         ? "SEQUENCE VALIDATED"
@@ -247,7 +280,8 @@ function checkPhase2() {
    PHASE 3
 ========================= */
 
-function enterPhase3(){
+function enterPhase3() {
+
     stage = 4;
     showScreen("phase3Screen");
 
@@ -262,112 +296,7 @@ function enterPhase3(){
 }
 
 /* =========================
-   PHASE 3 MENU
-========================= */
-
-function openPhase3Tab(tabId){
-
-    playClick();
-
-    const menuGrid = document.querySelector("#phase3Screen .menuGrid");
-    if (menuGrid) menuGrid.style.display = "none";
-
-    document.querySelectorAll("#phase3Screen .tabContent")
-        .forEach(t => t.classList.remove("activeTab"));
-
-    const target = document.getElementById(tabId);
-    if (target) target.classList.add("activeTab");
-}
-
-function closePhase3(){
-
-    playClick();
-
-    document.querySelectorAll("#phase3Screen .tabContent")
-        .forEach(t => t.classList.remove("activeTab"));
-
-    const menuGrid = document.querySelector("#phase3Screen .menuGrid");
-    if (menuGrid) menuGrid.style.display = "flex";
-}
-
-/* =========================
-   SIMULATION CORE
-========================= */
-
-function runSimulation(){
-
-    playClick();
-
-    const bacteria = document.getElementById("bacteriaCell");
-    const virus = document.getElementById("virusParticle");
-    const rna = document.getElementById("rnaStrand");
-    const result = document.getElementById("simulationResult");
-    const atpBar = document.getElementById("atpBarInner");
-    const atpValue = document.getElementById("atpValue");
-
-    if (!bacteria || !virus || !result || !atpBar || !atpValue) return;
-
-    const pathway = document.getElementById("pathwaySelect")?.value;
-    const atp = document.getElementById("atpSelect")?.value;
-    const mutation = document.getElementById("mutationSelect")?.value;
-
-    bacteria.className = "";
-    virus.className = "";
-    if (rna) rna.className = "";
-
-    result.textContent = "Injecting viral RNA...";
-    atpBar.style.width = "0%";
-    atpValue.textContent = "0 ATP";
-
-    if (rna) rna.classList.add("rnaInject");
-
-    setTimeout(() => {
-
-        virus.classList.add("injecting");
-
-        if (pathway === "electron" && atp === "extreme") {
-
-            bacteria.classList.add("deadCell");
-
-            setTimeout(() => bacteria.classList.add("lysing"), 500);
-
-            atpBar.style.width = "100%";
-            atpValue.textContent = "ATP OVERLOAD";
-            result.textContent = "Cell lysis detected.";
-            return;
-        }
-
-        if (mutation === "repair" && atp === "elevated") {
-
-            bacteria.classList.add("failedMutation");
-
-            atpBar.style.width = "45%";
-            atpValue.textContent = "45 ATP";
-            result.textContent = "Unstable mutation.";
-            return;
-        }
-
-        if (pathway === "krebs" && atp === "elevated" && mutation === "enzyme") {
-
-            bacteria.classList.add("mutatedCell");
-
-            atpBar.style.width = "78%";
-            atpValue.textContent = "78 ATP";
-            result.textContent = "Stable integration confirmed.";
-            return;
-        }
-
-        bacteria.classList.add("stableCell");
-
-        atpBar.style.width = "30%";
-        atpValue.textContent = "30 ATP";
-        result.textContent = "No significant mutation detected.";
-
-    }, 1400);
-}
-
-/* =========================
-   GLOBAL EXPORT
+   EXPORTS (IMPORTANT FIX)
 ========================= */
 
 window.openTab = openTab;
