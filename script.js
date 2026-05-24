@@ -95,8 +95,9 @@ function handleStart() {
 /* =========================
    SCREEN SYSTEM (CLEAN RESET)
 ========================= */
-
 function showScreen(id) {
+
+    console.log("SWITCHING SCREEN:", id);
 
     document.querySelectorAll(".screen").forEach(screen => {
         screen.classList.remove("active");
@@ -105,10 +106,13 @@ function showScreen(id) {
 
     const target = document.getElementById(id);
 
-    if (target) {
-        target.classList.add("active");
-        target.style.display = "flex";
+    if (!target) {
+        console.error("SCREEN NOT FOUND:", id);
+        return;
     }
+
+    target.classList.add("active");
+    target.style.display = "flex";
 }
 
 /* =========================
