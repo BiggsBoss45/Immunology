@@ -1,37 +1,60 @@
 /* =========================
-   MOBILE MENU RESTRUCTURE (2x2 GRID)
+   GLOBAL MENU BASE (DESKTOP DEFAULT)
 ========================= */
 
-@media (max-width: 768px) {
+.menuGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
 
-    .menuGrid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        width: 100vw;
-        height: 100vh;
-    }
+.menuPanel {
+    position: relative;
+    border: 1px solid white;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
 
-    .menuPanel {
-        border: 1px solid white;
-        min-height: unset;
-        height: 100%;
-    }
+.menuPanel:hover {
+    transform: scale(1.02);
+}
 
-    .panelOverlay h1 {
-        font-size: 18px;
-        letter-spacing: 2px;
-        padding: 10px;
-    }
+.panelImage {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+    transition: 0.3s;
+    filter: grayscale(30%) brightness(0.6);
+}
 
-    .panelImage {
-        opacity: 0.6; /* makes mobile easier to read */
-    }
+.menuPanel:hover .panelImage {
+    opacity: 1;
+    filter: none;
+}
 
+.panelOverlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
+
+.panelOverlay h1 {
+    font-size: 32px;
+    letter-spacing: 3px;
+    text-align: center;
 }
 
 /* =========================
-   MOBILE SWIPE MENU (DUEL LINKS STYLE)
+   MOBILE SWIPE SYSTEM (DUEL LINKS STYLE)
 ========================= */
 
 @media (max-width: 768px) {
@@ -41,13 +64,18 @@
         flex-direction: row;
         width: 100vw;
         height: 100vh;
+
         overflow-x: auto;
         overflow-y: hidden;
+
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
+
+        /* important for smooth swipe */
+        scroll-behavior: smooth;
     }
 
-    /* hide scrollbar */
+    /* hide scrollbar (mobile clean UI) */
     .menuGrid::-webkit-scrollbar {
         display: none;
     }
@@ -55,20 +83,50 @@
     .menuPanel {
         flex: 0 0 100vw;
         height: 100vh;
+
         scroll-snap-align: start;
+
+        border: none;
         border-right: 1px solid white;
-        position: relative;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .panelOverlay h1 {
-        font-size: 22px;
-        letter-spacing: 3px;
+        font-size: 26px;
+        letter-spacing: 4px;
+        text-align: center;
+        padding: 20px;
     }
 
     .panelImage {
-        opacity: 0.6;
+        opacity: 0.55;
+        filter: grayscale(40%) brightness(0.5);
+    }
+
+    /* swipe hint support */
+    #swipeHint {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        opacity: 0.7;
+        pointer-events: none;
+        animation: fadeHint 2s infinite;
+    }
+
+    @keyframes fadeHint {
+        0%,100% { opacity: 0.2; }
+        50% { opacity: 0.8; }
     }
 }
+
+/* =========================
+   SMOOTH SCROLL FIX (ALL DEVICES)
+========================= */
 
 .menuGrid {
     scroll-behavior: smooth;
