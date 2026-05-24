@@ -449,6 +449,8 @@ function runSimulation() {
     const atp = document.getElementById("atpSelect")?.value;
     const mutation = document.getElementById("mutationSelect")?.value;
 
+    /* RESET */
+
     bacteria.className = "";
     virus.className = "";
 
@@ -456,37 +458,68 @@ function runSimulation() {
         rna.className = "";
     }
 
+    bacteria.style.opacity = "1";
+    bacteria.style.transform = "scale(1)";
+    bacteria.style.filter = "none";
+
     result.textContent = "Injecting viral RNA...";
 
     atpBar.style.width = "0%";
     atpValue.textContent = "0 ATP";
 
+    /* RESTART ANIMATIONS */
+
+    void virus.offsetWidth;
+    void bacteria.offsetWidth;
+
+    /* RNA ANIMATION */
+
     if (rna) {
+
+        rna.classList.remove("rnaInject");
+
+        void rna.offsetWidth;
+
         rna.classList.add("rnaInject");
+
     }
+
+    /* VIRUS MOVEMENT */
+
+    virus.classList.remove("injecting");
+
+    void virus.offsetWidth;
+
+    virus.classList.add("injecting");
+
+    /* MAIN OUTCOME */
 
     setTimeout(() => {
 
-        virus.classList.add("injecting");
+        /* CELL LYSIS */
 
         if (pathway === "electron" && atp === "extreme") {
 
             bacteria.classList.add("deadCell");
 
+            atpBar.style.width = "100%";
+            atpValue.textContent = "ATP OVERLOAD";
+
+            result.textContent = "Cell destabilization detected...";
+
             setTimeout(() => {
 
                 bacteria.classList.add("lysing");
 
-            }, 500);
+                result.textContent = "CELL LYSIS CONFIRMED";
 
-            atpBar.style.width = "100%";
-            atpValue.textContent = "ATP OVERLOAD";
-
-            result.textContent = "Cell lysis detected.";
+            }, 1200);
 
             return;
 
         }
+
+        /* FAILED MUTATION */
 
         if (mutation === "repair" && atp === "elevated") {
 
@@ -495,11 +528,13 @@ function runSimulation() {
             atpBar.style.width = "45%";
             atpValue.textContent = "45 ATP";
 
-            result.textContent = "Unstable mutation.";
+            result.textContent = "Unstable mutation pathway.";
 
             return;
 
         }
+
+        /* SUCCESSFUL INTEGRATION */
 
         if (
             pathway === "krebs" &&
@@ -512,11 +547,13 @@ function runSimulation() {
             atpBar.style.width = "78%";
             atpValue.textContent = "78 ATP";
 
-            result.textContent = "Stable integration confirmed.";
+            result.textContent = "Stable RNA integration confirmed.";
 
             return;
 
         }
+
+        /* NORMAL */
 
         bacteria.classList.add("stableCell");
 
@@ -525,7 +562,7 @@ function runSimulation() {
 
         result.textContent = "No significant mutation detected.";
 
-    }, 1400);
+    }, 2400);
 
 }
 
