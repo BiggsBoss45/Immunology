@@ -8,7 +8,7 @@ let locked = false;
 let audioUnlocked = false;
 
 /* =========================
-   AUDIO SYSTEM (FIXED)
+   AUDIO SYSTEM
 ========================= */
 
 const clickSound = new Audio("click.mp3");
@@ -21,7 +21,6 @@ function unlockAudio() {
     if (audioUnlocked) return;
     audioUnlocked = true;
 
-    // must be triggered by user gesture
     clickSound.play()
         .then(() => {
             clickSound.pause();
@@ -43,14 +42,6 @@ function playReboot() {
 }
 
 /* =========================
-   ERROR DEBUG
-========================= */
-
-window.addEventListener("error", (e) => {
-    console.log("JS ERROR:", e.message);
-});
-
-/* =========================
    INIT
 ========================= */
 
@@ -64,7 +55,7 @@ window.addEventListener("load", () => {
 });
 
 /* =========================
-   INPUT SYSTEM
+   INPUT
 ========================= */
 
 document.addEventListener("keydown", (e) => {
@@ -80,7 +71,6 @@ document.addEventListener("click", () => {
 });
 
 function handleStart() {
-
     if (locked) return;
 
     if (stage === 0) startSequence();
@@ -88,16 +78,23 @@ function handleStart() {
 }
 
 /* =========================
-   SCREEN SYSTEM
+   SCREEN SYSTEM (CORE FIX)
+   → guarantees ONLY ONE visible screen
 ========================= */
 
 function showScreen(id) {
 
-    document.querySelectorAll(".screen")
-        .forEach(s => s.classList.remove("active"));
+    // hide ALL screens completely
+    document.querySelectorAll(".screen").forEach(s => {
+        s.classList.remove("active");
+        s.style.display = "none";
+    });
 
     const el = document.getElementById(id);
-    if (el) el.classList.add("active");
+    if (el) {
+        el.classList.add("active");
+        el.style.display = "flex";
+    }
 }
 
 /* =========================
@@ -118,13 +115,11 @@ function startSequence() {
     showScreen("bootScreen");
 
     setTimeout(() => {
-
         stage = 2;
         bootState = "continue";
         locked = false;
 
         showScreen("continueScreen");
-
     }, 6000);
 }
 
@@ -141,21 +136,42 @@ function continueToMenu() {
 }
 
 /* =========================
-   TAB SYSTEM (MAIN MENU)
+   TAB SYSTEM (FULLSCREEN FIX)
 ========================= */
 
 function openTab(tabId) {
 
     playClick();
 
-    const menuGrid = document.querySelector("#menuScreen .menuGrid");
-    if (menuGrid) menuGrid.style.display = "none";
+    // hide menu completely
+    const menu = document.getElementById("menuScreen");
+    if (menu) menu.style.display = "none";
 
-    document.querySelectorAll("#menuScreen .tabContent")
-        .forEach(tab => tab.classList.remove("activeTab"));
+    // close phase 3 if open
+    const phase3 = document.getElementById("phase3Screen");
+    if (phase3) phase3.style.display = "none";
+
+    // hide all tabs
+    document.querySelectorAll(".tabContent").forEach(tab => {
+        tab.classList.remove("activeTab");
+        tab.style.display = "none";
+    });
 
     const target = document.getElementById(tabId);
-    if (target) target.classList.add("activeTab");
+
+    if (target) {
+        target.classList.add("activeTab");
+        target.style.display = "block";
+
+        // force fullscreen overlay
+        target.style.position = "fixed";
+        target.style.inset = "0";
+        target.style.width = "100vw";
+        target.style.height = "100vh";
+        target.style.zIndex = "9999";
+        target.style.background = "black";
+        target.style.overflow = "auto";
+    }
 
     if (tabId === "dnaTab") loadDNA();
 }
@@ -164,11 +180,13 @@ function closeTabs() {
 
     playClick();
 
-    document.querySelectorAll("#menuScreen .tabContent")
-        .forEach(tab => tab.classList.remove("activeTab"));
+    document.querySelectorAll(".tabContent").forEach(tab => {
+        tab.classList.remove("activeTab");
+        tab.style.display = "none";
+    });
 
-    const menuGrid = document.querySelector("#menuScreen .menuGrid");
-    if (menuGrid) menuGrid.style.display = "flex";
+    const menu = document.getElementById("menuScreen");
+    if (menu) menu.style.display = "flex";
 }
 
 /* =========================
@@ -193,15 +211,13 @@ function revealVideo() {
 }
 
 /* =========================
-   DNA SYSTEM (FIXED)
+   DNA SYSTEM
 ========================= */
 
 function loadDNA() {
 
     const dnaList = document.getElementById("dnaList");
-    if (!dnaList) return;
-
-    if (dnaList.childElementCount > 0) return;
+    if (!dnaList || dnaList.childElementCount > 0) return;
 
     const sequences = [
         "B-01","C-09","E-13","L-12",
@@ -211,18 +227,13 @@ function loadDNA() {
     dnaList.innerHTML = "";
 
     sequences.forEach(seq => {
-
         const item = document.createElement("div");
         item.textContent = "DNA SEQUENCE: " + seq;
-
         item.style.padding = "14px";
         item.style.borderBottom = "1px solid #333";
         item.style.fontSize = "18px";
-
         dnaList.appendChild(item);
     });
-
-    console.log("DNA LOADED");
 }
 
 /* =========================
@@ -252,7 +263,6 @@ function checkPhase2() {
 
     if (success) {
         document.getElementById("phase2Access").style.display = "block";
-
         setTimeout(() => enterPhase3(), 1000);
     }
 }
@@ -264,6 +274,7 @@ function checkPhase2() {
 function enterPhase3() {
 
     stage = 4;
+
     showScreen("phase3Screen");
 
     const screen = document.getElementById("phase3Screen");
@@ -277,7 +288,7 @@ function enterPhase3() {
 }
 
 /* =========================
-   PHASE 3 TAB SYSTEM (FIXED MISSING FUNCTIONS)
+   PHASE 3 TAB SYSTEM (FIXED)
 ========================= */
 
 function openPhase3Tab(tabId) {
@@ -288,25 +299,41 @@ function openPhase3Tab(tabId) {
     if (menuGrid) menuGrid.style.display = "none";
 
     document.querySelectorAll("#phase3Screen .tabContent")
-        .forEach(t => t.classList.remove("activeTab"));
+        .forEach(t => {
+            t.classList.remove("activeTab");
+            t.style.display = "none";
+        });
 
     const target = document.getElementById(tabId);
-    if (target) target.classList.add("activeTab");
+
+    if (target) {
+        target.classList.add("activeTab");
+        target.style.display = "block";
+
+        target.style.position = "fixed";
+        target.style.inset = "0";
+        target.style.width = "100vw";
+        target.style.height = "100vh";
+        target.style.zIndex = "9999";
+        target.style.background = "black";
+    }
 }
 
 function closePhase3() {
 
     playClick();
 
-    document.querySelectorAll("#phase3Screen .tabContent")
-        .forEach(t => t.classList.remove("activeTab"));
+    document.querySelectorAll("#phase3Screen .tabContent").forEach(t => {
+        t.classList.remove("activeTab");
+        t.style.display = "none";
+    });
 
     const menuGrid = document.querySelector("#phase3Screen .menuGrid");
     if (menuGrid) menuGrid.style.display = "flex";
 }
 
 /* =========================
-   SIMULATION CORE (FIXED)
+   SIMULATION CORE
 ========================= */
 
 function runSimulation() {
@@ -382,7 +409,7 @@ function runSimulation() {
 }
 
 /* =========================
-   GLOBAL EXPORTS
+   EXPORTS
 ========================= */
 
 window.openTab = openTab;
