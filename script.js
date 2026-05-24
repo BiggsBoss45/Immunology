@@ -1,4 +1,9 @@
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
+    stage = 0;
+    bootState = "idle";
+    started = false;
+    locked = false;
+
     showScreen("startScreen");
 
     document.querySelectorAll(".tabContent").forEach(t => {
@@ -60,17 +65,7 @@ function playReboot() {
 /* =========================
    INIT
 ========================= */
-window.addEventListener("load", () => {
-    showScreen("startScreen");
-});
 
-    stage = 0;
-    bootState = "idle";
-    started = false;
-    locked = false;
-
-    showScreen("startScreen");
-});
 
 /* =========================
    INPUT (FIXED - NO AUTO SKIP BUG)
