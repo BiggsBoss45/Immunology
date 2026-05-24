@@ -1,306 +1,223 @@
-alert("SCRIPT IS RUNNING");
-console.log("SCRIPT LOADED");
-
-let stage = 0;
-let bootState = "idle";
-let started = false;
-let locked = false;
-let audioUnlocked = false;
-
 /* =========================
-   AUDIO FIX
+   BASE (DESKTOP + GLOBAL)
 ========================= */
 
-const clickSound = new Audio("click.mp3");
-const rebootSound = new Audio("reboot.mp3");
-
-function unlockAudio() {
-    if (audioUnlocked) return;
-    audioUnlocked = true;
-
-    clickSound.play().then(() => {
-        clickSound.pause();
-        clickSound.currentTime = 0;
-    }).catch(() => {});
+body{
+    margin:0;
+    background:black;
+    color:white;
+    font-family:Courier New, monospace;
+    overflow:hidden;
+    text-shadow:0 0 5px rgba(255,255,255,0.4);
 }
 
-function playClick() {
-    if (!audioUnlocked) return;
-    clickSound.currentTime = 0;
-    clickSound.play().catch(() => {});
+.screen{
+    display:none;
+    position:fixed;
+    inset:0;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:black;
+}
+
+.active{
+    display:flex !important;
 }
 
 /* =========================
-   INIT
+   DESKTOP MENU
 ========================= */
 
-window.addEventListener("load", () => {
-    stage = 0;
-    bootState = "idle";
-    started = false;
-    locked = false;
+.menuGrid{
+    display:flex;
+    width:100vw;
+    height:100vh;
+}
 
-    showScreen("startScreen");
+.menuPanel{
+    position:relative;
+    flex:1;
+    overflow:hidden;
+    cursor:pointer;
+    border-right:1px solid white;
+    transition:0.3s ease;
+}
 
-    initSnapMenu(); // IMPORTANT NEW FEATURE
-});
+.menuPanel:hover{
+    flex:1.2;
+}
 
-/* =========================
-   INPUT
-========================= */
+.panelImage{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition:0.4s;
+    filter:brightness(0.45) grayscale(40%);
+}
 
-document.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter") return;
+.menuPanel:hover .panelImage{
+    opacity:1;
+}
 
-    unlockAudio();
-    handleStart();
-});
+.panelOverlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    backdrop-filter:blur(2px);
+}
 
-document.addEventListener("click", () => {
-    unlockAudio();
-    handleStart();
-});
-
-function handleStart() {
-    if (locked) return;
-
-    if (stage === 0) startSequence();
-    else if (stage === 2 && bootState === "continue") continueToMenu();
+.panelOverlay h1{
+    font-size:42px;
+    letter-spacing:4px;
 }
 
 /* =========================
-   SCREEN SYSTEM
+   TAB SYSTEM (FIXED FULLSCREEN)
 ========================= */
 
-function showScreen(id){
-    document.querySelectorAll(".screen")
-        .forEach(s => s.classList.remove("active"));
+.tabContent{
+    display:none;
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
 
-    const el = document.getElementById(id);
-    if (el) el.classList.add("active");
+    background:black;
+    z-index:9999;
+
+    overflow:auto;
+    padding:20px;
+}
+
+.activeTab{
+    display:block !important;
 }
 
 /* =========================
-   START SEQUENCE
+   BUTTONS
 ========================= */
 
-function startSequence(){
-    if (started) return;
-    started = true;
-    locked = true;
+button{
+    background:black;
+    color:white;
+    border:1px solid white;
+    padding:12px 24px;
+    cursor:pointer;
+}
 
-    stage = 1;
-    bootState = "booting";
-
-    playClick();
-    showScreen("bootScreen");
-
-    setTimeout(() => {
-        stage = 2;
-        bootState = "continue";
-        locked = false;
-
-        playClick();
-        showScreen("continueScreen");
-    }, 6000);
+button:hover{
+    background:white;
+    color:black;
 }
 
 /* =========================
-   MENU
+   📱 MOBILE MARVEL SNAP FIXED
 ========================= */
 
-function continueToMenu(){
-    stage = 3;
-    bootState = "menu";
+@media (max-width: 768px) {
 
-    playClick();
-    showScreen("menuScreen");
+    /* ===== SNAP SCROLL ROW ===== */
 
-    setTimeout(initSnapMenu, 100);
-}
+    .menuGrid{
+        display:flex;
+        flex-direction:row;
 
-/* =========================
-   🧠 MARVEL SNAP SWIPE ENGINE
-========================= */
+        width:100vw;
+        height:100vh;
 
-function initSnapMenu() {
-    const grid = document.querySelector(".menuGrid");
-    if (!grid) return;
+        overflow-x:auto;
+        overflow-y:hidden;
 
-    let isDown = false;
-    let startX = 0;
-    let scrollLeft = 0;
+        scroll-snap-type:x mandatory;
+        scroll-behavior:smooth;
 
-    const panels = document.querySelectorAll(".menuPanel");
+        -webkit-overflow-scrolling:touch;
 
-    function getCenteredIndex() {
-        const center = grid.scrollLeft + window.innerWidth / 2;
-
-        let closestIndex = 0;
-        let closestDist = Infinity;
-
-        panels.forEach((p, i) => {
-            const rect = p.getBoundingClientRect();
-            const pCenter = rect.left + rect.width / 2 + grid.scrollLeft;
-
-            const dist = Math.abs(center - pCenter);
-
-            if (dist < closestDist) {
-                closestDist = dist;
-                closestIndex = i;
-            }
-        });
-
-        return closestIndex;
+        /* 🔥 IMPORTANT FIX: true centering space */
+        padding: 0 calc(50vw - 170px);
+        gap:0;
     }
 
-    function snapTo(index) {
-        const target = panels[index];
-        if (!target) return;
-
-        const offset =
-            target.offsetLeft - (window.innerWidth - target.offsetWidth) / 2;
-
-        grid.scrollTo({
-            left: offset,
-            behavior: "smooth"
-        });
+    .menuGrid::-webkit-scrollbar{
+        display:none;
     }
 
-    /* mouse drag (desktop) */
-    grid.addEventListener("mousedown", (e) => {
-        isDown = true;
-        startX = e.pageX;
-        scrollLeft = grid.scrollLeft;
-    });
+    /* ===== BIG CENTER CARDS ===== */
 
-    grid.addEventListener("mouseleave", () => isDown = false);
-    grid.addEventListener("mouseup", () => {
-        isDown = false;
-        snapTo(getCenteredIndex());
-    });
+    .menuPanel{
+        flex:0 0 340px;   /* BIGGER CARD */
+        height:80vh;
 
-    grid.addEventListener("mousemove", (e) => {
-        if (!isDown) return;
-        const x = e.pageX;
-        const walk = (startX - x);
-        grid.scrollLeft = scrollLeft + walk;
-    });
+        scroll-snap-align:center;
 
-    /* touch swipe (mobile) */
-    grid.addEventListener("touchstart", (e) => {
-        startX = e.touches[0].clientX;
-        scrollLeft = grid.scrollLeft;
-    });
+        border-radius:22px;
+        overflow:hidden;
 
-    grid.addEventListener("touchend", () => {
-        snapTo(getCenteredIndex());
-    });
+        position:relative;
 
-    grid.addEventListener("touchmove", (e) => {
-        const x = e.touches[0].clientX;
-        const walk = (startX - x);
-        grid.scrollLeft = scrollLeft + walk;
-    });
+        box-shadow:0 12px 40px rgba(0,0,0,0.6);
 
-    /* initial center */
-    setTimeout(() => snapTo(0), 150);
-}
+        transform:scale(0.9);
+        transition:transform 0.25s ease, box-shadow 0.25s ease;
+    }
 
-/* =========================
-   TAB SYSTEM
-========================= */
+    /* CENTER FOCUS EFFECT */
+    .menuPanel:active,
+    .menuPanel:focus{
+        transform:scale(1);
+        box-shadow:0 0 30px rgba(0,255,150,0.35);
+    }
 
-function openTab(tabId){
-    playClick();
+    /* ===== IMAGE ===== */
 
-    const menuGrid = document.querySelector("#menuScreen .menuGrid");
-    if (menuGrid) menuGrid.style.display = "none";
+    .panelImage{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        opacity:0.8;
+        filter:brightness(0.65) contrast(1.1);
+    }
 
-    document.querySelectorAll("#menuScreen .tabContent")
-        .forEach(t => t.classList.remove("activeTab"));
+    /* ===== OVERLAY ===== */
 
-    const target = document.getElementById(tabId);
-    if (target) target.classList.add("activeTab");
-}
+    .panelOverlay{
+        position:absolute;
+        inset:0;
 
-function closeTabs(){
-    playClick();
+        display:flex;
+        justify-content:center;
+        align-items:center;
 
-    document.querySelectorAll("#menuScreen .tabContent")
-        .forEach(t => t.classList.remove("activeTab"));
+        background:linear-gradient(
+            to top,
+            rgba(0,0,0,0.85),
+            rgba(0,0,0,0.2)
+        );
+    }
 
-    const menuGrid = document.querySelector("#menuScreen .menuGrid");
-    if (menuGrid) menuGrid.style.display = "flex";
+    .panelOverlay h1{
+        font-size:22px;
+        text-align:center;
+        letter-spacing:2px;
+        padding:10px;
+    }
 
-    setTimeout(initSnapMenu, 100);
-}
+    /* ===== SWIPE HINT ===== */
 
-/* =========================
-   VIDEO
-========================= */
-
-function revealVideo(){
-    playClick();
-
-    const video = document.getElementById("mainVideo");
-    const container = document.getElementById("videoContainer");
-    const button = document.getElementById("revealButton");
-
-    if (!video || !container || !button) return;
-
-    container.style.display = "block";
-    button.style.display = "none";
-
-    video.src = "video1.mp4";
-    video.load();
-}
-
-/* =========================
-   PHASE 2
-========================= */
-
-function checkPhase2(){
-    const selected = Array.from(
-        document.querySelectorAll("#orgList input:checked")
-    ).map(el => el.value);
-
-    const correct = ["V-03","E-13","H-07","P-09"];
-
-    const success =
-        selected.length === correct.length &&
-        correct.every(v => selected.includes(v));
-
-    const result = document.getElementById("phase2Result");
-
-    result.textContent = success
-        ? "SEQUENCE VALIDATED"
-        : "INVALID COMBINATION";
-
-    if (success) {
-        document.getElementById("phase2Access").style.display = "block";
-
-        setTimeout(() => {
-            enterPhase3();
-        }, 1000);
+    .menuGrid::before{
+        content:"Swipe →";
+        position:fixed;
+        bottom:20px;
+        left:50%;
+        transform:translateX(-50%);
+        font-size:14px;
+        opacity:0.6;
+        pointer-events:none;
+        letter-spacing:2px;
     }
 }
-
-/* =========================
-   PHASE 3 (UNCHANGED)
-========================= */
-
-function enterPhase3(){
-    stage = 4;
-    showScreen("phase3Screen");
-}
-
-/* =========================
-   EXPORTS
-========================= */
-
-window.openTab = openTab;
-window.closeTabs = closeTabs;
-window.revealVideo = revealVideo;
-window.checkPhase2 = checkPhase2;
-window.enterPhase3 = enterPhase3;
