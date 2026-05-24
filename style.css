@@ -1,223 +1,306 @@
-/* =========================
-   BASE (DESKTOP + GLOBAL)
-========================= */
+alert("SCRIPT IS RUNNING");
+console.log("SCRIPT LOADED");
 
-body{
-    margin:0;
-    background:black;
-    color:white;
-    font-family:Courier New, monospace;
-    overflow:hidden;
-    text-shadow:0 0 5px rgba(255,255,255,0.4);
-}
-
-.screen{
-    display:none;
-    position:fixed;
-    inset:0;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    background:black;
-}
-
-.active{
-    display:flex !important;
-}
+let stage = 0;
+let bootState = "idle";
+let started = false;
+let locked = false;
+let audioUnlocked = false;
 
 /* =========================
-   DESKTOP MENU (UNCHANGED)
+   AUDIO FIX
 ========================= */
 
-.menuGrid{
-    display:flex;
-    width:100vw;
-    height:100vh;
+const clickSound = new Audio("click.mp3");
+const rebootSound = new Audio("reboot.mp3");
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+
+    clickSound.play().then(() => {
+        clickSound.pause();
+        clickSound.currentTime = 0;
+    }).catch(() => {});
 }
 
-.menuPanel{
-    position:relative;
-    flex:1;
-    overflow:hidden;
-    cursor:pointer;
-    border-right:1px solid white;
-    transition:0.3s ease;
+function playClick() {
+    if (!audioUnlocked) return;
+    clickSound.currentTime = 0;
+    clickSound.play().catch(() => {});
 }
 
-.menuPanel:hover{
-    flex:1.2;
+/* =========================
+   INIT
+========================= */
+
+window.addEventListener("load", () => {
+    stage = 0;
+    bootState = "idle";
+    started = false;
+    locked = false;
+
+    showScreen("startScreen");
+
+    initSnapMenu(); // IMPORTANT NEW FEATURE
+});
+
+/* =========================
+   INPUT
+========================= */
+
+document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+
+    unlockAudio();
+    handleStart();
+});
+
+document.addEventListener("click", () => {
+    unlockAudio();
+    handleStart();
+});
+
+function handleStart() {
+    if (locked) return;
+
+    if (stage === 0) startSequence();
+    else if (stage === 2 && bootState === "continue") continueToMenu();
 }
 
-.panelImage{
-    position:absolute;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:0;
-    transition:0.4s;
-    filter:brightness(0.45) grayscale(40%);
+/* =========================
+   SCREEN SYSTEM
+========================= */
+
+function showScreen(id){
+    document.querySelectorAll(".screen")
+        .forEach(s => s.classList.remove("active"));
+
+    const el = document.getElementById(id);
+    if (el) el.classList.add("active");
 }
 
-.menuPanel:hover .panelImage{
-    opacity:1;
+/* =========================
+   START SEQUENCE
+========================= */
+
+function startSequence(){
+    if (started) return;
+    started = true;
+    locked = true;
+
+    stage = 1;
+    bootState = "booting";
+
+    playClick();
+    showScreen("bootScreen");
+
+    setTimeout(() => {
+        stage = 2;
+        bootState = "continue";
+        locked = false;
+
+        playClick();
+        showScreen("continueScreen");
+    }, 6000);
 }
 
-.panelOverlay{
-    position:absolute;
-    inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    backdrop-filter:blur(2px);
+/* =========================
+   MENU
+========================= */
+
+function continueToMenu(){
+    stage = 3;
+    bootState = "menu";
+
+    playClick();
+    showScreen("menuScreen");
+
+    setTimeout(initSnapMenu, 100);
 }
 
-.panelOverlay h1{
-    font-size:42px;
-    letter-spacing:4px;
+/* =========================
+   🧠 MARVEL SNAP SWIPE ENGINE
+========================= */
+
+function initSnapMenu() {
+    const grid = document.querySelector(".menuGrid");
+    if (!grid) return;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    const panels = document.querySelectorAll(".menuPanel");
+
+    function getCenteredIndex() {
+        const center = grid.scrollLeft + window.innerWidth / 2;
+
+        let closestIndex = 0;
+        let closestDist = Infinity;
+
+        panels.forEach((p, i) => {
+            const rect = p.getBoundingClientRect();
+            const pCenter = rect.left + rect.width / 2 + grid.scrollLeft;
+
+            const dist = Math.abs(center - pCenter);
+
+            if (dist < closestDist) {
+                closestDist = dist;
+                closestIndex = i;
+            }
+        });
+
+        return closestIndex;
+    }
+
+    function snapTo(index) {
+        const target = panels[index];
+        if (!target) return;
+
+        const offset =
+            target.offsetLeft - (window.innerWidth - target.offsetWidth) / 2;
+
+        grid.scrollTo({
+            left: offset,
+            behavior: "smooth"
+        });
+    }
+
+    /* mouse drag (desktop) */
+    grid.addEventListener("mousedown", (e) => {
+        isDown = true;
+        startX = e.pageX;
+        scrollLeft = grid.scrollLeft;
+    });
+
+    grid.addEventListener("mouseleave", () => isDown = false);
+    grid.addEventListener("mouseup", () => {
+        isDown = false;
+        snapTo(getCenteredIndex());
+    });
+
+    grid.addEventListener("mousemove", (e) => {
+        if (!isDown) return;
+        const x = e.pageX;
+        const walk = (startX - x);
+        grid.scrollLeft = scrollLeft + walk;
+    });
+
+    /* touch swipe (mobile) */
+    grid.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+        scrollLeft = grid.scrollLeft;
+    });
+
+    grid.addEventListener("touchend", () => {
+        snapTo(getCenteredIndex());
+    });
+
+    grid.addEventListener("touchmove", (e) => {
+        const x = e.touches[0].clientX;
+        const walk = (startX - x);
+        grid.scrollLeft = scrollLeft + walk;
+    });
+
+    /* initial center */
+    setTimeout(() => snapTo(0), 150);
 }
 
 /* =========================
    TAB SYSTEM
 ========================= */
 
-.tabContent{
-    display:none;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    width:90%;
-    height:85%;
-    background:black;
-    z-index:500;
-    overflow:auto;
-    padding:30px;
+function openTab(tabId){
+    playClick();
+
+    const menuGrid = document.querySelector("#menuScreen .menuGrid");
+    if (menuGrid) menuGrid.style.display = "none";
+
+    document.querySelectorAll("#menuScreen .tabContent")
+        .forEach(t => t.classList.remove("activeTab"));
+
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add("activeTab");
 }
 
-.activeTab{
-    display:block;
-}
+function closeTabs(){
+    playClick();
 
-/* =========================
-   BUTTONS
-========================= */
+    document.querySelectorAll("#menuScreen .tabContent")
+        .forEach(t => t.classList.remove("activeTab"));
 
-button{
-    background:black;
-    color:white;
-    border:1px solid white;
-    padding:12px 24px;
-    cursor:pointer;
-}
+    const menuGrid = document.querySelector("#menuScreen .menuGrid");
+    if (menuGrid) menuGrid.style.display = "flex";
 
-button:hover{
-    background:white;
-    color:black;
+    setTimeout(initSnapMenu, 100);
 }
 
 /* =========================
-   =========================
-   📱 MARVEL SNAP MOBILE UI
-   =========================
+   VIDEO
 ========================= */
 
-@media (max-width: 768px) {
+function revealVideo(){
+    playClick();
 
-    /* ===== MAIN MENU BECOMES SNAP CAROUSEL ===== */
+    const video = document.getElementById("mainVideo");
+    const container = document.getElementById("videoContainer");
+    const button = document.getElementById("revealButton");
 
-    .menuGrid{
-        display:flex;
-        flex-direction:row;
-        width:100vw;
-        height:100vh;
-        overflow-x:auto;
-        overflow-y:hidden;
+    if (!video || !container || !button) return;
 
-        scroll-snap-type:x mandatory;
-        -webkit-overflow-scrolling:touch;
+    container.style.display = "block";
+    button.style.display = "none";
 
-        padding:0 20vw; /* gives side preview like Snap */
-        gap:20px;
-    }
+    video.src = "video1.mp4";
+    video.load();
+}
 
-    .menuGrid::-webkit-scrollbar{
-        display:none;
-    }
+/* =========================
+   PHASE 2
+========================= */
 
-    /* ===== SNAP CARD ===== */
+function checkPhase2(){
+    const selected = Array.from(
+        document.querySelectorAll("#orgList input:checked")
+    ).map(el => el.value);
 
-    .menuPanel{
-        flex:0 0 60vw;
-        height:75vh;
-        margin:auto;
+    const correct = ["V-03","E-13","H-07","P-09"];
 
-        border-radius:18px;
-        border:1px solid rgba(255,255,255,0.3);
+    const success =
+        selected.length === correct.length &&
+        correct.every(v => selected.includes(v));
 
-        scroll-snap-align:center;
+    const result = document.getElementById("phase2Result");
 
-        transform:scale(0.85);
-        transition:transform 0.3s ease, box-shadow 0.3s ease;
+    result.textContent = success
+        ? "SEQUENCE VALIDATED"
+        : "INVALID COMBINATION";
 
-        position:relative;
+    if (success) {
+        document.getElementById("phase2Access").style.display = "block";
 
-        box-shadow:0 10px 30px rgba(0,0,0,0.6);
-    }
-
-    /* centered card feels “active” */
-    .menuPanel:active,
-    .menuPanel:focus,
-    .menuPanel:hover{
-        transform:scale(1);
-        box-shadow:0 0 25px rgba(0,255,150,0.3);
-    }
-
-    /* ===== IMAGE ===== */
-
-    .panelImage{
-        opacity:0.7;
-        filter:brightness(0.6) contrast(1.1);
-        border-radius:18px;
-    }
-
-    /* ===== TEXT OVERLAY ===== */
-
-    .panelOverlay{
-        backdrop-filter:blur(3px);
-        background:linear-gradient(
-            to top,
-            rgba(0,0,0,0.8),
-            rgba(0,0,0,0.2)
-        );
-        border-radius:18px;
-    }
-
-    .panelOverlay h1{
-        font-size:20px;
-        letter-spacing:2px;
-        text-align:center;
-        padding:10px;
-    }
-
-    /* ===== OPTIONAL "SWIPE HINT" ===== */
-
-    .menuGrid::before{
-        content:"Swipe →";
-        position:fixed;
-        bottom:20px;
-        left:50%;
-        transform:translateX(-50%);
-        font-size:14px;
-        opacity:0.6;
-        letter-spacing:2px;
-        pointer-events:none;
+        setTimeout(() => {
+            enterPhase3();
+        }, 1000);
     }
 }
 
 /* =========================
-   SMOOTH SCROLL
+   PHASE 3 (UNCHANGED)
 ========================= */
 
-.menuGrid{
-    scroll-behavior:smooth;
+function enterPhase3(){
+    stage = 4;
+    showScreen("phase3Screen");
 }
+
+/* =========================
+   EXPORTS
+========================= */
+
+window.openTab = openTab;
+window.closeTabs = closeTabs;
+window.revealVideo = revealVideo;
+window.checkPhase2 = checkPhase2;
+window.enterPhase3 = enterPhase3;
