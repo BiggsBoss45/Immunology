@@ -437,133 +437,216 @@ function runSimulation() {
     const bacteria = document.getElementById("bacteriaCell");
     const virus = document.getElementById("virusParticle");
     const rna = document.getElementById("rnaStrand");
-
     const result = document.getElementById("simulationResult");
-
     const atpBar = document.getElementById("atpBarInner");
     const atpValue = document.getElementById("atpValue");
 
     if (!bacteria || !virus || !result || !atpBar || !atpValue) return;
 
     const pathway = document.getElementById("pathwaySelect")?.value;
-    const atp = document.getElementById("atpSelect")?.value;
+    const atpState = document.getElementById("atpSelect")?.value;
     const mutation = document.getElementById("mutationSelect")?.value;
 
-    /* RESET */
+    /* =========================
+       RESET VISUAL STATE
+    ========================= */
 
     bacteria.className = "";
     virus.className = "";
-
-    if (rna) {
-        rna.className = "";
-    }
-
-    bacteria.style.opacity = "1";
-    bacteria.style.transform = "scale(1)";
-    bacteria.style.filter = "none";
+    if (rna) rna.className = "";
 
     result.textContent = "Injecting viral RNA...";
-
     atpBar.style.width = "0%";
     atpValue.textContent = "0 ATP";
 
-    /* RESTART ANIMATIONS */
+    if (rna) rna.classList.add("rnaInject");
 
-    void virus.offsetWidth;
-    void bacteria.offsetWidth;
+    /* =========================
+       BASE PATHWAY VALUES
+    ========================= */
 
-    /* RNA ANIMATION */
+    let baseATP = 50;
+    let stability = 50;   // resistance to virus
+    let vulnerability = 50;
 
-    if (rna) {
+    switch (pathway) {
 
-        rna.classList.remove("rnaInject");
+        case "glycolysis":
+            baseATP = 40;
+            stability = 45;
+            vulnerability = 55;
+            break;
 
-        void rna.offsetWidth;
+        case "krebs":
+            baseATP = 70;
+            stability = 60;
+            vulnerability = 40;
+            break;
 
-        rna.classList.add("rnaInject");
+        case "electron":
+            baseATP = 90;
+            stability = 35;
+            vulnerability = 70;
+            break;
 
+        case "fermentation":
+            baseATP = 25;
+            stability = 55;
+            vulnerability = 45;
+            break;
+
+        case "pentose":
+            baseATP = 50;
+            stability = 80;
+            vulnerability = 30;
+            break;
+
+        case "fatty":
+            baseATP = 60;
+            stability = 65;
+            vulnerability = 50;
+            break;
     }
 
-    /* VIRUS MOVEMENT */
+    /* =========================
+       ATP MODIFIERS
+    ========================= */
 
-    virus.classList.remove("injecting");
+    let atpMultiplier = 1;
 
-    void virus.offsetWidth;
+    switch (atpState) {
 
-    virus.classList.add("injecting");
+        case "depleted": atpMultiplier = 0.3; break;
+        case "low": atpMultiplier = 0.6; break;
+        case "baseline": atpMultiplier = 1; break;
+        case "elevated": atpMultiplier = 1.2; break;
+        case "high": atpMultiplier = 1.4; break;
+        case "extreme": atpMultiplier = 1.7; break;
+        case "overload": atpMultiplier = 2.0; break;
+    }
 
-    /* MAIN OUTCOME */
+    /* =========================
+       MUTATION MODIFIERS
+    ========================= */
+
+    let stabilityModifier = 1;
+    let virusResistanceModifier = 1;
+    let chaos = 0;
+
+    switch (mutation) {
+
+        case "none":
+            stabilityModifier = 0.8;
+            break;
+
+        case "repair":
+            stabilityModifier = 1.2;
+            break;
+
+        case "enzyme":
+            stabilityModifier = 1.3;
+            break;
+
+        case "resistant":
+            virusResistanceModifier = 1.5;
+            break;
+
+        case "suppression":
+            virusResistanceModifier = 0.7;
+            break;
+
+        case "error":
+            chaos = Math.random() * 30;
+            break;
+
+        case "collapse":
+            stabilityModifier = 0.5;
+            virusResistanceModifier = 0.5;
+            break;
+
+        case "hypermutation":
+            chaos = Math.random() * 60;
+            stabilityModifier = 1.1;
+            virusResistanceModifier = 1.1;
+            break;
+    }
+
+    /* =========================
+       VIRUS PRESSURE MODEL
+    ========================= */
+
+    const virusPressure = 55 * virusResistanceModifier + chaos;
+    const cellDefense = stability * stabilityModifier;
+    const finalATP = Math.round(baseATP * atpMultiplier);
+
+    /* =========================
+       VISUAL UPDATE
+    ========================= */
+
+    atpBar.style.width = Math.min(finalATP, 100) + "%";
+    atpValue.textContent = finalATP + " ATP";
+
+    /* =========================
+       VIRUS ANIMATION START
+    ========================= */
+
+    setTimeout(() => {
+        virus.classList.add("injecting");
+    }, 200);
+
+    setTimeout(() => {
+        virus.classList.add("grabbing");
+    }, 900);
+
+    setTimeout(() => {
+        virus.classList.add("attached");
+    }, 1400);
+
+    /* =========================
+       OUTCOME ENGINE
+    ========================= */
 
     setTimeout(() => {
 
-        /* CELL LYSIS */
+        const infectionScore = virusPressure - cellDefense;
 
-        if (pathway === "electron" && atp === "extreme") {
+        if (finalATP >= 120 && infectionScore < 0) {
+
+            bacteria.classList.add("stableCell");
+            result.textContent = "Strong metabolic resistance detected.";
+            return;
+        }
+
+        if (infectionScore > 60 || atpState === "depleted") {
 
             bacteria.classList.add("deadCell");
 
-            atpBar.style.width = "100%";
-            atpValue.textContent = "ATP OVERLOAD";
-
-            result.textContent = "Cell destabilization detected...";
-
             setTimeout(() => {
-
                 bacteria.classList.add("lysing");
+            }, 500);
 
-                result.textContent = "CELL LYSIS CONFIRMED";
-
-            }, 1200);
-
+            result.textContent = "Cell lysis detected.";
             return;
-
         }
 
-        /* FAILED MUTATION */
-
-        if (mutation === "repair" && atp === "elevated") {
+        if (infectionScore > 20) {
 
             bacteria.classList.add("failedMutation");
-
-            atpBar.style.width = "45%";
-            atpValue.textContent = "45 ATP";
-
-            result.textContent = "Unstable mutation pathway.";
-
+            result.textContent = "Unstable infection — partial control.";
             return;
-
         }
 
-        /* SUCCESSFUL INTEGRATION */
-
-        if (
-            pathway === "krebs" &&
-            atp === "elevated" &&
-            mutation === "enzyme"
-        ) {
+        if (chaos > 40) {
 
             bacteria.classList.add("mutatedCell");
-
-            atpBar.style.width = "78%";
-            atpValue.textContent = "78 ATP";
-
-            result.textContent = "Stable RNA integration confirmed.";
-
+            result.textContent = "Hypermutation event stabilized.";
             return;
-
         }
 
-        /* NORMAL */
-
         bacteria.classList.add("stableCell");
+        result.textContent = "No significant infection detected.";
 
-        atpBar.style.width = "30%";
-        atpValue.textContent = "30 ATP";
-
-        result.textContent = "No significant mutation detected.";
-
-    }, 2400);
-
+    }, 1800);
 }
 
 /* =========================
