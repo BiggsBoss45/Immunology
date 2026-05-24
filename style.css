@@ -29,3 +29,47 @@
     }
 
 }
+
+/* =========================
+   MOBILE SWIPE MENU (DUEL LINKS STYLE)
+========================= */
+
+@media (max-width: 768px) {
+
+    .menuGrid {
+        display: flex;
+        flex-direction: row;
+        width: 100vw;
+        height: 100vh;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* hide scrollbar */
+    .menuGrid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .menuPanel {
+        flex: 0 0 100vw;
+        height: 100vh;
+        scroll-snap-align: start;
+        border-right: 1px solid white;
+        position: relative;
+    }
+
+    .panelOverlay h1 {
+        font-size: 22px;
+        letter-spacing: 3px;
+    }
+
+    .panelImage {
+        opacity: 0.6;
+    }
+}
+
+.menuGrid {
+    scroll-behavior: smooth;
+}
