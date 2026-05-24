@@ -94,20 +94,24 @@ function playStartup() {
 ========================= */
 
 document.addEventListener("keydown", (e) => {
-
     if (e.key !== "Enter") return;
     if (locked) return;
 
     unlockAudio();
-
     handleStart();
 });
 
-document.addEventListener("click", () => {
+/* MOBILE + TOUCH START FIX */
+document.addEventListener("click", (e) => {
 
     if (locked) return;
 
     unlockAudio();
+
+    // ONLY trigger start if still on start/boot/continue flow
+    if (stage === 0 || stage === 2 && bootState === "continue") {
+        handleStart();
+    }
 });
 
 /* =========================
