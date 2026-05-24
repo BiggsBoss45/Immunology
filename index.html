@@ -365,42 +365,35 @@
 
         <div class="simControls">
 
-            <select id="pathwaySelect">
-
-                <option value="electron">
-                    Electron Transport
-                </option>
-
-                <option value="krebs">
-                    Krebs Cycle
-                </option>
-
-            </select>
+           <select id="pathwaySelect">
+    <option value="glycolysis">Glycolysis</option>
+    <option value="krebs">Krebs Cycle</option>
+    <option value="electron">Electron Transport Chain</option>
+    <option value="fermentation">Fermentation</option>
+    <option value="pentose">Pentose Phosphate Pathway</option>
+    <option value="fatty">Fatty Acid Oxidation</option>
+</select>
 
             <select id="atpSelect">
-
-                <option value="elevated">
-                    Elevated ATP
-                </option>
-
-                <option value="extreme">
-                    Extreme ATP
-                </option>
-
-            </select>
+    <option value="depleted">Depleted ATP</option>
+    <option value="low">Low ATP</option>
+    <option value="baseline">Baseline ATP</option>
+    <option value="elevated">Elevated ATP</option>
+    <option value="high">High ATP</option>
+    <option value="extreme">Extreme ATP</option>
+    <option value="overload">ATP Overload</option>
+</select>
 
             <select id="mutationSelect">
-
-                <option value="repair">
-                    Repair Mutation
-                </option>
-
-                <option value="enzyme">
-                    Enzyme Mutation
-                </option>
-
-            </select>
-
+    <option value="none">No Mutation Response</option>
+    <option value="repair">DNA Repair Activation</option>
+    <option value="enzyme">Enzyme Adaptation</option>
+    <option value="resistant">Antiviral Resistance</option>
+    <option value="suppression">Gene Suppression</option>
+    <option value="error">Replication Error</option>
+    <option value="collapse">Genome Instability</option>
+    <option value="hypermutation">Hypermutation State</option>
+</select>
         </div>
 
         <button onclick="runSimulation()">
