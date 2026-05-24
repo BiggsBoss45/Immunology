@@ -1,377 +1,224 @@
-body{
-    margin:0;
-    background:black;
-    color:white;
-    font-family:Courier New, monospace;
-    overflow:hidden;
-    text-shadow:0 0 5px rgba(255,255,255,0.4);
+body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: Courier New, monospace;
+    overflow-x: hidden;
+    text-shadow: 0 0 5px rgba(255,255,255,0.4);
 }
 
 /* =========================
-   GLOBAL SCREEN SYSTEM
+   SCREEN SYSTEM
 ========================= */
 
-.screen{
-    display:none;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-
-    background:black;
-
-    /* FIX: ensure screens don't block clicks when hidden */
-    pointer-events:none;
-
-    z-index:100;
+.screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: black;
 }
 
-.screen.active{
-    display:flex !important;
-    pointer-events:auto;
-    z-index:1000;
+.active {
+    display: flex !important;
 }
 
 /* =========================
-   START / BOOT
+   START / BOOT TEXT
 ========================= */
 
-#immuneLogo{
-    width:400px;
-    opacity:0;
-    animation:fadeIn 7s forwards;
+h1, h2 {
+    text-align: center;
+    padding: 0 12px;
 }
 
-@keyframes fadeIn{
-    from{ opacity:0; }
-    to{ opacity:1; }
-}
-
-#continuePrompt{
-    font-size:28px;
-    letter-spacing:3px;
-    animation:pulseText 1.5s infinite;
-    opacity:0.8;
-}
-
-@keyframes pulseText{
-    0%{ opacity:0.3; }
-    50%{ opacity:1; }
-    100%{ opacity:0.3; }
+#continuePrompt {
+    font-size: clamp(18px, 4vw, 28px);
+    letter-spacing: 2px;
+    animation: pulseText 1.5s infinite;
+    text-align: center;
+    padding: 0 20px;
 }
 
 /* =========================
-   MENU GRID (CRITICAL FIX)
+   MENU GRID (FIXED RESPONSIVE)
 ========================= */
 
-.menuGrid{
-    display:flex;
-    width:100vw;
-    height:100vh;
-
-    /* FIX: ensure it is clickable */
-    pointer-events:auto;
+.menuGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    height: 100vh;
 }
 
-.menuPanel{
-    position:relative;
-    flex:1;
-    overflow:hidden;
-    cursor:pointer;
-
-    border-right:1px solid white;
-    transition:0.3s ease;
-
-    /* FIX: prevent overlay blocking clicks */
-    pointer-events:auto;
-    z-index:2;
+/* MOBILE FIX */
+@media (max-width: 768px) {
+    .menuGrid {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+    }
 }
 
-.menuPanel:hover{
-    flex:1.2;
+.menuPanel {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid white;
+    transition: 0.3s ease;
+    min-height: 120px;
 }
 
-.panelImage{
-    position:absolute;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:0;
-    transition:0.4s;
-    filter:brightness(0.45) grayscale(40%);
-
-    pointer-events:none;
+.menuPanel:hover {
+    filter: brightness(1.2);
 }
 
-.menuPanel:hover .panelImage{
-    opacity:1;
-}
-
-.panelOverlay{
-    position:absolute;
-    width:100%;
-    height:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    backdrop-filter:blur(2px);
-
-    /* FIX: allows clicks through overlay */
-    pointer-events:none;
-}
-
-.panelOverlay h1{
-    font-size:42px;
-    letter-spacing:4px;
+.panelOverlay h1 {
+    font-size: clamp(18px, 4vw, 42px);
+    text-align: center;
 }
 
 /* =========================
-   TAB SYSTEM (BIG FIX HERE)
+   TABS (FIXED MOBILE OVERFLOW)
 ========================= */
 
-.tabContent{
-    display:none;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    width:90%;
-    height:85%;
-
-    background:black;
-
-    z-index:2000;
-
-    overflow:auto;
-    padding:30px;
-
-    /* FIX: ensure it doesn't block menu when hidden */
-    pointer-events:auto;
+.tabContent {
+    display: none;
+    position: absolute;
+    inset: 5%;
+    background: black;
+    overflow-y: auto;
+    padding: 20px;
+    border: 1px solid white;
 }
 
-.activeTab{
-    display:block;
+.activeTab {
+    display: block;
+}
+
+/* MOBILE TABS FULL SCREEN */
+@media (max-width: 768px) {
+    .tabContent {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+        border: none;
+    }
 }
 
 /* =========================
-   BUTTONS
+   BUTTONS (TOUCH FRIENDLY)
 ========================= */
 
-button{
-    background:black;
-    color:white;
-    border:1px solid white;
-    padding:12px 24px;
-    cursor:pointer;
-
-    pointer-events:auto;
+button {
+    background: black;
+    color: white;
+    border: 1px solid white;
+    padding: 14px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    min-height: 44px; /* touch target */
 }
 
-button:hover{
-    background:white;
-    color:black;
+button:hover {
+    background: white;
+    color: black;
 }
 
 /* =========================
-   PHASE 3 SCREEN FIX
+   VIDEO / IFRAME FIX
 ========================= */
 
-#phase3Screen{
-    display:none;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-    z-index:3000;
-
-    flex-direction:column;
-    background:#2a2a2a;
-
-    pointer-events:auto;
-}
-
-#phase3Screen.active{
-    display:flex !important;
+iframe, video {
+    width: 100%;
+    max-width: 100%;
 }
 
 /* =========================
-   MICROSCOPE ZOOM
+   PHASE 3 SCREEN
 ========================= */
 
-#simulationArea{
-    margin-top:40px;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    flex-wrap:wrap;
-
-    transform-origin:center;
-    transition:transform 1.2s ease, filter 1.2s ease;
+#phase3Screen {
+    background: #1a1a1a;
 }
 
-.zoomIn{
-    transform:scale(1.6);
-    filter:brightness(1.3) contrast(1.2);
+#phase3Screen.active {
+    display: flex !important;
 }
 
 /* =========================
-   CELL SYSTEM
+   SIMULATION AREA (FIX MOBILE CLASH)
 ========================= */
 
-#bacteriaContainer{
-    width:320px;
-    height:320px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    position:relative;
+#simulationArea {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
 }
 
-#bacteriaCell{
-    width:240px;
-    height:240px;
-    border-radius:50%;
-    position:relative;
-    overflow:hidden;
-
-    border:3px solid rgba(0,255,153,0.6);
-
-    background:radial-gradient(circle,
-        rgba(0,255,153,0.15),
-        rgba(0,0,0,0.9)
-    );
-
-    box-shadow:0 0 25px rgba(0,255,153,0.2);
-    transition:0.6s ease;
-}
-
-/* nucleus */
-#bacteriaCell::after{
-    content:"";
-    position:absolute;
-    width:60px;
-    height:60px;
-    border-radius:50%;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    background:rgba(0,255,153,0.25);
+/* STACK ON MOBILE */
+@media (max-width: 768px) {
+    #simulationArea {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 /* =========================
-   VIRUS
+   CELL SIZE RESPONSIVE
 ========================= */
 
-#virusParticle{
-    width:28px;
-    height:28px;
-    background:red;
-    border-radius:50%;
-    position:absolute;
-    top:-70px;
-    left:50%;
-    transform:translateX(-50%);
-    box-shadow:0 0 20px red;
-}
-
-.injecting{
-    animation:injectVirus 1.6s forwards ease-in-out;
-}
-
-@keyframes injectVirus{
-    0%{ top:-70px; opacity:1; }
-    70%{ top:120px; opacity:1; }
-    100%{ top:120px; opacity:0; }
+#bacteriaContainer {
+    width: min(320px, 80vw);
+    height: min(320px, 80vw);
 }
 
 /* =========================
-   RNA
+   TEXT SCALING FIX
 ========================= */
 
-#rnaStrand{
-    position:absolute;
-    width:4px;
-    height:0;
-    left:50%;
-    top:120px;
-    transform:translateX(-50%);
-    background:linear-gradient(to bottom, #00ff99, transparent);
-    opacity:0;
-}
-
-.rnaInject{
-    animation:rnaTravel 1.8s forwards ease-in-out;
-}
-
-@keyframes rnaTravel{
-    0%{ height:0; opacity:0; }
-    30%{ opacity:1; }
-    100%{ height:140px; opacity:0.9; }
+p, li {
+    font-size: clamp(14px, 3.5vw, 18px);
 }
 
 /* =========================
-   STATES
+   ATP BAR FIX
 ========================= */
 
-.deadCell{
-    background:red;
-    animation:lysis 0.9s forwards;
+#atpBarOuter {
+    width: 100%;
+    max-width: 300px;
+    height: 25px;
+    border: 2px solid #00ff99;
 }
 
-@keyframes lysis{
-    0%{ transform:scale(1); }
-    100%{ transform:scale(0.1); opacity:0; }
-}
-
-.failedMutation{
-    background:orange;
-    animation:shake 0.5s infinite;
-}
-
-@keyframes shake{
-    0%{ transform:translate(0); }
-    50%{ transform:translate(2px,-2px); }
-    100%{ transform:translate(0); }
-}
-
-.mutatedCell{
-    background:#00ff99;
-    animation:mutateGlow 2s infinite;
-}
-
-@keyframes mutateGlow{
-    0%,100%{ filter:brightness(1); }
-    50%{ filter:brightness(1.8); }
-}
-
-.stableCell{
-    background:#008844;
+#atpValue {
+    text-align: center;
 }
 
 /* =========================
-   ATP BAR
+   LIST SPACING FIX
 ========================= */
 
-#atpBarOuter{
-    width:100%;
-    height:30px;
-    border:2px solid #00ff99;
+#researchNotes ul {
+    padding-left: 20px;
 }
 
-#atpBarInner{
-    width:0%;
-    height:100%;
-    background:#00ff99;
-    transition:1s;
+#researchNotes li {
+    margin-bottom: 10px;
 }
 
-#simulationResult{
-    margin-top:20px;
-    font-size:20px;
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes pulseText {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
 }
