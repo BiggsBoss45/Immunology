@@ -1,224 +1,31 @@
-body {
-    margin: 0;
-    background: black;
-    color: white;
-    font-family: Courier New, monospace;
-    overflow-x: hidden;
-    text-shadow: 0 0 5px rgba(255,255,255,0.4);
-}
-
 /* =========================
-   SCREEN SYSTEM
+   MOBILE MENU RESTRUCTURE (2x2 GRID)
 ========================= */
 
-.screen {
-    display: none;
-    position: fixed;
-    inset: 0;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background: black;
-}
-
-.active {
-    display: flex !important;
-}
-
-/* =========================
-   START / BOOT TEXT
-========================= */
-
-h1, h2 {
-    text-align: center;
-    padding: 0 12px;
-}
-
-#continuePrompt {
-    font-size: clamp(18px, 4vw, 28px);
-    letter-spacing: 2px;
-    animation: pulseText 1.5s infinite;
-    text-align: center;
-    padding: 0 20px;
-}
-
-/* =========================
-   MENU GRID (FIXED RESPONSIVE)
-========================= */
-
-.menuGrid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    width: 100%;
-    height: 100vh;
-}
-
-/* MOBILE FIX */
 @media (max-width: 768px) {
+
     .menuGrid {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, 1fr);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        width: 100vw;
+        height: 100vh;
     }
-}
 
-.menuPanel {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    border: 1px solid white;
-    transition: 0.3s ease;
-    min-height: 120px;
-}
-
-.menuPanel:hover {
-    filter: brightness(1.2);
-}
-
-.panelOverlay h1 {
-    font-size: clamp(18px, 4vw, 42px);
-    text-align: center;
-}
-
-/* =========================
-   TABS (FIXED MOBILE OVERFLOW)
-========================= */
-
-.tabContent {
-    display: none;
-    position: absolute;
-    inset: 5%;
-    background: black;
-    overflow-y: auto;
-    padding: 20px;
-    border: 1px solid white;
-}
-
-.activeTab {
-    display: block;
-}
-
-/* MOBILE TABS FULL SCREEN */
-@media (max-width: 768px) {
-    .tabContent {
-        inset: 0;
-        width: 100%;
+    .menuPanel {
+        border: 1px solid white;
+        min-height: unset;
         height: 100%;
-        padding: 15px;
-        border: none;
     }
-}
 
-/* =========================
-   BUTTONS (TOUCH FRIENDLY)
-========================= */
-
-button {
-    background: black;
-    color: white;
-    border: 1px solid white;
-    padding: 14px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    min-height: 44px; /* touch target */
-}
-
-button:hover {
-    background: white;
-    color: black;
-}
-
-/* =========================
-   VIDEO / IFRAME FIX
-========================= */
-
-iframe, video {
-    width: 100%;
-    max-width: 100%;
-}
-
-/* =========================
-   PHASE 3 SCREEN
-========================= */
-
-#phase3Screen {
-    background: #1a1a1a;
-}
-
-#phase3Screen.active {
-    display: flex !important;
-}
-
-/* =========================
-   SIMULATION AREA (FIX MOBILE CLASH)
-========================= */
-
-#simulationArea {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-/* STACK ON MOBILE */
-@media (max-width: 768px) {
-    #simulationArea {
-        flex-direction: column;
-        align-items: center;
+    .panelOverlay h1 {
+        font-size: 18px;
+        letter-spacing: 2px;
+        padding: 10px;
     }
-}
 
-/* =========================
-   CELL SIZE RESPONSIVE
-========================= */
+    .panelImage {
+        opacity: 0.6; /* makes mobile easier to read */
+    }
 
-#bacteriaContainer {
-    width: min(320px, 80vw);
-    height: min(320px, 80vw);
-}
-
-/* =========================
-   TEXT SCALING FIX
-========================= */
-
-p, li {
-    font-size: clamp(14px, 3.5vw, 18px);
-}
-
-/* =========================
-   ATP BAR FIX
-========================= */
-
-#atpBarOuter {
-    width: 100%;
-    max-width: 300px;
-    height: 25px;
-    border: 2px solid #00ff99;
-}
-
-#atpValue {
-    text-align: center;
-}
-
-/* =========================
-   LIST SPACING FIX
-========================= */
-
-#researchNotes ul {
-    padding-left: 20px;
-}
-
-#researchNotes li {
-    margin-bottom: 10px;
-}
-
-/* =========================
-   ANIMATION
-========================= */
-
-@keyframes pulseText {
-    0% { opacity: 0.3; }
-    50% { opacity: 1; }
-    100% { opacity: 0.3; }
 }
