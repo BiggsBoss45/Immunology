@@ -815,21 +815,12 @@ button:hover{
     }
 
     .codon{
-        margin-right:10px;
-        margin-bottom:12px;
-       .codon.activeScan{
+    margin-right:10px;
+    margin-bottom:12px;
+}
+
+.codon.activeScan{
     color:#ff2b2b;
     transform:scale(1.15);
     text-shadow:0 0 14px red, 0 0 28px rgba(255,0,0,0.6);
-}
-    }
-
-    #videoContainer{
-        width:95%;
-    }
-
-    #simulationArea{
-        transform:scale(0.7);
-        transform-origin:top center;
-    }
 }
