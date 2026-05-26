@@ -15,87 +15,171 @@
 <!-- =========================
      AUDIO
 ========================= -->
+
 <audio id="bootAudio" src="BootupIm.mp3"></audio>
 <audio id="clickAudio" src="click.mp3"></audio>
 <audio id="rebootAudio" src="reboot.mp3"></audio>
 
 <!-- =========================
-     START SCREEN (FIXED TAP TARGET)
+     START SCREEN
 ========================= -->
+
 <div id="startScreen" class="screen active">
+
     <h1>PRESS ENTER / TAP SCREEN</h1>
+
 </div>
 
 <!-- =========================
      BOOT SCREEN
 ========================= -->
+
 <div id="bootScreen" class="screen">
+
     <div id="vectorContainer">
+
         <div class="scanCircle"></div>
+
         <div class="scanLine horizontal"></div>
+
         <div class="scanLine vertical"></div>
+
         <img src="Immune.png" id="immuneLogo">
+
     </div>
+
 </div>
 
 <!-- =========================
-     CONTINUE SCREEN (FIXED TAP TARGET)
+     CONTINUE SCREEN
 ========================= -->
+
 <div id="continueScreen" class="screen">
+
     <div id="continuePrompt">
+
         PRESS ENTER / TAP TO CONTINUE
+
     </div>
+
 </div>
 
 <!-- =========================
      MAIN MENU
 ========================= -->
+
 <div id="menuScreen" class="screen">
 
     <div id="menuSwipeContainer">
+
         <div class="menuGrid">
 
-            <div class="menuPanel" onclick="openTab('audioTab')">
-                <img src="preview1.png" class="panelImage">
-                <div class="panelOverlay"><h1>VIDEO LOGS</h1></div>
+            <!-- VIDEO -->
+
+            <div class="menuPanel"
+                 onclick="openTab('audioTab')">
+
+                <img src="preview1.png"
+                     class="panelImage">
+
+                <div class="panelOverlay">
+
+                    <h1>VIDEO LOGS</h1>
+
+                </div>
+
             </div>
 
-            <div class="menuPanel" onclick="openTab('docTab')">
-                <img src="preview2.png" class="panelImage">
-                <div class="panelOverlay"><h1>AMINO ACID SEQUENCE</h1></div>
+            <!-- AMINO -->
+
+            <div class="menuPanel"
+                 onclick="openTab('docTab')">
+
+                <img src="preview2.png"
+                     class="panelImage">
+
+                <div class="panelOverlay">
+
+                    <h1>AMINO ACID SEQUENCE</h1>
+
+                </div>
+
             </div>
 
-            <div class="menuPanel" onclick="openTab('phase2Tab')">
-                <img src="preview3.png" class="panelImage">
-                <div class="panelOverlay"><h1>PHASE 2</h1></div>
+            <!-- PHASE 2 -->
+
+            <div class="menuPanel"
+                 onclick="openTab('phase2Tab')">
+
+                <img src="preview3.png"
+                     class="panelImage">
+
+                <div class="panelOverlay">
+
+                    <h1>PHASE 2</h1>
+
+                </div>
+
             </div>
 
-            <div class="menuPanel" onclick="openTab('dnaTab')">
-                <img src="preview4.png" class="panelImage">
-                <div class="panelOverlay"><h1>RECOVERED DNA</h1></div>
+            <!-- DNA -->
+
+            <div class="menuPanel"
+                 onclick="openTab('dnaTab')">
+
+                <img src="preview4.png"
+                     class="panelImage">
+
+                <div class="panelOverlay">
+
+                    <h1>RECOVERED DNA</h1>
+
+                </div>
+
             </div>
 
         </div>
 
-        <div id="swipeHint">SWIPE TO CHANGE SCREEN</div>
+        <div id="swipeHint">
+
+            SWIPE TO CHANGE SCREEN
+
+        </div>
+
     </div>
+
 </div>
 
 <!-- =========================
      VIDEO TAB
 ========================= -->
+
 <div id="audioTab" class="tabContent">
 
-    <button onclick="closeTabs()">BACK</button>
+    <button onclick="closeTabs()">
+        BACK
+    </button>
 
-    <h1>RECOVERED VIDEO LOG</h1>
+    <h1>
+        RECOVERED VIDEO LOG
+    </h1>
 
-    <button onclick="revealVideo()">OPEN VIDEO LOG</button>
+    <button onclick="revealVideo()">
+        OPEN VIDEO LOG
+    </button>
 
-    <div id="videoContainer" style="display:none;">
-        <video id="mainVideo" controls width="100%">
-            <source src="video1.mp4" type="video/mp4">
+    <div id="videoContainer"
+         style="display:none;">
+
+        <video id="mainVideo"
+               controls
+               width="100%">
+
+            <source src="video1.mp4"
+                    type="video/mp4">
+
         </video>
+
     </div>
 
 </div>
@@ -103,41 +187,268 @@
 <!-- =========================
      DOC TAB
 ========================= -->
+
 <div id="docTab" class="tabContent">
 
-    <button onclick="closeTabs()">BACK</button>
+    <button onclick="closeTabs()">
+        BACK
+    </button>
 
-    <h1>RECOVERED AMINO ACID SEQUENCE</h1>
-    <h2>ARCHIVED PROTEIN RECONSTRUCTION SEQUENCE</h2>
+    <h1>
+        RECOVERED AMINO ACID SEQUENCE
+    </h1>
+
+    <h2>
+        ARCHIVED PROTEIN RECONSTRUCTION SEQUENCE
+    </h2>
+
+    <!-- =========================
+         MASSIVE SEQUENCE
+    ========================= -->
 
     <div id="proteinSequence">
+
         <div class="sequence">
-            <!-- kept as-is -->
-            <span class="codon">Met</span>
-            <span class="codon">Ala</span>
-            <span class="codon">Glu</span>
-            <span class="codon">Phe</span>
-            <span class="codon">Pro</span>
-            <span class="codon">Gly</span>
-            <span class="codon">Lys</span>
-            <span class="codon">Tyr</span>
-            <span class="codon">Val</span>
-            <span class="codon">Leu</span>
+
+            <!-- =========================
+                 BLOCK 01
+            ========================= -->
+
+            <div class="sequenceBlock">
+
+                <div class="blockLabel">
+                    RECONSTRUCTION BLOCK // 01
+                </div>
+
+                <span class="codon">Met</span>
+                <span class="codon">Ala</span>
+                <span class="codon">Gly</span>
+                <span class="codon">Lys</span>
+                <span class="codon">Thr</span>
+                <span class="codon">Val</span>
+                <span class="codon">Asp</span>
+                <span class="codon">Glu</span>
+                <span class="codon">Arg</span>
+                <span class="codon">Phe</span>
+                <span class="codon">Ser</span>
+                <span class="codon">Leu</span>
+                <span class="codon">Tyr</span>
+                <span class="codon">Asn</span>
+                <span class="codon">Pro</span>
+                <span class="codon">Gly</span>
+
+                <!-- VECTOR -->
+
+                <span class="codon vector">Met</span>
+                <span class="codon vector">Glu</span>
+                <span class="codon vector">Pro</span>
+                <span class="codon vector">Cys</span>
+                <span class="codon vector">Lys</span>
+                <span class="codon vector">Gly</span>
+                <span class="codon vector">Phe</span>
+                <span class="codon vector">Arg</span>
+                <span class="codon vector">Trp</span>
+                <span class="codon vector">Asn</span>
+                <span class="codon vector">Ala</span>
+                <span class="codon vector">Stop</span>
+
+                <!-- NORMAL -->
+
+                <span class="codon">Ile</span>
+                <span class="codon">Ser</span>
+                <span class="codon">Thr</span>
+                <span class="codon">Arg</span>
+                <span class="codon">Leu</span>
+                <span class="codon">Val</span>
+                <span class="codon">Phe</span>
+                <span class="codon">Asp</span>
+                <span class="codon">Gly</span>
+                <span class="codon">Lys</span>
+                <span class="codon">Met</span>
+                <span class="codon">Arg</span>
+                <span class="codon">Ala</span>
+                <span class="codon">Stop</span>
+
+            </div>
+
+            <!-- =========================
+                 BLOCK 02
+            ========================= -->
+
+            <div class="sequenceBlock">
+
+                <div class="blockLabel">
+                    RECONSTRUCTION BLOCK // 02
+                </div>
+
+                <span class="codon">Met</span>
+                <span class="codon">Thr</span>
+                <span class="codon">Ala</span>
+                <span class="codon">Val</span>
+                <span class="codon">Phe</span>
+                <span class="codon">Gly</span>
+                <span class="codon">Leu</span>
+                <span class="codon">Ser</span>
+                <span class="codon">Arg</span>
+                <span class="codon">His</span>
+                <span class="codon">Asp</span>
+                <span class="codon">Tyr</span>
+
+                <!-- VECTOR -->
+
+                <span class="codon vector">Phe</span>
+                <span class="codon vector">Met</span>
+                <span class="codon vector">Asp</span>
+                <span class="codon vector">Pro</span>
+                <span class="codon vector">Cys</span>
+                <span class="codon vector">Lys</span>
+                <span class="codon vector">Gly</span>
+                <span class="codon vector">Leu</span>
+                <span class="codon vector">Arg</span>
+                <span class="codon vector">Stop</span>
+
+                <!-- NORMAL -->
+
+                <span class="codon">Thr</span>
+                <span class="codon">Glu</span>
+                <span class="codon">Arg</span>
+                <span class="codon">Val</span>
+                <span class="codon">Leu</span>
+                <span class="codon">Ile</span>
+                <span class="codon">Asp</span>
+                <span class="codon">Phe</span>
+                <span class="codon">Gly</span>
+                <span class="codon">Lys</span>
+                <span class="codon">Arg</span>
+                <span class="codon">Stop</span>
+
+            </div>
+
+            <!-- =========================
+                 BLOCK 03
+            ========================= -->
+
+            <div class="sequenceBlock">
+
+                <div class="blockLabel">
+                    RECONSTRUCTION BLOCK // 03
+                </div>
+
+                <span class="codon">Met</span>
+                <span class="codon">Leu</span>
+                <span class="codon">Asp</span>
+                <span class="codon">Val</span>
+                <span class="codon">Arg</span>
+                <span class="codon">Phe</span>
+                <span class="codon">Thr</span>
+                <span class="codon">Ser</span>
+                <span class="codon">Gly</span>
+                <span class="codon">Tyr</span>
+
+                <!-- VECTOR -->
+
+                <span class="codon vector">Met</span>
+                <span class="codon vector">Pro</span>
+                <span class="codon vector">Gly</span>
+                <span class="codon vector">Phe</span>
+                <span class="codon vector">Lys</span>
+                <span class="codon vector">Arg</span>
+                <span class="codon vector">Cys</span>
+                <span class="codon vector">Glu</span>
+                <span class="codon vector">Leu</span>
+                <span class="codon vector">Ala</span>
+                <span class="codon vector">Trp</span>
+                <span class="codon vector">Asn</span>
+                <span class="codon vector">Stop</span>
+
+                <!-- NORMAL -->
+
+                <span class="codon">Gly</span>
+                <span class="codon">Asp</span>
+                <span class="codon">Ile</span>
+                <span class="codon">Thr</span>
+                <span class="codon">Phe</span>
+                <span class="codon">Ser</span>
+                <span class="codon">Val</span>
+                <span class="codon">Arg</span>
+                <span class="codon">Lys</span>
+                <span class="codon">Stop</span>
+
+            </div>
+
+            <!-- =========================
+                 BLOCK 04
+            ========================= -->
+
+            <div class="sequenceBlock">
+
+                <div class="blockLabel">
+                    RECONSTRUCTION BLOCK // 04
+                </div>
+
+                <span class="codon">Met</span>
+                <span class="codon">Ala</span>
+                <span class="codon">Thr</span>
+                <span class="codon">Glu</span>
+                <span class="codon">Val</span>
+                <span class="codon">Arg</span>
+                <span class="codon">Ser</span>
+                <span class="codon">Phe</span>
+                <span class="codon">Lys</span>
+                <span class="codon">Leu</span>
+
+                <!-- VECTOR -->
+
+                <span class="codon vector">Met</span>
+                <span class="codon vector">Ala</span>
+                <span class="codon vector">Trp</span>
+                <span class="codon vector">Asn</span>
+                <span class="codon vector">Pro</span>
+                <span class="codon vector">Glu</span>
+                <span class="codon vector">Phe</span>
+                <span class="codon vector">Arg</span>
+                <span class="codon vector">Lys</span>
+                <span class="codon vector">Cys</span>
+                <span class="codon vector">Gly</span>
+                <span class="codon vector">Pro</span>
+                <span class="codon vector">Trp</span>
+                <span class="codon vector">Stop</span>
+
+                <!-- NORMAL -->
+
+                <span class="codon">Val</span>
+                <span class="codon">Leu</span>
+                <span class="codon">Arg</span>
+                <span class="codon">Ser</span>
+                <span class="codon">Ile</span>
+                <span class="codon">Thr</span>
+                <span class="codon">Asp</span>
+                <span class="codon">Phe</span>
+                <span class="codon">Lys</span>
+                <span class="codon">Stop</span>
+
+            </div>
+
         </div>
+
     </div>
 
 </div>
 
 <!-- =========================
-     PHASE 2 TAB (FIXED: FUNCTION NAME MATCH)
+     PHASE 2 TAB
 ========================= -->
+
 <div id="phase2Tab" class="tabContent">
 
     <button onclick="closeTabs()">BACK</button>
 
     <h2>PHASE 2 // VECTOR VALIDATION</h2>
 
-    <p>Select all valid organisms capable of producing the reconstructed protein.</p>
+    <p>
+        Select all valid organisms capable of producing
+        the reconstructed protein.
+    </p>
 
     <div id="orgList">
 
@@ -153,20 +464,26 @@
 
     </div>
 
-    <!-- FIX: your JS must match this -->
-    <button onclick="validatePhase2()">VALIDATE SEQUENCE</button>
+    <button onclick="validatePhase2()">
+        VALIDATE SEQUENCE
+    </button>
 
     <p id="phase2Result"></p>
 
     <div id="phase2Access" style="display:none;">
+
         <h2>PHASE 2 UNLOCKED</h2>
-        <p>RECONSTRUCTED PROTEIN CONFIRMED</p>
+
+        <p>
+            RECONSTRUCTED PROTEIN CONFIRMED
+        </p>
+
     </div>
 
 </div>
 
 <!-- =========================
-     DNA TAB (FIXED IDS EXPECTED BY JS)
+     DNA TAB
 ========================= -->
 <div id="dnaTab" class="tabContent">
 
@@ -174,27 +491,245 @@
 
     <h2>RECOVERED DNA SEQUENCES</h2>
 
-    <div id="dnaList"></div>
+    <p class="dnaHint">
+        Cross-reference translated protein regions against
+        highlighted vector signatures.
+    </p>
+
+    <div id="dnaList">
+
+        <!-- DECOY -->
+        <div class="dnaFile">
+            <h3>S-05</h3>
+
+            <div class="dnaSequence">
+                GCTAACCGTAGGCTAACCGTAGGCTAACCG
+            </div>
+
+            <div class="dnaSequence">
+                TTACCGGATCGATCGTAGCTAGGCTAACCG
+            </div>
+
+            <div class="dnaSequence">
+                GCGTTAACCGGTAGCTAACCGTAGCTAACG
+            </div>
+
+            <div class="dnaSequence">
+                CCGTAGGCTAACCGTAGGCTAACCGTAGGC
+            </div>
+        </div>
+
+        <!-- CORRECT -->
+        <div class="dnaFile">
+            <h3>V-03</h3>
+
+            <div class="dnaSequence">
+                ATGGAGCCCTGCAAGGGCTTCCGCAAGTGG
+            </div>
+
+            <div class="dnaSequence">
+                GGTACCGTAGCTAACCGTAGGCTAACCGTA
+            </div>
+
+            <div class="dnaSequence">
+                TTAGCGATCGGATCGTAGCTAACCGGATCG
+            </div>
+
+            <div class="dnaSequence">
+                AACCGTAGCTAGCTAACCGTAGGCTAACCG
+            </div>
+        </div>
+
+        <!-- DECOY -->
+        <div class="dnaFile">
+            <h3>M-22</h3>
+
+            <div class="dnaSequence">
+                TTGCGATACCGGTTAGCGATACCGGTTAAC
+            </div>
+
+            <div class="dnaSequence">
+                GATCGTAGCTAACCGTAGCTAACCGTAGCT
+            </div>
+
+            <div class="dnaSequence">
+                TTACCGTAGGCTAACCGTAGGATCGTAGGC
+            </div>
+
+            <div class="dnaSequence">
+                CGTAGCTAACCGTAGGCTAACCGTAGCTAA
+            </div>
+        </div>
+
+        <!-- CORRECT -->
+        <div class="dnaFile">
+            <h3>E-13</h3>
+
+            <div class="dnaSequence">
+                TTTATGGACCCCTGCAAGGGCCTGCGCTAA
+            </div>
+
+            <div class="dnaSequence">
+                GCTAACCGTAGGCTAACCGTAGCTAACCGT
+            </div>
+
+            <div class="dnaSequence">
+                AACCGTAGCTAACCGTAGGCTAACCGTAGC
+            </div>
+
+            <div class="dnaSequence">
+                TTGACCGTAGCTAACCGTAGGCTAACCGTA
+            </div>
+        </div>
+
+        <!-- DECOY -->
+        <div class="dnaFile">
+            <h3>B-01</h3>
+
+            <div class="dnaSequence">
+                CGATGGTACCGATGGTACCGATGGTACCGA
+            </div>
+
+            <div class="dnaSequence">
+                TTAGCGTAGCTAACCGTAGGCTAACCGTAG
+            </div>
+
+            <div class="dnaSequence">
+                GATCGTAGCTAGGCTAACCGTAGCTAACCG
+            </div>
+
+            <div class="dnaSequence">
+                AACCGGTTAACCGGTTAACCGGTTAACCGG
+            </div>
+        </div>
+
+        <!-- CORRECT -->
+        <div class="dnaFile">
+            <h3>H-07</h3>
+
+            <div class="dnaSequence">
+                ATGCCCGGCTTCAAGCGCTGCGAATTGGCG
+            </div>
+
+            <div class="dnaSequence">
+                GCTAACCGTAGCTAACCGTAGGCTAACCGT
+            </div>
+
+            <div class="dnaSequence">
+                TTACCGTAGCTAACCGTAGGCTAACCGTAG
+            </div>
+
+            <div class="dnaSequence">
+                AACCGTAGGCTAACCGTAGCTAACCGTAGC
+            </div>
+        </div>
+
+        <!-- DECOY -->
+        <div class="dnaFile">
+            <h3>L-12</h3>
+
+            <div class="dnaSequence">
+                AACCGGTTAACCGGTTAACCGGTTAACCGG
+            </div>
+
+            <div class="dnaSequence">
+                GATCGTAGCTAACCGTAGCTAACCGTAGGC
+            </div>
+
+            <div class="dnaSequence">
+                TTAGCGATCGTAGCTAACCGTAGGCTAACG
+            </div>
+
+            <div class="dnaSequence">
+                CCGTAGCTAACCGTAGGCTAACCGTAGCTA
+            </div>
+        </div>
+
+        <!-- CORRECT -->
+        <div class="dnaFile">
+            <h3>P-09</h3>
+
+            <div class="dnaSequence">
+                ATGGCGTGGAACCCCGAGTTCCGCAAGTGC
+            </div>
+
+            <div class="dnaSequence">
+                TTACCGTAGCTAACCGTAGGCTAACCGTAG
+            </div>
+
+            <div class="dnaSequence">
+                GCTAACCGTAGGCTAACCGTAGCTAACCGT
+            </div>
+
+            <div class="dnaSequence">
+                AACCGTAGCTAACCGTAGGCTAACCGTAGC
+            </div>
+        </div>
+
+        <!-- DECOY -->
+        <div class="dnaFile">
+            <h3>C-17</h3>
+
+            <div class="dnaSequence">
+                GGGATCCGGGATCCGGGATCCGGGATCCGG
+            </div>
+
+            <div class="dnaSequence">
+                TTAGCGTAGCTAACCGTAGGCTAACCGTAA
+            </div>
+
+            <div class="dnaSequence">
+                GATCGTAGCTAACCGTAGCTAACCGTAGCT
+            </div>
+
+            <div class="dnaSequence">
+                AACCGTAGGCTAACCGTAGCTAACCGTAGG
+            </div>
+        </div>
+
+    </div>
 
 </div>
 
 <!-- =========================
      PHASE 3 SCREEN
 ========================= -->
+
 <div id="phase3Screen" class="screen">
 
     <div class="menuGrid">
 
-        <div class="menuPanel" onclick="openPhase3Tab('p3VideoTab')">
-            <div class="panelOverlay"><h1>VIDEO LOG</h1></div>
+        <div class="menuPanel"
+             onclick="openPhase3Tab('p3VideoTab')">
+
+            <div class="panelOverlay">
+
+                <h1>VIDEO LOG</h1>
+
+            </div>
+
         </div>
 
-        <div class="menuPanel" onclick="openPhase3Tab('p3MetaTab')">
-            <div class="panelOverlay"><h1>METABOLIC PATHWAYS</h1></div>
+        <div class="menuPanel"
+             onclick="openPhase3Tab('p3MetaTab')">
+
+            <div class="panelOverlay">
+
+                <h1>METABOLIC PATHWAYS</h1>
+
+            </div>
+
         </div>
 
-        <div class="menuPanel" onclick="openPhase3Tab('p3QuizTab')">
-            <div class="panelOverlay"><h1>PHASE 3</h1></div>
+        <div class="menuPanel"
+             onclick="openPhase3Tab('p3QuizTab')">
+
+            <div class="panelOverlay">
+
+                <h1>PHASE 3</h1>
+
+            </div>
+
         </div>
 
     </div>
