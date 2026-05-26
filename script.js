@@ -447,25 +447,30 @@ function validatePhase2() {
 
     if (sortedSelected === sortedCorrect) {
 
-    output.innerHTML = `<span style="color:#4cff88">SEQUENCE VALIDATED</span>`;
+        output.innerHTML = `<span style="color:#4cff88">SEQUENCE VALIDATED</span>`;
 
-    if (unlock) {
-        unlock.style.display = "block";
+        if (unlock) {
+            unlock.style.display = "block";
+        }
+
+        stage = 4;
+
+        const overlay = document.getElementById("glitchOverlay");
+
+        if (overlay) {
+            overlay.classList.remove("glitchActive");
+            void overlay.offsetWidth;
+            overlay.classList.add("glitchActive");
+        }
+
+        setTimeout(() => {
+            showScreen("phase3Screen");
+        }, 1200);
+
+    } else {
+
+        output.innerHTML = `<span style="color:#ff5577">INVALID SEQUENCE</span>`;
     }
-
-    stage = 4;
-
-    const overlay = document.getElementById("glitchOverlay");
-
-    if (overlay) {
-        overlay.classList.remove("glitchActive");
-        void overlay.offsetWidth; // reset animation
-        overlay.classList.add("glitchActive");
-    }
-
-    setTimeout(() => {
-        showScreen("phase3Screen");
-    }, 1200);
 }
 /* =========================
    SIMULATION
