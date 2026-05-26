@@ -1,5 +1,5 @@
 /* =========================
-   BASE (DESKTOP ONLY)
+   BASE
 ========================= */
 
 body{
@@ -11,18 +11,57 @@ body{
     text-shadow:0 0 5px rgba(255,255,255,0.4);
 }
 
+/* =========================
+   SCREEN SYSTEM
+========================= */
+
 .screen{
     display:none;
     position:fixed;
     inset:0;
+
     justify-content:center;
     align-items:center;
     flex-direction:column;
+
     background:black;
+
+    z-index:1;
 }
 
 .active{
     display:flex !important;
+}
+
+/* =========================
+   START + CONTINUE
+========================= */
+
+#startScreen,
+#continueScreen{
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+#startScreen h1,
+#continuePrompt{
+
+    font-size:clamp(28px,4vw,58px);
+
+    letter-spacing:6px;
+
+    text-align:center;
+
+    animation:flicker 2s infinite;
+}
+
+@keyframes flicker{
+
+    0%{ opacity:1; }
+    50%{ opacity:0.7; }
+    100%{ opacity:1; }
+
 }
 
 /* =========================
@@ -65,15 +104,20 @@ body{
 .panelOverlay{
     position:absolute;
     inset:0;
+
     display:flex;
     justify-content:center;
     align-items:center;
+
     backdrop-filter:blur(2px);
+
+    z-index:2;
 }
 
 .panelOverlay h1{
     font-size:42px;
     letter-spacing:4px;
+    text-align:center;
 }
 
 /* =========================
@@ -82,16 +126,21 @@ body{
 
 .tabContent{
     display:none;
+
     position:fixed;
     inset:0;
+
     width:100vw;
     height:100vh;
 
     background:black;
+
     z-index:9999;
 
     overflow:auto;
+
     padding:20px;
+
     box-sizing:border-box;
 }
 
@@ -104,16 +153,25 @@ body{
 ========================= */
 
 button{
+
     background:black;
     color:white;
+
     border:1px solid white;
+
     padding:12px 24px;
+
     cursor:pointer;
+
     font-family:inherit;
+
     transition:0.25s;
+
+    margin-bottom:20px;
 }
 
 button:hover{
+
     background:white;
     color:black;
 }
@@ -123,23 +181,30 @@ button:hover{
 ========================= */
 
 #audioTab{
+
     display:none;
+
     flex-direction:column;
     justify-content:center;
     align-items:center;
+
     gap:25px;
+
     text-align:center;
 }
 
 #videoContainer{
+
     width:70%;
     max-width:900px;
+
     display:flex;
     justify-content:center;
     align-items:center;
 }
 
 #mainVideo{
+
     width:100%;
     max-height:70vh;
 
@@ -155,32 +220,49 @@ button:hover{
 ========================= */
 
 #dnaTab{
+
     color:#22ff88;
+
     padding:40px;
+
     overflow-y:auto;
+
     font-family:monospace;
 }
 
 #dnaList{
+
     margin-top:25px;
+
     border:1px solid #1eff7a;
+
     background:rgba(0,0,0,0.6);
+
     width:80%;
+
     margin-left:auto;
     margin-right:auto;
 }
 
 #dnaList div{
+
     color:#6dff9f;
+
     background:rgba(20,20,20,0.7);
+
     padding:18px;
+
     border-bottom:1px solid #1eff7a;
+
     letter-spacing:2px;
+
     transition:0.3s;
 }
 
 #dnaList div:hover{
+
     background:rgba(30,255,122,0.12);
+
     transform:scale(1.01);
 }
 
@@ -188,34 +270,163 @@ button:hover{
    AMINO ACID VIEWER
 ========================= */
 
-#proteinSequence{
-    width:95vw;
-    min-height:70vh;
+#docTab{
 
-    margin:30px auto;
+    background:black;
+
+    color:white;
+
+    overflow-y:auto;
+
+    padding:40px;
+
+    box-sizing:border-box;
+}
+
+#docTab h1{
+
+    font-size:64px;
+
+    letter-spacing:6px;
+
+    margin-bottom:20px;
+}
+
+#docTab h2{
+
+    color:#777;
+
+    font-size:28px;
+
+    margin-bottom:60px;
+}
+
+/* MAIN CONTAINER */
+
+#proteinSequence{
+
+    width:100%;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:70px;
+}
+
+/* EACH BLOCK */
+
+.sequence{
+
+    width:100%;
+
+    min-height:220px;
 
     padding:35px;
 
     box-sizing:border-box;
 
-    border:2px solid #22ff88;
+    border:2px solid rgba(34,255,136,0.2);
 
-    background:rgba(0,0,0,0.92);
-
-    color:#6dff9f;
-
-    font-size:28px;
-    line-height:2.1;
-    letter-spacing:4px;
-
-    overflow-wrap:break-word;
-    word-break:break-word;
-
-    overflow-y:auto;
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.03),
+            rgba(255,255,255,0.01)
+        );
 
     box-shadow:
-        0 0 25px rgba(34,255,136,0.2),
-        inset 0 0 30px rgba(34,255,136,0.08);
+        0 0 30px rgba(34,255,136,0.08),
+        inset 0 0 30px rgba(34,255,136,0.04);
+
+    font-size:clamp(28px,2vw,42px);
+
+    line-height:2.4;
+
+    word-wrap:break-word;
+
+    overflow:hidden;
+
+    position:relative;
+}
+
+/* CRT SCANLINES */
+
+.sequence::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.02) 0px,
+            rgba(255,255,255,0.02) 1px,
+            transparent 2px,
+            transparent 4px
+        );
+}
+
+/* CODONS */
+
+.codon{
+
+    display:inline-block;
+
+    margin-right:14px;
+    margin-bottom:18px;
+
+    cursor:pointer;
+
+    transition:
+        color 0.25s,
+        transform 0.25s,
+        text-shadow 0.25s;
+
+    color:#d8d8d8;
+
+    position:relative;
+}
+
+/* NORMAL HOVER */
+
+.codon:hover{
+
+    color:white;
+
+    transform:scale(1.08);
+
+    text-shadow:
+        0 0 12px white,
+        0 0 24px rgba(255,255,255,0.5);
+}
+
+/* HIDDEN VECTOR SEGMENTS */
+
+.vector{
+
+    color:#d8d8d8;
+
+    opacity:0.92;
+}
+
+/* DISCOVERY EFFECT */
+
+.vector:hover{
+
+    color:#ff2b2b;
+
+    background:rgba(255,0,0,0.08);
+
+    text-shadow:
+        0 0 14px red,
+        0 0 28px rgba(255,0,0,0.7);
+
+    transform:scale(1.12);
 }
 
 /* =========================
@@ -223,6 +434,7 @@ button:hover{
 ========================= */
 
 #phase2Container{
+
     width:90%;
     max-width:1200px;
 
@@ -238,6 +450,7 @@ button:hover{
 }
 
 #sequenceInput{
+
     width:100%;
 
     background:black;
@@ -258,6 +471,7 @@ button:hover{
 }
 
 #sequenceInput:focus{
+
     outline:none;
 
     box-shadow:0 0 12px rgba(34,255,136,0.4);
@@ -268,7 +482,9 @@ button:hover{
 ========================= */
 
 #recoveredContainer{
+
     width:90%;
+
     margin:30px auto;
 
     display:flex;
@@ -278,6 +494,7 @@ button:hover{
 }
 
 .recoveredFile{
+
     padding:20px;
 
     border:1px solid #22ff88;
@@ -296,6 +513,7 @@ button:hover{
 }
 
 .recoveredFile:hover{
+
     background:rgba(34,255,136,0.08);
 
     transform:scale(1.01);
@@ -308,13 +526,20 @@ button:hover{
 ========================= */
 
 #microscopeViewport{
+
     width:100%;
+
     min-height:500px;
+
     display:flex;
+
     justify-content:center;
     align-items:center;
+
     overflow:hidden;
+
     background:radial-gradient(circle, #07110d 0%, #000000 100%);
+
     border:2px solid #1eff7a;
 }
 
@@ -323,9 +548,12 @@ button:hover{
 ========================= */
 
 #simulationArea{
+
     position:relative;
+
     width:900px;
     height:500px;
+
     overflow:visible;
 }
 
@@ -334,9 +562,12 @@ button:hover{
 ========================= */
 
 #bacteriaCell{
+
     position:absolute;
+
     width:340px;
     height:180px;
+
     border-radius:100px;
 
     background:radial-gradient(circle at center, #4cff88 0%, #15803d 70%);
@@ -358,14 +589,19 @@ button:hover{
 ========================= */
 
 #virusParticle{
+
     position:absolute;
+
     width:120px;
     height:120px;
+
     left:70px;
     top:80px;
+
     z-index:999;
 
     display:flex;
+
     justify-content:center;
     align-items:center;
 
@@ -381,10 +617,14 @@ button:hover{
 ========================= */
 
 .virusHead{
+
     width:70px;
     height:70px;
+
     background:radial-gradient(circle at 30% 30%, #ff4d6d, #7a001a);
+
     border-radius:50%;
+
     position:absolute;
 
     box-shadow:
@@ -397,13 +637,18 @@ button:hover{
 ========================= */
 
 .virusTail{
+
     width:14px;
     height:55px;
+
     background:linear-gradient(to bottom, #ff4d6d, #5a0015);
+
     position:absolute;
+
     top:70px;
 
     border-radius:20px;
+
     transform:rotate(10deg);
 
     box-shadow:0 0 10px rgba(255,0,80,0.5);
@@ -414,13 +659,20 @@ button:hover{
 ========================= */
 
 .virusLeg{
+
     position:absolute;
+
     width:6px;
     height:35px;
+
     background:#ff5c7a;
+
     top:15px;
+
     transform-origin:top center;
+
     border-radius:6px;
+
     box-shadow:0 0 8px rgba(255,0,80,0.6);
 }
 
@@ -500,12 +752,18 @@ button:hover{
 ========================= */
 
 .rnaInject{
+
     animation:injectRNA 2.6s forwards;
+
     position:absolute;
+
     width:8px;
     height:8px;
+
     background:#7dffb0;
+
     border-radius:50%;
+
     box-shadow:0 0 10px #7dffb0;
 }
 
@@ -545,8 +803,11 @@ button:hover{
 }
 
 @keyframes infectionPulse{
+
     0%{ filter:brightness(1); }
+
     50%{ filter:brightness(2) hue-rotate(25deg); }
+
     100%{ filter:brightness(1); }
 }
 
@@ -610,17 +871,26 @@ button:hover{
 ========================= */
 
 .lysing::after{
+
     content:"";
+
     position:absolute;
+
     inset:0;
+
     background:radial-gradient(circle, rgba(255,255,255,0.9), transparent 60%);
+
     opacity:0;
+
     animation:flash 0.9s forwards;
 }
 
 @keyframes flash{
+
     0%{ opacity:0; }
+
     30%{ opacity:1; }
+
     100%{ opacity:0; }
 }
 
@@ -629,9 +899,66 @@ button:hover{
 ========================= */
 
 @keyframes virusJitter{
+
     0%{ transform:translate(0px,0px) rotate(0deg); }
+
     25%{ transform:translate(1px,-1px) rotate(1deg); }
+
     50%{ transform:translate(-1px,1px) rotate(-1deg); }
+
     75%{ transform:translate(1px,1px) rotate(0.5deg); }
+
     100%{ transform:translate(0px,0px) rotate(0deg); }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+    .menuGrid{
+        flex-direction:column;
+    }
+
+    .menuPanel{
+        height:25vh;
+    }
+
+    .panelOverlay h1{
+        font-size:24px;
+    }
+
+    #docTab{
+        padding:20px;
+    }
+
+    #docTab h1{
+        font-size:34px;
+        line-height:1.3;
+    }
+
+    #docTab h2{
+        font-size:18px;
+    }
+
+    .sequence{
+        font-size:22px;
+        line-height:2;
+        padding:20px;
+    }
+
+    .codon{
+        margin-right:10px;
+        margin-bottom:12px;
+    }
+
+    #videoContainer{
+        width:95%;
+    }
+
+    #simulationArea{
+        transform:scale(0.7);
+        transform-origin:top center;
+    }
 }
