@@ -442,7 +442,6 @@ function validatePhase2() {
 
     if (!output) return;
 
-    // sort both arrays so order doesn't matter
     const sortedSelected = selected.sort().join(",");
     const sortedCorrect = correct.sort().join(",");
 
@@ -454,9 +453,13 @@ function validatePhase2() {
             unlock.style.display = "block";
         }
 
-        // OPTIONAL: advance story later
-        // stage = 4;
-        // showScreen("phase3Screen");
+        // 🔥 ADD THIS: advance story stage
+        stage = 4;
+
+        // 🔥 ADD THIS: go to Phase 3 screen
+        setTimeout(() => {
+            showScreen("phase3Screen");
+        }, 1200);
 
     } else {
 
