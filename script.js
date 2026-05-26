@@ -1,3 +1,4 @@
+console.log("JS FILE LOADED");
 /* =========================
    GLOBAL STATE
 ========================= */
@@ -87,19 +88,13 @@ function playStartup() {
 ========================= */
 
 function handleStart() {
+    console.log("handleStart fired");
 
     if (locked) return;
 
-    // FIRST TAP / START
-    if (stage === 0) {
-        startSequence();
-        return;
-    }
+    if (stage === 0) startSequence();
 
-    // CONTINUE SCREEN
-    if (stage === 2 && bootState === "continue") {
-        continueToMenu();
-    }
+    if (stage === 2 && bootState === "continue") continueToMenu();
 }
 
 /* =========================
@@ -130,8 +125,8 @@ function showScreen(id) {
         return;
     }
 
-    target.classList.add("active");
     target.style.display = "flex";
+    target.classList.add("active");
 }
 
 /* =========================
@@ -516,3 +511,28 @@ window.revealVideo = revealVideo;
 window.validateSequence = validateSequence;
 window.runInfection = runInfection;
 window.handleStart = handleStart;
+
+function initStartControls() {
+
+    const startScreen = document.getElementById("startScreen");
+
+    if (!startScreen) {
+        console.error("Start screen not found");
+        return;
+    }
+
+    startScreen.addEventListener("click", handleStart);
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleStart();
+    });
+
+    console.log("Start controls initialized");
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    console.log("DOM READY");
+
+    initStartControls();
+});
