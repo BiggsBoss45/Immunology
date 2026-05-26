@@ -247,27 +247,134 @@ function revealVideo() {
    DNA GENERATION
 ========================= */
 
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
 function generateRecoveredDNA() {
 
     const container = document.getElementById("dnaList");
-
     if (!container) return;
 
     container.innerHTML = "";
 
-    recoveredSequences.forEach((seq, i) => {
+    const organisms = [
+        {
+            name: "V-03",
+            correct: true,
+            sequences: [
+                "ATGGAGCCCTGCAAGGGCTTCCGCAAGTGG",
+                "GGTACCGTAGCTAACCGTAGGCTAACCGTA",
+                "TTAGCGATCGGATCGTAGCTAACCGGATCG",
+                "AACCGTAGCTAGCTAACCGTAGGCTAACCG"
+            ]
+        },
+        {
+            name: "E-13",
+            correct: true,
+            sequences: [
+                "TTTATGGACCCCTGCAAGGGCCTGCGCTAA",
+                "GCTAACCGTAGGCTAACCGTAGCTAACCGT",
+                "AACCGTAGCTAACCGTAGGCTAACCGTAGC",
+                "TTGACCGTAGCTAACCGTAGGCTAACCGTA"
+            ]
+        },
+        {
+            name: "H-07",
+            correct: true,
+            sequences: [
+                "ATGCCCGGCTTCAAGCGCTGCGAATTGGCG",
+                "GCTAACCGTAGCTAACCGTAGGCTAACCGT",
+                "TTACCGTAGCTAACCGTAGGCTAACCGTAG",
+                "AACCGTAGGCTAACCGTAGCTAACCGTAGC"
+            ]
+        },
+        {
+            name: "P-09",
+            correct: true,
+            sequences: [
+                "ATGGCGTGGAACCCCGAGTTCCGCAAGTGC",
+                "TTACCGTAGCTAACCGTAGGCTAACCGTAG",
+                "GCTAACCGTAGGCTAACCGTAGCTAACCGT",
+                "AACCGTAGCTAACCGTAGGCTAACCGTAGC"
+            ]
+        },
 
-        const div = document.createElement("div");
+        /* DECOYS */
+        {
+            name: "S-05",
+            correct: false,
+            sequences: [
+                "GCTAACCGTAGGCTAACCGTAGGCTAACCG",
+                "TTACCGGATCGATCGTAGCTAGGCTAACCG",
+                "GCGTTAACCGGTAGCTAACCGTAGCTAACG",
+                "CCGTAGGCTAACCGTAGGCTAACCGTAGGC"
+            ]
+        },
+        {
+            name: "M-22",
+            correct: false,
+            sequences: [
+                "TTGCGATACCGGTTAGCGATACCGGTTAAC",
+                "GATCGTAGCTAACCGTAGCTAACCGTAGCT",
+                "TTACCGTAGGCTAACCGTAGGATCGTAGGC",
+                "CGTAGCTAACCGTAGGCTAACCGTAGCTAA"
+            ]
+        },
+        {
+            name: "L-12",
+            correct: false,
+            sequences: [
+                "AACCGGTTAACCGGTTAACCGGTTAACCGG",
+                "GATCGTAGCTAACCGTAGCTAACCGTAGGC",
+                "TTAGCGATCGTAGCTAACCGTAGGCTAACG",
+                "CCGTAGCTAACCGTAGGCTAACCGTAGCTA"
+            ]
+        },
+        {
+            name: "B-01",
+            correct: false,
+            sequences: [
+                "CGATGGTACCGATGGTACCGATGGTACCGA",
+                "TTAGCGTAGCTAACCGTAGGCTAACCGTAG",
+                "GATCGTAGCTAGGCTAACCGTAGCTAACCG",
+                "AACCGGTTAACCGGTTAACCGGTTAACCGG"
+            ]
+        },
+        {
+            name: "C-17",
+            correct: false,
+            sequences: [
+                "GGGATCCGGGATCCGGGATCCGGGATCCGG",
+                "TTAGCGTAGCTAACCGTAGGCTAACCGTAA",
+                "GATCGTAGCTAACCGTAGCTAACCGTAGCT",
+                "AACCGTAGGCTAACCGTAGCTAACCGTAGG"
+            ]
+        }
+    ];
 
-        div.innerHTML = `
-            <strong>SAMPLE ${i + 1}</strong><br><br>
-            ${seq}
-        `;
+    shuffle(organisms);
 
-        container.appendChild(div);
+    organisms.forEach(org => {
+
+        const file = document.createElement("div");
+        file.className = "dnaFile";
+
+        const title = document.createElement("h3");
+        title.textContent = org.name;
+
+        file.appendChild(title);
+
+        org.sequences.forEach(seq => {
+            const line = document.createElement("div");
+            line.className = "dnaSequence";
+            line.textContent = seq;
+            file.appendChild(line);
+        });
+
+        container.appendChild(file);
     });
 }
-
 /* =========================
    PROTEIN DISPLAY
 ========================= */
