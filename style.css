@@ -824,3 +824,46 @@ button:hover{
     transform:scale(1.15);
     text-shadow:0 0 14px red, 0 0 28px rgba(255,0,0,0.6);
 }
+
+/* =========================
+   DNA FILE VISIBILITY FIX
+========================= */
+
+.dnaFile{
+    border:1px solid #22ff88;
+    margin-bottom:20px;
+    padding:15px;
+    background:rgba(0,0,0,0.7);
+}
+
+.dnaFile h3{
+    color:#6dff9f;
+    margin-bottom:10px;
+}
+
+.dnaSequence{
+    font-family:monospace;
+    color:#b6ffcf;
+    margin:5px 0;
+    word-break:break-all;
+}
+
+.dnaHint{
+    color:#aaa;
+    margin-bottom:20px;
+}
+
+/* =========================
+   AMINO ACID BLOCK FIX
+========================= */
+
+.sequenceBlock{
+    margin-bottom:30px;
+}
+
+.blockLabel{
+    color:#777;
+    margin-bottom:10px;
+    letter-spacing:2px;
+    font-size:14px;
+}
