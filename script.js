@@ -459,8 +459,23 @@ function validatePhase2() {
         }
 
         setTimeout(() => {
-            showScreen("phase3Screen");
-        }, 1200);
+
+    console.log("Switching to Phase 3");
+
+    const phase3 = document.getElementById("phase3Screen");
+
+    document.querySelectorAll(".screen, .tabContent").forEach(el => {
+        el.style.display = "none";
+        el.classList.remove("active");
+        el.classList.remove("activeTab");
+    });
+
+    if (phase3) {
+        phase3.style.display = "flex";
+        phase3.classList.add("active");
+    }
+
+}, 1200);
 
     } else {
 
