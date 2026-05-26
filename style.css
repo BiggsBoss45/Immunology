@@ -867,3 +867,53 @@ button:hover{
     letter-spacing:2px;
     font-size:14px;
 }
+
+#glitchOverlay{
+    position:fixed;
+    inset:0;
+    background:black;
+    z-index:99999;
+    pointer-events:none;
+    opacity:0;
+}
+
+.glitchActive{
+    animation:glitchFlash 1.2s forwards;
+}
+
+@keyframes glitchFlash{
+
+    0%{
+        opacity:0;
+        filter:contrast(1) hue-rotate(0deg);
+    }
+
+    10%{
+        opacity:1;
+        transform:translateX(-5px);
+        filter:contrast(2) hue-rotate(90deg);
+    }
+
+    20%{
+        transform:translateX(5px);
+        filter:contrast(3) hue-rotate(-90deg);
+    }
+
+    30%{
+        transform:translateX(-3px);
+    }
+
+    40%{
+        transform:translateX(3px);
+    }
+
+    60%{
+        opacity:1;
+        filter:contrast(2);
+    }
+
+    100%{
+        opacity:0;
+        filter:contrast(1);
+    }
+}
