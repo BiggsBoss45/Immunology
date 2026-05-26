@@ -427,6 +427,42 @@ function validateSequence() {
     }
 }
 
+function validatePhase2() {
+
+    playClick();
+
+    const selected = Array.from(
+        document.querySelectorAll("#orgList input[type='checkbox']:checked")
+    ).map(cb => cb.value);
+
+    const correct = ["V-03", "E-13", "H-07", "P-09"];
+
+    const output = document.getElementById("phase2Result");
+    const unlock = document.getElementById("phase2Access");
+
+    if (!output) return;
+
+    // sort both arrays so order doesn't matter
+    const sortedSelected = selected.sort().join(",");
+    const sortedCorrect = correct.sort().join(",");
+
+    if (sortedSelected === sortedCorrect) {
+
+        output.innerHTML = `<span style="color:#4cff88">SEQUENCE VALIDATED</span>`;
+
+        if (unlock) {
+            unlock.style.display = "block";
+        }
+
+        // OPTIONAL: advance story later
+        // stage = 4;
+        // showScreen("phase3Screen");
+
+    } else {
+
+        output.innerHTML = `<span style="color:#ff5577">INVALID VECTOR SIGNATURE</span>`;
+    }
+}
 /* =========================
    SIMULATION
 ========================= */
