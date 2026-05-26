@@ -225,7 +225,14 @@ function closeTabs() {
 
     showScreen("menuScreen");
 }
+function toggleGuide() {
 
+    const guide = document.getElementById("translationGuide");
+    if (!guide) return;
+
+    guide.style.display =
+        guide.style.display === "none" ? "block" : "none";
+}
 /* =========================
    VIDEO
 ========================= */
