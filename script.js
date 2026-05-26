@@ -205,14 +205,13 @@ function openTab(tabId) {
 
     const target = document.getElementById(tabId);
 
-    if (!target) return;
+    if (!target) {
+        console.error("TAB NOT FOUND:", tabId);
+        return;
+    }
 
     target.classList.add("activeTab");
     target.style.display = "block";
-    target.style.position = "fixed";
-    target.style.inset = "0";
-    target.style.zIndex = "9999";
-    target.style.background = "black";
 }
 
 function closeTabs() {
@@ -275,11 +274,22 @@ function generateRecoveredDNA() {
 
 function generateProteinSequence() {
 
-    const protein = document.getElementById("proteinSequence");
+    const container = document.getElementById("proteinSequence");
+    if (!container) {
+    console.error("DNA LIST MISSING: #dnaList not found in HTML");
+    return;
+}
 
-    if (!protein) return;
+    container.innerHTML = "";
 
-    protein.innerText = correctProtein;
+    correctProtein.split("-").forEach(codon => {
+
+        const span = document.createElement("span");
+        span.className = "codon";
+        span.textContent = codon;
+
+        container.appendChild(span);
+    });
 }
 
 /* =========================
