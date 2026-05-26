@@ -714,6 +714,48 @@
         DNA: ATG → mRNA: UAC → Amino Acid: Met
     </p>
 
+<button onclick="toggleAAChart()" style="margin-top:25px;">
+    OPEN AMINO ACID REFERENCE CHART
+</button>
+
+<div id="aaChart" style="display:none; margin-top:20px; border:1px solid #22ff88; padding:20px;">
+
+    <h2>AMINO ACID CODON REFERENCE</h2>
+
+    <p>mRNA codons → Amino Acids</p>
+
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; font-size:16px;">
+
+        <div>Met → AUG</div>
+        <div>Val → GUU/GUC/GUA/GUG</div>
+        <div>Lys → AAA/AAG</div>
+
+        <div>Arg → CGU/CGC/CGA/CGG/AGA/AGG</div>
+        <div>Thr → ACU/ACC/ACA/ACG</div>
+        <div>Gly → GGU/GGC/GGA/GGG</div>
+
+        <div>Ser → UCU/UCC/UCA/UCG/AGU/AGC</div>
+        <div>Pro → CCU/CCC/CCA/CCG</div>
+        <div>Leu → UUA/UUG/CUU/CUC/CUA/CUG</div>
+
+        <div>Ala → GCU/GCC/GCA/GCG</div>
+        <div>Phe → UUU/UUC</div>
+        <div>Tyr → UAU/UAC</div>
+
+        <div>Asn → AAU/AAC</div>
+        <div>Gln → CAA/CAG</div>
+        <div>His → CAU/CAC</div>
+
+        <div>Asp → GAU/GAC</div>
+        <div>Glu → GAA/GAG</div>
+        <div>Cys → UGU/UGC</div>
+
+        <div>Trp → UGG</div>
+        <div>Ile → AUU/AUC/AUA</div>
+        <div>STOP → UAA/UAG/UGA</div>
+
+    </div>
+
 </div>
              
         </div>
