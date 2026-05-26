@@ -277,29 +277,12 @@ function generateProteinSequence() {
     const container = document.getElementById("proteinSequence");
     if (!container) return;
 
-    container.innerHTML = "";
+    const codons = container.querySelectorAll(".codon");
 
-    const title = document.createElement("h1");
-    title.innerText = "RECOVERED AMINO ACID SEQUENCE";
-
-    const subtitle = document.createElement("h2");
-    subtitle.innerText = "ARCHIVED PROTEIN RECONSTRUCTION SEQUENCE";
-
-    const block = document.createElement("div");
-    block.className = "sequence";
-
-    correctProtein.split("-").forEach(codon => {
-        const span = document.createElement("span");
-        span.className = "codon";
-        span.innerText = codon;
-        block.appendChild(span);
+    codons.forEach(c => {
+        c.classList.add("activeCodon");
     });
-
-    container.appendChild(title);
-    container.appendChild(subtitle);
-    container.appendChild(block);
 }
-
 /* =========================
    VALIDATION
 ========================= */
