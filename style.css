@@ -64,6 +64,15 @@ body{
 
 }
 
+#phase3Screen{
+    display:none;
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    background:black;
+    z-index:99999;
+}
 /* =========================
    MENU
 ========================= */
