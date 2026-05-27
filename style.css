@@ -1011,3 +1011,62 @@ button:hover{
 
     text-align:center;
 }
+
+/* =========================
+   PHASE 3
+========================= */
+
+#phase3Screen{
+
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    width:100vw;
+    height:100vh;
+
+    background:black;
+
+    z-index:999999;
+
+    justify-content:center;
+    align-items:center;
+}
+
+#phase3Menu{
+
+    display:flex;
+
+    gap:40px;
+
+    justify-content:center;
+    align-items:center;
+}
+
+.phase3Button{
+
+    width:320px;
+    height:220px;
+
+    font-size:34px;
+
+    letter-spacing:4px;
+
+    background:black;
+    color:white;
+
+    border:2px solid white;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.phase3Button:hover{
+
+    background:white;
+    color:black;
+
+    transform:scale(1.05);
+}
