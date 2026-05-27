@@ -926,3 +926,88 @@ button:hover{
         filter:contrast(1);
     }
 }
+
+#phase3Screen{
+
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    width:100vw;
+    height:100vh;
+
+    background:black;
+
+    z-index:99999;
+
+    overflow:hidden;
+
+    justify-content:center;
+    align-items:center;
+}
+
+/* PHASE 3 MENU */
+
+#phase3Screen .menuGrid{
+
+    display:flex;
+
+    width:100%;
+    height:100%;
+
+    flex-direction:row;
+}
+
+/* PANELS */
+
+#phase3Screen .menuPanel{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    border-right:1px solid white;
+
+    position:relative;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+#phase3Screen .menuPanel:hover{
+    flex:1.15;
+}
+
+/* TEXT */
+
+#phase3Screen .panelOverlay{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:5;
+}
+
+#phase3Screen .panelOverlay h1{
+
+    color:white;
+
+    font-size:42px;
+
+    letter-spacing:4px;
+
+    text-align:center;
+}
