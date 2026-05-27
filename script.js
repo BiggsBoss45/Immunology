@@ -460,19 +460,14 @@ function validatePhase2() {
 
         setTimeout(() => {
 
-    console.log("Switching to Phase 3");
+    document.querySelectorAll(".screen, .tabContent").forEach(el => {
+        el.style.display = "none";
+    });
 
     const phase3 = document.getElementById("phase3Screen");
 
-    document.querySelectorAll(".screen, .tabContent").forEach(el => {
-        el.style.display = "none";
-        el.classList.remove("active");
-        el.classList.remove("activeTab");
-    });
-
     if (phase3) {
-        phase3.style.display = "flex";
-        phase3.classList.add("active");
+        phase3.style.display = "block";
     }
 
 }, 1200);
