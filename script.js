@@ -460,25 +460,20 @@ function validatePhase2() {
 
        setTimeout(() => {
 
-    // hide everything
     document.querySelectorAll(".screen, .tabContent").forEach(el => {
-        el.classList.remove("active");
-        el.classList.remove("activeTab");
         el.style.display = "none";
     });
 
-    // show phase 3
     const phase3 = document.getElementById("phase3Screen");
 
     if (!phase3) {
-        console.error("PHASE 3 SCREEN NOT FOUND");
+        console.error("PHASE 3 NOT FOUND");
         return;
     }
 
-    phase3.classList.add("active");
     phase3.style.display = "flex";
 
-    console.log("PHASE 3 LOADED");
+    console.log("PHASE 3 ACTIVE");
 
 }, 1200);
     } else {
