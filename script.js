@@ -458,20 +458,29 @@ function validatePhase2() {
             overlay.classList.add("glitchActive");
         }
 
-        setTimeout(() => {
+       setTimeout(() => {
 
+    // hide everything
     document.querySelectorAll(".screen, .tabContent").forEach(el => {
+        el.classList.remove("active");
+        el.classList.remove("activeTab");
         el.style.display = "none";
     });
 
+    // show phase 3
     const phase3 = document.getElementById("phase3Screen");
 
-    if (phase3) {
-        phase3.style.display = "block";
+    if (!phase3) {
+        console.error("PHASE 3 SCREEN NOT FOUND");
+        return;
     }
 
-}, 1200);
+    phase3.classList.add("active");
+    phase3.style.display = "flex";
 
+    console.log("PHASE 3 LOADED");
+
+}, 1200);
     } else {
 
         output.innerHTML = `<span style="color:#ff5577">INVALID SEQUENCE</span>`;
