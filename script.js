@@ -238,11 +238,35 @@ function revealVideo() {
 
     const video = document.getElementById("mainVideo");
     const container = document.getElementById("videoContainer");
+    const button = document.getElementById("revealButton");
 
     if (!video || !container) return;
 
+    // FORCE reset state first (prevents autoplay glitches)
+    video.pause();
+    video.currentTime = 0;
+    video.muted = true; // start muted to avoid autoplay blocking
+
+    // Ensure correct file is loaded
+    video.src = "video1.mp4";
+    video.load();
+
+    // Show container FIRST
     container.style.display = "block";
-    video.play().catch(() => {});
+
+    // Hide button
+    if (button) button.style.display = "none";
+
+    // IMPORTANT: only play AFTER user interaction chain is safe
+    setTimeout(() => {
+        video.play()
+            .then(() => {
+                console.log("Video started successfully");
+            })
+            .catch(err => {
+                console.log("Video play blocked or delayed:", err);
+            });
+    }, 150);
 }
 
 /* =========================
@@ -442,44 +466,77 @@ function validatePhase2() {
 
     if (sortedSelected === sortedCorrect) {
 
-        output.innerHTML = `<span style="color:#4cff88">SEQUENCE VALIDATED</span>`;
+    output.innerHTML = `<span style="color:#4cff88">SEQUENCE VALIDATED</span>`;
 
-        if (unlock) {
-            unlock.style.display = "block";
-        }
+    if (unlock) unlock.style.display = "block";
 
-        stage = 4;
+    stage = 4;
 
-        const overlay = document.getElementById("glitchOverlay");
+    // 🔥 generate crash code
+    const errorCode = generateErrorCode();
 
-        if (overlay) {
-            overlay.classList.remove("glitchActive");
-            void overlay.offsetWidth;
-            overlay.classList.add("glitchActive");
-        }
+    setTimeout(() => {
+        triggerCrash(errorCode);
+    }, 1200);
 
-       setTimeout(() => {
-
-    document.querySelectorAll(".screen, .tabContent").forEach(el => {
-        el.style.display = "none";
-    });
-
-    const phase3 = document.getElementById("phase3Screen");
-
-    if (!phase3) {
-        console.error("PHASE 3 NOT FOUND");
-        return;
-    }
-
-    phase3.style.display = "flex";
-
-    console.log("PHASE 3 ACTIVE");
-
-}, 1200);
+}
     } else {
 
         output.innerHTML = `<span style="color:#ff5577">INVALID SEQUENCE</span>`;
     }
+}
+function triggerCrash(errorCode) {
+
+    // freeze game input
+    locked = true;
+
+    // store for next website
+    sessionStorage.setItem("ERROR_CODE", errorCode);
+
+    // build crash overlay
+    const crash = document.createElement("div");
+
+    crash.id = "crashScreen";
+    crash.style.position = "fixed";
+    crash.style.top = "0";
+    crash.style.left = "0";
+    crash.style.width = "100vw";
+    crash.style.height = "100vh";
+    crash.style.background = "black";
+    crash.style.color = "red";
+    crash.style.fontFamily = "monospace";
+    crash.style.display = "flex";
+    crash.style.flexDirection = "column";
+    crash.style.justifyContent = "center";
+    crash.style.alignItems = "center";
+    crash.style.zIndex = "99999";
+    crash.style.textAlign = "center";
+    crash.style.animation = "flicker 0.08s infinite";
+
+    crash.innerHTML = `
+        <h1>CRITICAL SYSTEM FAILURE</h1>
+        <p>NEURAL DATABASE CORRUPTED</p>
+        <p>ACCESS TERMINATED</p>
+
+        <br>
+
+        <p>RECOVERY CODE:</p>
+        <h2 style="letter-spacing:3px;">${errorCode}</h2>
+
+        <p style="opacity:0.7;">(copy this code to continue system recovery)</p>
+    `;
+
+    document.body.appendChild(crash);
+}
+function generateErrorCode() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "ERR-";
+
+    for (let i = 0; i < 6; i++) {
+        code += chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    return code;
 }
 /* =========================
    SIMULATION
