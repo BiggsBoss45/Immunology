@@ -90,7 +90,7 @@ function playStartup() {
 function handleStart() {
     console.log("handleStart fired");
 
-    if (locked) return;
+   if (locked) return;
 
     if (stage === 0) startSequence();
 
@@ -100,12 +100,6 @@ function handleStart() {
 /* =========================
    OPTIONAL KEY SUPPORT
 ========================= */
-
-document.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter") return;
-    unlockAudio();
-    handleStart();
-});
 
 /* =========================
    SCREEN SYSTEM
@@ -176,12 +170,6 @@ function continueToMenu() {
    MOBILE SAFE TAP START
    (THIS IS THE KEY FIX)
 ========================= */
-
-document.getElementById("startScreen")
-?.addEventListener("click", () => {
-    unlockAudio();
-    handleStart();
-});
 
 /* =========================
    TAB SYSTEM
@@ -466,77 +454,74 @@ function validatePhase2() {
 
     if (sortedSelected === sortedCorrect) {
 
-    output.innerHTML = `<span style="color:#4cff88">SEQUENCE VALIDATED</span>`;
+        output.innerHTML = `<span style="color:#4cff88">SEQUENCE VALIDATED</span>`;
 
-    if (unlock) unlock.style.display = "block";
+        if (unlock) unlock.style.display = "block";
 
-    stage = 4;
+        stage = 4;
 
-    // 🔥 generate crash code
-    const errorCode = generateErrorCode();
+        const errorCode = generateErrorCode();
 
-    setTimeout(() => {
-        triggerCrash(errorCode);
-    }, 1200);
+        setTimeout(() => {
+            triggerCrash(errorCode);
+        }, 1200);
 
-}
     } else {
-
         output.innerHTML = `<span style="color:#ff5577">INVALID SEQUENCE</span>`;
     }
 }
 function triggerCrash(errorCode) {
 
-    // freeze game input
     locked = true;
 
-    // store for next website
     sessionStorage.setItem("ERROR_CODE", errorCode);
 
-    // build crash overlay
     const crash = document.createElement("div");
-
     crash.id = "crashScreen";
-    crash.style.position = "fixed";
-    crash.style.top = "0";
-    crash.style.left = "0";
-    crash.style.width = "100vw";
-    crash.style.height = "100vh";
-    crash.style.background = "black";
-    crash.style.color = "red";
-    crash.style.fontFamily = "monospace";
-    crash.style.display = "flex";
-    crash.style.flexDirection = "column";
-    crash.style.justifyContent = "center";
-    crash.style.alignItems = "center";
-    crash.style.zIndex = "99999";
-    crash.style.textAlign = "center";
-    crash.style.animation = "flicker 0.08s infinite";
+
+    Object.assign(crash.style, {
+        position: "fixed",
+        inset: "0",
+        background: "black",
+        color: "red",
+        fontFamily: "monospace",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: "99999",
+        textAlign: "center"
+    });
 
     crash.innerHTML = `
         <h1>CRITICAL SYSTEM FAILURE</h1>
         <p>NEURAL DATABASE CORRUPTED</p>
         <p>ACCESS TERMINATED</p>
-
         <br>
-
         <p>RECOVERY CODE:</p>
         <h2 style="letter-spacing:3px;">${errorCode}</h2>
-
-        <p style="opacity:0.7;">(copy this code to continue system recovery)</p>
+        <p style="opacity:0.7;">Click to continue</p>
     `;
+
+    crash.addEventListener("click", dismissCrash);
 
     document.body.appendChild(crash);
 }
+
 function generateErrorCode() {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let code = "ERR-";
+    return "ERR-7429XG";
+}
 
-    for (let i = 0; i < 6; i++) {
-        code += chars[Math.floor(Math.random() * chars.length)];
-    }
 
-    return code;
+function dismissCrash() {
+
+    const crash = document.getElementById("crashScreen");
+    if (crash) crash.remove();
+
+    locked = false;
+
+    stage = 4;
+    bootState = "menu";
 }
 /* =========================
    SIMULATION
@@ -592,10 +577,16 @@ function initStartControls() {
         return;
     }
 
+    // Prevent double-binding bugs
+    startScreen.onclick = null;
+
     startScreen.addEventListener("click", handleStart);
 
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") handleStart();
+        if (e.key === "Enter") {
+            unlockAudio();
+            handleStart();
+        }
     });
 
     console.log("Start controls initialized");
